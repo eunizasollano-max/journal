@@ -256,10 +256,14 @@ function updateAuthUI(user) {
       }
     }
     if (signOutBtn) signOutBtn.style.display = '';
+    const syncBtn = document.getElementById('sync-btn');
+    if (syncBtn) syncBtn.style.display = '';
   } else {
     if (authStatus) authStatus.textContent = 'Not signed in';
     if (userAvatar) userAvatar.innerHTML = '';
     if (signOutBtn) signOutBtn.style.display = 'none';
+    const syncBtn = document.getElementById('sync-btn');
+    if (syncBtn) syncBtn.style.display = 'none';
   }
 }
 
@@ -273,12 +277,94 @@ function wireSignOutButton() {
   });
 }
 
+function wireSyncButton() {
+  const btn = document.getElementById('sync-btn');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    btn.textContent = '⟳';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    try {
+      const counts = await JournalDB.syncFromCloud();
+      showToast(`Synced ${counts.entries} entries, ${counts.goals} goals, ${counts.recap} recaps ✓`);
+      Router.handleRoute?.();
+    } catch (e) {
+      showToast('Sync failed — check your connection.');
+    } finally {
+      btn.textContent = '⟳';
+      btn.disabled = false;
+      btn.style.opacity = '';
+    }
+  });
+}
+
 /* ── Sidebar date ── */
 function updateSidebarDate() {
   const el = document.querySelector('.footer-date');
   if (!el) return;
   const d = new Date();
   el.textContent = formatDate(d);
+}
+
+/* ── View-only / preview mode ── */
+function showViewOnlyBanner() {
+  if (document.getElementById('view-only-banner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'view-only-banner';
+  banner.className = 'trial-banner';
+  banner.innerHTML = `
+    <span>👀 You're previewing — entries won't be saved</span>
+    <button class="trial-banner-btn" id="view-only-signin-btn" type="button">Sign In to Save</button>
+  `;
+  document.body.prepend(banner);
+  document.getElementById('view-only-signin-btn')?.addEventListener('click', () => {
+    window._viewOnly  = false;
+    window._guestMode = false;
+    banner.remove();
+    Auth.showLoginScreen();
+  });
+}
+
+function wrapSavesForViewOnly() {
+  const block = (name) => async () => {
+    showToast('Sign in to save your journal ✨');
+    Auth.showLoginScreen();
+  };
+  JournalDB.saveEntry = block('saveEntry');
+  JournalDB.saveGoals = block('saveGoals');
+  JournalDB.saveRecap = block('saveRecap');
+}
+
+/* ── Nickname editing ── */
+function initNicknameEdit() {
+  const el = document.querySelector('.brand-user');
+  if (!el) return;
+
+  el.style.cursor = 'pointer';
+  el.title = 'Click to edit your name';
+
+  el.addEventListener('click', () => {
+    const currentName = localStorage.getItem('journal_user_name') || el.textContent.replace(/'s Journal$/, '').trim();
+    const input = document.createElement('input');
+    input.type  = 'text';
+    input.value = currentName;
+    input.maxLength = 40;
+    input.className = 'brand-user-input';
+    input.style.cssText = 'font:inherit;background:transparent;border:none;border-bottom:1px solid currentColor;outline:none;width:100%;max-width:180px;text-align:center;color:inherit;';
+
+    el.textContent = '';
+    el.appendChild(input);
+    input.focus();
+    input.select();
+
+    const save = () => {
+      const name = input.value.trim() || currentName;
+      localStorage.setItem('journal_user_name', name);
+      applyUserName(name);
+    };
+    input.addEventListener('blur', save);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); input.blur(); } if (e.key === 'Escape') { input.value = currentName; input.blur(); } });
+  });
 }
 
 /* ── Passphrase modal (Google users + returning email users with no session key) ── */
@@ -352,7 +438,6 @@ async function showPassphraseModal(user, onComplete) {
 async function initApp() {
   initTheme();
   await Scripture.loadScriptures();
-
   Auth.onAuthReady(async (user) => {
     updateAuthUI(user);
 
@@ -363,8 +448,10 @@ async function initApp() {
 
     await JournalDB.openDB();
 
-    if (window._guestMode) {
+    if (window._viewOnly) {
+      wrapSavesForViewOnly();
       hideLoginAndLaunch(null);
+      showViewOnlyBanner();
       return;
     }
 
@@ -374,7 +461,7 @@ async function initApp() {
 
     const access = await Payment.checkAccess();
     if (!access.allowed) {
-      Payment.showPaymentWall();
+      Payment.showPaymentWall(access.status);
       return;
     }
 
@@ -392,13 +479,50 @@ function hideLoginAndLaunch(user) {
   launchJournal(user);
 }
 
+function showBetaWelcome() {
+  if (localStorage.getItem('journal_beta_dismissed')) return;
+  if (document.getElementById('beta-welcome-overlay')) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'beta-welcome-overlay';
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-box" style="max-width:420px;text-align:center">
+      <div style="font-size:2.4rem;margin-bottom:var(--sp-3)">🌸</div>
+      <h2 class="modal-title">Hey friend!</h2>
+      <p class="modal-desc" style="line-height:1.85;margin-bottom:var(--sp-4)">
+        Thank you so much for being an early tester — it truly means the world.
+      </p>
+      <p class="modal-desc" style="line-height:1.85;margin-bottom:var(--sp-4)">
+        Just a heads up: <em>Another Day, another chance</em> is still in
+        <strong>testing mode</strong>, so you may run into small bugs or unfinished features.
+        Please don't rely on it yet as your only journal — data could be reset
+        as we make improvements.
+      </p>
+      <p class="modal-desc" style="line-height:1.85;margin-bottom:var(--sp-5)">
+        Your feedback is a gift. If something feels off or broken, just let me know! 🤍
+      </p>
+      <p style="font-family:var(--font-script);font-size:var(--fs-xl);color:var(--color-accent-script);margin-bottom:var(--sp-6)">— Yuni</p>
+      <button class="btn btn-primary btn-lg" id="beta-got-it-btn" style="width:100%">Got it, let's go! ✨</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.getElementById('beta-got-it-btn').addEventListener('click', () => {
+    overlay.remove();
+    localStorage.setItem('journal_beta_dismissed', '1');
+  });
+}
+
 function launchJournal(user) {
   updateSidebarDate();
+  showBetaWelcome();
   initOnboarding();
+  initNicknameEdit();
   initThemePicker();
   initFontPicker();
   initCursorGlow();
   wireSignOutButton();
+  wireSyncButton();
 
   Router.register('#home',      () => HomePage.init());
   Router.register('#today',     () => EntryPage.init());

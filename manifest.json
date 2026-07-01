@@ -1,0 +1,18 @@
+{
+  "name": "Another Day, Another Chance",
+  "short_name": "Another Day",
+  "description": "A personal, faith-centered journaling app.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#d4a0a0",
+  "background_color": "#fdf8f8",
+  "icons": [
+    {
+      "src": "assets/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

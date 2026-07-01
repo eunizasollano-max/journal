@@ -31,7 +31,10 @@ function onAuthReady(cb) {
 async function signInWithGoogle() {
   const { error } = await SupabaseClient.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin + window.location.pathname },
+    options: {
+      redirectTo: window.location.origin + window.location.pathname,
+      scopes: 'https://www.googleapis.com/auth/drive.file',
+    },
   });
   if (error) throw error;
 }
@@ -129,7 +132,7 @@ function renderLoginUI(mode = 'signin') {
       </div>
 
       <div class="login-guest-row">
-        <button class="btn-link text-muted" id="guest-mode-btn" type="button">Continue as guest (local only)</button>
+        <button class="btn-link text-muted" id="guest-mode-btn" type="button">Preview the app →</button>
       </div>
     `;
     wireSignInButtons();
@@ -202,7 +205,8 @@ function wireSignInButtons() {
   document.getElementById('forgot-password-btn')?.addEventListener('click', () => renderLoginUI('reset'));
   document.getElementById('show-signup-btn')?.addEventListener('click', () => renderLoginUI('signup'));
   document.getElementById('guest-mode-btn')?.addEventListener('click', () => {
-    window._guestMode = true;
+    window._guestMode  = true;
+    window._viewOnly   = true;
     hideLoginScreen();
     if (authReadyCb) authReadyCb(null);
   });

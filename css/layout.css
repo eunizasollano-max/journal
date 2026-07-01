@@ -50,16 +50,16 @@ body {
 
 @media (max-width: 768px) {
   .main-content::before {
-    width: 180px;
-    height: 180px;
+    width: 140px;
+    height: 140px;
     top: 50px;
-    right: -20px;
+    right: 0;
   }
   .main-content::after {
-    left: -20px;
+    left: 0;
     bottom: 80px;
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
   }
 }
 
@@ -336,10 +336,14 @@ body {
     margin-left: 0;
     padding-top: var(--header-height);
     padding-bottom: var(--mobile-nav-height);
+    overflow-x: hidden;
+    width: 100%;
   }
 
   .page-content {
     padding: var(--sp-4);
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   .page-header { display: none; }

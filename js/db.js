@@ -72,19 +72,51 @@ async function getEntry(date) {
         const cloudEntry = await JournalCrypto.decrypt(data.data);
         const localEntry = await idbReq(idbTx('entries').get(date));
         if (localEntry?.media) cloudEntry.media = localEntry.media;
-        return cloudEntry;
+        return resolveMediaUrls(cloudEntry);
       }
     } catch (e) {
       console.warn('Supabase getEntry failed, using IndexedDB', e);
     }
   }
-  return idbReq(idbTx('entries').get(date));
+  const local = await idbReq(idbTx('entries').get(date));
+  return resolveMediaUrls(local);
+}
+
+async function uploadMediaToDrive(entry) {
+  if (!JournalDrive.isGoogleUser() || !entry.media?.length) return entry;
+  const uploaded = [];
+  for (const item of entry.media) {
+    if (item.driveId) { uploaded.push(item); continue; }
+    try {
+      const res  = await fetch(item.url);
+      const blob = await res.blob();
+      const driveId = await JournalDrive.uploadFile(blob, `journal-${entry.date}-${Date.now()}`, item.type || blob.type);
+      uploaded.push({ ...item, driveId, url: null });
+    } catch (e) {
+      console.warn('Drive upload failed, keeping local:', e);
+      uploaded.push(item);
+    }
+  }
+  return { ...entry, media: uploaded };
+}
+
+async function resolveMediaUrls(entry) {
+  if (!entry?.media?.length) return entry;
+  const resolved = await Promise.all(entry.media.map(async (item) => {
+    if (item.driveId && !item.url) {
+      const url = await JournalDrive.getFileUrl(item.driveId).catch(() => null);
+      return { ...item, url };
+    }
+    return item;
+  }));
+  return { ...entry, media: resolved };
 }
 
 async function saveEntry(entry) {
   await openIDB();
   entry.updatedAt = new Date().toISOString();
 
+  entry = await uploadMediaToDrive(entry);
   await idbReq(idbTx('entries', 'readwrite').put(entry));
 
   if (useSupabase()) {
@@ -206,4 +238,51 @@ async function saveRecap(year, month, reflection) {
   }
 }
 
-window.JournalDB = { openDB, getEntry, saveEntry, getAllEntries, getEntriesForMonth, getGoals, saveGoals, getRecap, saveRecap };
+async function syncFromCloud() {
+  if (!useSupabase()) return { entries: 0, goals: 0, recap: 0 };
+  await openIDB();
+  const uid = getUserId();
+  let counts = { entries: 0, goals: 0, recap: 0 };
+
+  try {
+    const { data: eRows } = await SupabaseClient.from('entries').select('*').eq('user_id', uid);
+    if (eRows?.length) {
+      const store = idbTx('entries', 'readwrite');
+      for (const row of eRows) {
+        const entry = await JournalCrypto.decrypt(row.data);
+        const local = await idbReq(idbTx('entries').get(row.date));
+        if (local?.media) entry.media = local.media;
+        await idbReq(store.put({ ...entry, date: row.date }));
+      }
+      counts.entries = eRows.length;
+    }
+  } catch (e) { console.warn('Sync entries failed', e); }
+
+  try {
+    const { data: gRows } = await SupabaseClient.from('goals').select('*').eq('user_id', uid);
+    if (gRows?.length) {
+      const store = idbTx('goals', 'readwrite');
+      for (const row of gRows) {
+        const record = await JournalCrypto.decrypt(row.data);
+        await idbReq(store.put({ ...record, monthKey: row.month_key }));
+      }
+      counts.goals = gRows.length;
+    }
+  } catch (e) { console.warn('Sync goals failed', e); }
+
+  try {
+    const { data: rRows } = await SupabaseClient.from('recap').select('*').eq('user_id', uid);
+    if (rRows?.length) {
+      const store = idbTx('recap', 'readwrite');
+      for (const row of rRows) {
+        const record = await JournalCrypto.decrypt(row.data);
+        await idbReq(store.put({ ...record, monthKey: row.month_key }));
+      }
+      counts.recap = rRows.length;
+    }
+  } catch (e) { console.warn('Sync recap failed', e); }
+
+  return counts;
+}
+
+window.JournalDB = { openDB, getEntry, saveEntry, getAllEntries, getEntriesForMonth, getGoals, saveGoals, getRecap, saveRecap, syncFromCloud };

@@ -22,12 +22,7 @@ Deno.serve(async (req) => {
       mode: 'subscription',
       customer_email: email,
       line_items: [{
-        price_data: {
-          currency: 'usd',
-          product_data: { name: 'Another Day Journal', description: 'Monthly subscription' },
-          unit_amount: 399,
-          recurring: { interval: 'month' },
-        },
+        price: 'price_1ToNjsKtZkEjMDWMyh79R2zn',
         quantity: 1,
       }],
       metadata: { user_id },

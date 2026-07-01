@@ -1384,6 +1384,10 @@
   }
 }
 
+@media (max-width: 768px) {
+  .entry-floral-header { display: none; }
+}
+
 .font-options {
   display: flex;
   flex-direction: column;

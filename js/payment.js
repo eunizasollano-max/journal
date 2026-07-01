@@ -6,34 +6,34 @@
 */
 
 const TRIAL_DAYS   = 14;
-const PRICE_LABEL  = '$3.99/month';
+const PRICE_LABEL  = '$1.99/month';
 
-async function getOrCreateSubscription() {
+async function getSubscription() {
   const user = Auth.getCurrentUser();
   if (!user) return null;
-
   const { data } = await SupabaseClient
     .from('user_subscriptions')
     .select('*')
     .eq('user_id', user.id)
     .maybeSingle();
+  return data;
+}
 
-  if (data) return data;
-
-  // First login — create trial record
-  const { data: created } = await SupabaseClient
-    .from('user_subscriptions')
-    .insert({ user_id: user.id, trial_start_date: new Date().toISOString(), is_paid: false, subscription_status: 'trial' })
-    .select()
-    .single();
-
-  return created;
+async function startTrial() {
+  const user = Auth.getCurrentUser();
+  if (!user) return;
+  await SupabaseClient.from('user_subscriptions').insert({
+    user_id: user.id,
+    trial_start_date: new Date().toISOString(),
+    is_paid: false,
+    subscription_status: 'trial',
+  });
 }
 
 async function checkAccess() {
   try {
-    const sub = await getOrCreateSubscription();
-    if (!sub) return { allowed: false, status: 'error' };
+    const sub = await getSubscription();
+    if (!sub) return { allowed: false, status: 'new' };
 
     if (sub.is_paid && sub.subscription_status === 'active') {
       return { allowed: true, status: 'active' };
@@ -67,8 +67,24 @@ function showTrialBanner(daysLeft) {
   document.getElementById('trial-upgrade-btn')?.addEventListener('click', showPaymentWall);
 }
 
-function showPaymentWall() {
+function showPaymentWall(status = 'expired') {
   document.getElementById('payment-overlay')?.remove();
+
+  const isNew      = status === 'new';
+  const headline   = isNew ? 'Start your journaling journey' : 'Your free trial has ended';
+  const subline    = isNew ? 'Choose how you\'d like to begin:' : 'Continue your journey — cancel anytime.';
+
+  const trialCard = isNew ? `
+    <div class="plan-card" id="trial-card">
+      <div class="plan-badge">Free</div>
+      <div class="plan-name">Free Trial</div>
+      <div class="plan-price">${TRIAL_DAYS} days free</div>
+      <div class="plan-then">then ${PRICE_LABEL}</div>
+      <button class="btn btn-outline plan-btn" id="start-trial-btn" type="button">
+        Try Free Trial
+      </button>
+    </div>
+  ` : '';
 
   const overlay = document.createElement('div');
   overlay.id = 'payment-overlay';
@@ -76,9 +92,9 @@ function showPaymentWall() {
   overlay.innerHTML = `
     <div class="modal-box payment-modal">
       <div class="payment-modal-icon">🌸</div>
-      <h2 class="modal-title" style="margin-bottom:var(--sp-1)">Your free trial has ended</h2>
-      <p class="modal-desc" style="margin-bottom:var(--sp-2)">Continue your journey for just</p>
-      <div class="payment-price">${PRICE_LABEL}</div>
+      <h2 class="modal-title">${headline}</h2>
+      <p class="modal-desc">${subline}</p>
+
       <ul class="payment-features">
         <li>✦ Daily guided journal prompts</li>
         <li>✦ Free write with auto-save</li>
@@ -86,17 +102,41 @@ function showPaymentWall() {
         <li>✦ Photo &amp; video gallery</li>
         <li>✦ Calendar view of all entries</li>
       </ul>
-      <button class="btn btn-primary payment-cta" id="checkout-btn" type="button">
-        Start Subscription
-      </button>
-      <p class="payment-fine-print">Cancel anytime. Your entries are never deleted.</p>
+
+      <div class="plan-cards">
+        ${trialCard}
+        <div class="plan-card plan-card--primary" id="subscribe-card">
+          ${isNew ? '<div class="plan-badge plan-badge--primary">Best value</div>' : ''}
+          <div class="plan-name">Subscribe</div>
+          <div class="plan-price">${PRICE_LABEL}</div>
+          <div class="plan-then">cancel anytime</div>
+          <button class="btn btn-primary plan-btn" id="checkout-btn" type="button">
+            Subscribe Now
+          </button>
+        </div>
+      </div>
+
       <button class="btn-link text-muted" id="payment-signout-btn" type="button"
         style="margin-top:var(--sp-4);font-size:var(--fs-sm)">Sign out</button>
     </div>
   `;
 
   document.body.appendChild(overlay);
+
   document.getElementById('checkout-btn')?.addEventListener('click', startCheckout);
+
+  document.getElementById('start-trial-btn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('start-trial-btn');
+    if (btn) { btn.textContent = 'Starting…'; btn.disabled = true; }
+    try {
+      await startTrial();
+      window.location.reload();
+    } catch (e) {
+      console.error('Trial start failed:', e);
+      if (btn) { btn.textContent = 'Try Free Trial'; btn.disabled = false; }
+    }
+  });
+
   document.getElementById('payment-signout-btn')?.addEventListener('click', () => {
     overlay.remove();
     Auth.signOut();
@@ -142,4 +182,4 @@ async function handlePostPaymentReturn() {
   }
 }
 
-window.Payment = { checkAccess, showPaymentWall, showTrialBanner, handlePostPaymentReturn };
+window.Payment = { checkAccess, showPaymentWall, showTrialBanner, handlePostPaymentReturn, startTrial };
