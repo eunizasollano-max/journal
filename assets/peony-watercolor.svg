@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 310">
+  <defs>
+    <radialGradient id="pw1" cx="38%" cy="32%" r="65%">
+      <stop offset="0%"   stop-color="#fdeef2"/>
+      <stop offset="45%"  stop-color="#f4c0cc"/>
+      <stop offset="100%" stop-color="#e8909c"/>
+    </radialGradient>
+    <radialGradient id="pw2" cx="35%" cy="28%" r="68%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="40%"  stop-color="#fad8e4"/>
+      <stop offset="100%" stop-color="#f0a8b8"/>
+    </radialGradient>
+    <radialGradient id="pw3" cx="50%" cy="40%" r="60%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="55%"  stop-color="#fce8ee"/>
+      <stop offset="100%" stop-color="#f4c0cc"/>
+    </radialGradient>
+    <radialGradient id="pwlg" cx="40%" cy="30%" r="65%">
+      <stop offset="0%"   stop-color="#c8dcc0"/>
+      <stop offset="50%"  stop-color="#8ab898"/>
+      <stop offset="100%" stop-color="#5e9870"/>
+    </radialGradient>
+    <radialGradient id="pwlg2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#a8c8a0"/>
+      <stop offset="100%" stop-color="#6a9878"/>
+    </radialGradient>
+    <radialGradient id="pwcg" cx="40%" cy="35%" r="60%">
+      <stop offset="0%"   stop-color="#d4a888"/>
+      <stop offset="60%"  stop-color="#b88060"/>
+      <stop offset="100%" stop-color="#8c5c40"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Leaves -->
+  <ellipse cx="88"  cy="258" rx="52" ry="20" transform="rotate(-32 88 258)"  fill="url(#pwlg)"  opacity=".95"/>
+  <ellipse cx="90"  cy="260" rx="46" ry="14" transform="rotate(-32 90 260)"  fill="url(#pwlg2)" opacity=".5"/>
+  <ellipse cx="232" cy="255" rx="50" ry="19" transform="rotate(28 232 255)"  fill="url(#pwlg)"  opacity=".95"/>
+  <ellipse cx="230" cy="257" rx="44" ry="13" transform="rotate(28 230 257)"  fill="url(#pwlg2)" opacity=".5"/>
+  <ellipse cx="160" cy="268" rx="48" ry="16" transform="rotate(4 160 268)"   fill="url(#pwlg)"  opacity=".85"/>
+  <ellipse cx="62"  cy="228" rx="44" ry="16" transform="rotate(-52 62 228)"  fill="url(#pwlg)"  opacity=".85"/>
+  <ellipse cx="258" cy="226" rx="42" ry="15" transform="rotate(48 258 226)"  fill="url(#pwlg)"  opacity=".85"/>
+  <path d="M72 248 Q88 235 104 246" stroke="#5e9870" stroke-width="1.2" fill="none" opacity=".5"/>
+  <path d="M216 244 Q232 231 248 242" stroke="#5e9870" stroke-width="1.2" fill="none" opacity=".5"/>
+
+  <!-- Outer petals -->
+  <ellipse cx="160" cy="178" rx="56" ry="72" fill="url(#pw1)" opacity=".92"/>
+  <ellipse cx="90"  cy="192" rx="52" ry="64" transform="rotate(-36 90 192)"  fill="url(#pw1)" opacity=".88"/>
+  <ellipse cx="232" cy="190" rx="50" ry="62" transform="rotate(33 232 190)"  fill="url(#pw1)" opacity=".88"/>
+  <ellipse cx="114" cy="136" rx="48" ry="66" transform="rotate(-20 114 136)" fill="url(#pw1)" opacity=".85"/>
+  <ellipse cx="206" cy="138" rx="47" ry="64" transform="rotate(18 206 138)"  fill="url(#pw1)" opacity=".85"/>
+  <ellipse cx="160" cy="122" rx="46" ry="62" fill="url(#pw1)" opacity=".85"/>
+
+  <!-- Mid petals -->
+  <ellipse cx="160" cy="170" rx="42" ry="55" fill="url(#pw2)" opacity=".92"/>
+  <ellipse cx="105" cy="180" rx="38" ry="50" transform="rotate(-28 105 180)" fill="url(#pw2)" opacity=".88"/>
+  <ellipse cx="215" cy="178" rx="37" ry="49" transform="rotate(25 215 178)"  fill="url(#pw2)" opacity=".88"/>
+  <ellipse cx="128" cy="144" rx="36" ry="52" transform="rotate(-16 128 144)" fill="url(#pw2)" opacity=".85"/>
+  <ellipse cx="192" cy="146" rx="35" ry="50" transform="rotate(14 192 146)"  fill="url(#pw2)" opacity=".85"/>
+  <ellipse cx="160" cy="132" rx="36" ry="50" fill="url(#pw2)" opacity=".85"/>
+
+  <!-- Inner petals -->
+  <ellipse cx="160" cy="162" rx="30" ry="40" fill="url(#pw3)" opacity=".92"/>
+  <ellipse cx="126" cy="163" rx="27" ry="37" transform="rotate(-20 126 163)" fill="url(#pw3)" opacity=".90"/>
+  <ellipse cx="194" cy="163" rx="26" ry="36" transform="rotate(18 194 163)"  fill="url(#pw3)" opacity=".90"/>
+  <ellipse cx="142" cy="142" rx="25" ry="36" transform="rotate(-12 142 142)" fill="url(#pw3)" opacity=".88"/>
+  <ellipse cx="178" cy="143" rx="24" ry="35" transform="rotate(10 178 143)"  fill="url(#pw3)" opacity=".88"/>
+
+  <!-- Innermost petals -->
+  <ellipse cx="160" cy="156" rx="20" ry="28" fill="#fef4f7" opacity=".95"/>
+  <ellipse cx="144" cy="154" rx="17" ry="25" transform="rotate(-15 144 154)" fill="#fef8fa" opacity=".92"/>
+  <ellipse cx="176" cy="154" rx="17" ry="25" transform="rotate(12 176 154)"  fill="#fef8fa" opacity=".92"/>
+  <ellipse cx="160" cy="144" rx="16" ry="24" fill="#ffffff" opacity=".90"/>
+
+  <!-- Center -->
+  <ellipse cx="160" cy="150" rx="14" ry="18" fill="url(#pwcg)" opacity=".85"/>
+  <ellipse cx="158" cy="148" rx="8"  ry="12" fill="#c89070" opacity=".70"/>
+  <circle cx="157" cy="145" r="3"   fill="#8c5c3c" opacity=".75"/>
+  <circle cx="164" cy="147" r="2.5" fill="#9a6848" opacity=".70"/>
+  <circle cx="159" cy="155" r="2.5" fill="#8c5c40" opacity=".68"/>
+</svg>

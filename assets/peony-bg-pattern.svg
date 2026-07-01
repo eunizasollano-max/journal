@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480">
+  <defs>
+    <style>
+      .p1 { fill: #f4c0cc; opacity: 0.18; }
+      .p2 { fill: #fde8ee; opacity: 0.22; }
+      .p3 { fill: #fff0f4; opacity: 0.28; }
+      .pc { fill: #f8d080; opacity: 0.18; }
+      .lf { fill: #b8d4a8; opacity: 0.16; }
+      .st { fill: #e8b8c8; opacity: 0.14; }
+    </style>
+  </defs>
+
+  <!-- ── Peony A — top-left, large ── -->
+  <g transform="translate(72, 68) scale(1.1)">
+    <!-- Leaves -->
+    <ellipse cx="-12" cy="26" rx="16" ry="5.5" transform="rotate(-45 -12 26)" class="lf"/>
+    <ellipse cx="28" cy="30" rx="15" ry="5" transform="rotate(40 28 30)" class="lf"/>
+    <!-- Outer petals -->
+    <ellipse cx="8"  cy="-10" rx="10" ry="14" class="p1"/>
+    <ellipse cx="20" cy="-4"  rx="10" ry="14" transform="rotate(72 20 -4)"  class="p1"/>
+    <ellipse cx="18" cy="16"  rx="10" ry="14" transform="rotate(144 18 16)" class="p1"/>
+    <ellipse cx="-4" cy="16"  rx="10" ry="14" transform="rotate(216 -4 16)" class="p1"/>
+    <ellipse cx="-8" cy="-4"  rx="10" ry="14" transform="rotate(288 -8 -4)" class="p1"/>
+    <!-- Mid petals -->
+    <ellipse cx="8"  cy="-7"  rx="7.5" ry="10.5" class="p2"/>
+    <ellipse cx="17" cy="-2"  rx="7.5" ry="10.5" transform="rotate(72 17 -2)"  class="p2"/>
+    <ellipse cx="15" cy="14"  rx="7.5" ry="10.5" transform="rotate(144 15 14)" class="p2"/>
+    <ellipse cx="-1" cy="14"  rx="7.5" ry="10.5" transform="rotate(216 -1 14)" class="p2"/>
+    <ellipse cx="-6" cy="-2"  rx="7.5" ry="10.5" transform="rotate(288 -6 -2)" class="p2"/>
+    <!-- Inner petals -->
+    <ellipse cx="8"  cy="-4"  rx="5"   ry="7.5"  class="p3"/>
+    <ellipse cx="14" cy="0"   rx="5"   ry="7.5"  transform="rotate(72 14 0)"   class="p3"/>
+    <ellipse cx="13" cy="11"  rx="5"   ry="7.5"  transform="rotate(144 13 11)" class="p3"/>
+    <ellipse cx="2"  cy="11"  rx="5"   ry="7.5"  transform="rotate(216 2 11)"  class="p3"/>
+    <ellipse cx="-3" cy="0"   rx="5"   ry="7.5"  transform="rotate(288 -3 0)"  class="p3"/>
+    <!-- Center -->
+    <circle cx="8" cy="4" r="6" class="pc"/>
+    <circle cx="8" cy="4" r="3.5" fill="#f8e080" opacity="0.2"/>
+  </g>
+
+  <!-- ── Peony B — bottom-right, medium ── -->
+  <g transform="translate(388, 368) scale(0.85)">
+    <ellipse cx="-10" cy="22" rx="14" ry="5" transform="rotate(-40 -10 22)" class="lf"/>
+    <ellipse cx="24"  cy="26" rx="13" ry="4.5" transform="rotate(38 24 26)" class="lf"/>
+    <ellipse cx="6"   cy="-9"  rx="9"   ry="12.5" class="p1"/>
+    <ellipse cx="18"  cy="-3"  rx="9"   ry="12.5" transform="rotate(72 18 -3)"  class="p1"/>
+    <ellipse cx="16"  cy="14"  rx="9"   ry="12.5" transform="rotate(144 16 14)" class="p1"/>
+    <ellipse cx="-3"  cy="14"  rx="9"   ry="12.5" transform="rotate(216 -3 14)" class="p1"/>
+    <ellipse cx="-7"  cy="-3"  rx="9"   ry="12.5" transform="rotate(288 -7 -3)" class="p1"/>
+    <ellipse cx="6"   cy="-6"  rx="7"   ry="9.5"  class="p2"/>
+    <ellipse cx="16"  cy="-1"  rx="7"   ry="9.5"  transform="rotate(72 16 -1)"  class="p2"/>
+    <ellipse cx="14"  cy="12"  rx="7"   ry="9.5"  transform="rotate(144 14 12)" class="p2"/>
+    <ellipse cx="-2"  cy="12"  rx="7"   ry="9.5"  transform="rotate(216 -2 12)" class="p2"/>
+    <ellipse cx="-5"  cy="-1"  rx="7"   ry="9.5"  transform="rotate(288 -5 -1)" class="p2"/>
+    <ellipse cx="6"   cy="-3"  rx="4.5" ry="6.5"  class="p3"/>
+    <ellipse cx="12"  cy="1"   rx="4.5" ry="6.5"  transform="rotate(72 12 1)"   class="p3"/>
+    <ellipse cx="11"  cy="10"  rx="4.5" ry="6.5"  transform="rotate(144 11 10)" class="p3"/>
+    <ellipse cx="1"   cy="10"  rx="4.5" ry="6.5"  transform="rotate(216 1 10)"  class="p3"/>
+    <ellipse cx="-2"  cy="1"   rx="4.5" ry="6.5"  transform="rotate(288 -2 1)"  class="p3"/>
+    <circle cx="6" cy="3" r="5" class="pc"/>
+  </g>
+
+  <!-- ── Peony C — top-right, small ── -->
+  <g transform="translate(400, 55) scale(0.65)">
+    <ellipse cx="5"  cy="-7"  rx="8"   ry="11" class="p2"/>
+    <ellipse cx="15" cy="-2"  rx="8"   ry="11" transform="rotate(72 15 -2)"  class="p2"/>
+    <ellipse cx="13" cy="12"  rx="8"   ry="11" transform="rotate(144 13 12)" class="p2"/>
+    <ellipse cx="-1" cy="12"  rx="8"   ry="11" transform="rotate(216 -1 12)" class="p2"/>
+    <ellipse cx="-5" cy="-2"  rx="8"   ry="11" transform="rotate(288 -5 -2)" class="p2"/>
+    <ellipse cx="5"  cy="-4"  rx="5.5" ry="8"  class="p3"/>
+    <ellipse cx="12" cy="0"   rx="5.5" ry="8"  transform="rotate(72 12 0)"   class="p3"/>
+    <ellipse cx="10" cy="10"  rx="5.5" ry="8"  transform="rotate(144 10 10)" class="p3"/>
+    <ellipse cx="0"  cy="10"  rx="5.5" ry="8"  transform="rotate(216 0 10)"  class="p3"/>
+    <ellipse cx="-3" cy="0"   rx="5.5" ry="8"  transform="rotate(288 -3 0)"  class="p3"/>
+    <circle cx="5" cy="3" r="4.5" class="pc"/>
+  </g>
+
+  <!-- ── Peony D — bottom-left, small ── -->
+  <g transform="translate(58, 398) scale(0.7)">
+    <ellipse cx="-8"  cy="20" rx="13" ry="4.5" transform="rotate(-42 -8 20)" class="lf"/>
+    <ellipse cx="22"  cy="22" rx="12" ry="4"   transform="rotate(40 22 22)"  class="lf"/>
+    <ellipse cx="6"   cy="-8"  rx="8.5" ry="12" class="p1"/>
+    <ellipse cx="17"  cy="-3"  rx="8.5" ry="12" transform="rotate(72 17 -3)"  class="p1"/>
+    <ellipse cx="15"  cy="13"  rx="8.5" ry="12" transform="rotate(144 15 13)" class="p1"/>
+    <ellipse cx="-2"  cy="13"  rx="8.5" ry="12" transform="rotate(216 -2 13)" class="p1"/>
+    <ellipse cx="-6"  cy="-3"  rx="8.5" ry="12" transform="rotate(288 -6 -3)" class="p1"/>
+    <ellipse cx="6"   cy="-5"  rx="6"   ry="9"  class="p3"/>
+    <ellipse cx="14"  cy="0"   rx="6"   ry="9"  transform="rotate(72 14 0)"   class="p3"/>
+    <ellipse cx="12"  cy="11"  rx="6"   ry="9"  transform="rotate(144 12 11)" class="p3"/>
+    <ellipse cx="0"   cy="11"  rx="6"   ry="9"  transform="rotate(216 0 11)"  class="p3"/>
+    <ellipse cx="-4"  cy="0"   rx="6"   ry="9"  transform="rotate(288 -4 0)"  class="p3"/>
+    <circle cx="6" cy="3" r="5" class="pc"/>
+  </g>
+
+  <!-- ── Peony E — center, tiny ── -->
+  <g transform="translate(240, 192) scale(0.55)">
+    <ellipse cx="4"  cy="-6"  rx="7"   ry="10" class="p2"/>
+    <ellipse cx="13" cy="-1"  rx="7"   ry="10" transform="rotate(72 13 -1)"  class="p2"/>
+    <ellipse cx="11" cy="11"  rx="7"   ry="10" transform="rotate(144 11 11)" class="p2"/>
+    <ellipse cx="-1" cy="11"  rx="7"   ry="10" transform="rotate(216 -1 11)" class="p2"/>
+    <ellipse cx="-4" cy="-1"  rx="7"   ry="10" transform="rotate(288 -4 -1)" class="p2"/>
+    <ellipse cx="4"  cy="-3"  rx="5"   ry="7"  class="p3"/>
+    <ellipse cx="11" cy="1"   rx="5"   ry="7"  transform="rotate(72 11 1)"   class="p3"/>
+    <ellipse cx="9"  cy="9"   rx="5"   ry="7"  transform="rotate(144 9 9)"   class="p3"/>
+    <ellipse cx="0"  cy="9"   rx="5"   ry="7"  transform="rotate(216 0 9)"   class="p3"/>
+    <ellipse cx="-3" cy="1"   rx="5"   ry="7"  transform="rotate(288 -3 1)"  class="p3"/>
+    <circle cx="4" cy="3" r="4" class="pc"/>
+  </g>
+
+  <!-- ── Scattered petals / buds ── -->
+  <ellipse cx="160" cy="88"  rx="8"  ry="10" class="st"/>
+  <ellipse cx="158" cy="88"  rx="6"  ry="8"  class="p2"/>
+  <circle  cx="160" cy="83"  r="3"   class="pc"/>
+
+  <ellipse cx="300" cy="260" rx="7"  ry="9"  class="st"/>
+  <ellipse cx="298" cy="260" rx="5"  ry="7"  class="p2"/>
+  <circle  cx="300" cy="256" r="2.5" class="pc"/>
+
+  <ellipse cx="92"  cy="200" rx="6"  ry="8"  class="st"/>
+  <ellipse cx="90"  cy="200" rx="4.5" ry="6" class="p3"/>
+  <circle  cx="92"  cy="196" r="2.2" class="pc"/>
+
+  <ellipse cx="388" cy="162" rx="6"  ry="8"  class="st"/>
+  <ellipse cx="386" cy="162" rx="4.5" ry="6" class="p3"/>
+  <circle  cx="388" cy="158" r="2.2" class="pc"/>
+
+  <ellipse cx="210" cy="388" rx="7"  ry="9"  class="st"/>
+  <ellipse cx="208" cy="388" rx="5"  ry="7"  class="p2"/>
+  <circle  cx="210" cy="384" r="2.5" class="pc"/>
+
+  <!-- Sparkle / plus marks -->
+  <path d="M338 108 V98 M333 103 H343" stroke="#f0b8c8" stroke-width="1.2" opacity="0.18" fill="none"/>
+  <path d="M148 330 V322 M144 326 H152" stroke="#f0b8c8" stroke-width="1.2" opacity="0.18" fill="none"/>
+  <path d="M430 280 V272 M426 276 H434" stroke="#f0b8c8" stroke-width="1"   opacity="0.15" fill="none"/>
+  <path d="M42  130 V124 M39 127 H45"   stroke="#f0b8c8" stroke-width="1"   opacity="0.15" fill="none"/>
+  <path d="M250 440 V433 M246 436 H254" stroke="#f0b8c8" stroke-width="1.2" opacity="0.18" fill="none"/>
+</svg>

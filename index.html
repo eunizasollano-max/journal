@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fdf0f0">
+  <title>Another Day, another chance — Journal</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Parisienne&family=Nunito:wght@300;400;500;600&family=Playfair+Display:wght@700&family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Quicksand:wght@400;500&family=Josefin+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     ONBOARDING OVERLAY
+══════════════════════════════════════ -->
+<div id="onboarding-overlay" class="modal-overlay hidden">
+  <div class="modal-box">
+
+    <!-- ── Step 1: Welcome + Name ── -->
+    <div class="onboard-step" id="onboard-step-1">
+      <div class="modal-peony">
+        <svg viewBox="0 0 320 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="og1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f9e8e8" stop-opacity=".9"/><stop offset="100%" stop-color="#e8c4c4" stop-opacity=".4"/></radialGradient>
+            <radialGradient id="og2" cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/><stop offset="100%" stop-color="#e8c0c0" stop-opacity=".5"/></radialGradient>
+            <radialGradient id="olg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8d8c0" stop-opacity=".8"/><stop offset="100%" stop-color="#88a880" stop-opacity=".3"/></radialGradient>
+          </defs>
+          <ellipse cx="100" cy="240" rx="42" ry="18" transform="rotate(-30 100 240)" fill="url(#olg)" opacity=".7"/>
+          <ellipse cx="220" cy="245" rx="40" ry="16" transform="rotate(25 220 245)" fill="url(#olg)" opacity=".65"/>
+          <ellipse cx="160" cy="258" rx="38" ry="14" fill="url(#olg)" opacity=".6"/>
+          <ellipse cx="160" cy="185" rx="52" ry="65" fill="url(#og1)" opacity=".6"/>
+          <ellipse cx="95" cy="195" rx="48" ry="58" transform="rotate(-35 95 195)" fill="url(#og1)" opacity=".55"/>
+          <ellipse cx="228" cy="192" rx="46" ry="56" transform="rotate(32 228 192)" fill="url(#og1)" opacity=".55"/>
+          <ellipse cx="160" cy="175" rx="38" ry="48" fill="url(#og2)" opacity=".7"/>
+          <ellipse cx="108" cy="182" rx="35" ry="44" transform="rotate(-28 108 182)" fill="url(#og2)" opacity=".65"/>
+          <ellipse cx="212" cy="180" rx="34" ry="43" transform="rotate(25 212 180)" fill="url(#og2)" opacity=".65"/>
+          <ellipse cx="160" cy="168" rx="26" ry="34" fill="url(#og2)" opacity=".75"/>
+          <ellipse cx="160" cy="155" rx="12" ry="16" fill="#c0a0a0" opacity=".6"/>
+          <circle cx="160" cy="152" r="5" fill="#9a7070" opacity=".55"/>
+        </svg>
+      </div>
+      <h1 class="modal-title">Another Day,</h1>
+      <div class="modal-subtitle">another chance</div>
+      <p class="modal-desc">
+        Welcome to your private journal — a sacred space for faith, reflection, and daily growth.
+        What would you like to call yourself in these pages?
+      </p>
+      <form id="onboarding-form">
+        <div class="field-group">
+          <input type="text" id="onboarding-name" class="input" placeholder="Your name or nickname..." autocomplete="off" maxlength="40">
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--sp-2)">
+          Continue →
+        </button>
+      </form>
+    </div>
+
+    <!-- ── Step 2: Guide + Day/Night choice ── -->
+    <div class="onboard-step hidden" id="onboard-step-2">
+      <h2 class="onboard-guide-title">here's your journal 🌸</h2>
+      <p class="onboard-guide-sub">Before you begin, here's a quick look at what's inside.</p>
+
+      <div class="onboard-features">
+        <div class="onboard-feature-item">
+          <span class="onboard-feature-icon">📖</span>
+          <div>
+            <div class="onboard-feature-name">Today's Entry</div>
+            <div class="onboard-feature-desc">Guided prompts for morning intentions or evening reflection</div>
+          </div>
+        </div>
+        <div class="onboard-feature-item">
+          <span class="onboard-feature-icon">✍️</span>
+          <div>
+            <div class="onboard-feature-name">Free Write</div>
+            <div class="onboard-feature-desc">A blank page — no rules, just your thoughts</div>
+          </div>
+        </div>
+        <div class="onboard-feature-item">
+          <span class="onboard-feature-icon">📅</span>
+          <div>
+            <div class="onboard-feature-name">Calendar</div>
+            <div class="onboard-feature-desc">Look back at any day you've written</div>
+          </div>
+        </div>
+        <div class="onboard-feature-item">
+          <span class="onboard-feature-icon">🌿</span>
+          <div>
+            <div class="onboard-feature-name">Monthly Goals</div>
+            <div class="onboard-feature-desc">Set intentions and track what matters most</div>
+          </div>
+        </div>
+        <div class="onboard-feature-item">
+          <span class="onboard-feature-icon">📊</span>
+          <div>
+            <div class="onboard-feature-name">Recap</div>
+            <div class="onboard-feature-desc">See your whole month's journey at a glance</div>
+          </div>
+        </div>
+        <div class="onboard-feature-item">
+          <span class="onboard-feature-icon">🖼️</span>
+          <div>
+            <div class="onboard-feature-name">Gallery</div>
+            <div class="onboard-feature-desc">Your photos and memories, all in one place</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="onboard-mode-label">How are you starting today?</div>
+      <div class="onboard-mode-row">
+        <button class="onboard-mode-btn" data-mode="morning">
+          <span class="onboard-mode-icon">🌤️</span>
+          <span class="onboard-mode-name">Daytime</span>
+          <span class="onboard-mode-desc">intentions &amp; looking ahead</span>
+        </button>
+        <button class="onboard-mode-btn" data-mode="evening">
+          <span class="onboard-mode-icon">🌙</span>
+          <span class="onboard-mode-name">Nighttime</span>
+          <span class="onboard-mode-desc">reflection &amp; letting go</span>
+        </button>
+      </div>
+
+      <button id="onboard-begin-btn" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--sp-5)" disabled>
+        Begin my journal ✨
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LOGIN OVERLAY (shown when Firebase is enabled + not signed in)
+══════════════════════════════════════ -->
+<div id="login-overlay" class="modal-overlay hidden">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-peony" style="width:80px;height:72px;margin:0 auto var(--sp-4)">
+      <svg viewBox="0 0 320 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="lg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f9e8e8" stop-opacity=".9"/><stop offset="100%" stop-color="#e8c4c4" stop-opacity=".4"/></radialGradient>
+          <radialGradient id="lg2" cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#fff" stop-opacity=".95"/><stop offset="100%" stop-color="#e8c0c0" stop-opacity=".5"/></radialGradient>
+          <radialGradient id="lgg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8d8c0" stop-opacity=".8"/><stop offset="100%" stop-color="#88a880" stop-opacity=".3"/></radialGradient>
+        </defs>
+        <ellipse cx="100" cy="240" rx="42" ry="18" transform="rotate(-30 100 240)" fill="url(#lgg)" opacity=".7"/>
+        <ellipse cx="220" cy="245" rx="40" ry="16" transform="rotate(25 220 245)" fill="url(#lgg)" opacity=".65"/>
+        <ellipse cx="160" cy="185" rx="52" ry="65" fill="url(#lg1)" opacity=".6"/>
+        <ellipse cx="95" cy="195" rx="48" ry="58" transform="rotate(-35 95 195)" fill="url(#lg1)" opacity=".55"/>
+        <ellipse cx="228" cy="192" rx="46" ry="56" transform="rotate(32 228 192)" fill="url(#lg1)" opacity=".55"/>
+        <ellipse cx="160" cy="175" rx="38" ry="48" fill="url(#lg2)" opacity=".7"/>
+        <ellipse cx="108" cy="182" rx="35" ry="44" transform="rotate(-28 108 182)" fill="url(#lg2)" opacity=".65"/>
+        <ellipse cx="160" cy="168" rx="26" ry="34" fill="url(#lg2)" opacity=".75"/>
+        <ellipse cx="160" cy="155" rx="12" ry="16" fill="#c0a0a0" opacity=".6"/>
+        <circle cx="160" cy="152" r="5" fill="#9a7070" opacity=".55"/>
+      </svg>
+    </div>
+    <h2 class="modal-title" style="font-size:var(--fs-xl)">Another Day,</h2>
+    <div class="modal-subtitle" style="font-size:var(--fs-lg)">another chance</div>
+    <p style="font-size:var(--fs-sm);color:var(--color-text-muted);margin:var(--sp-3) 0 var(--sp-5);line-height:1.6">Sign in to save your journal to the cloud and access it from any device.</p>
+    <div id="login-form-area"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP SHELL
+══════════════════════════════════════ -->
+<div id="app">
+
+  <!-- ── Sidebar (desktop) ── -->
+  <aside class="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-brand">
+      <div class="brand-peony">
+        <svg viewBox="0 0 320 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="sb1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f9e8e8" stop-opacity=".9"/><stop offset="100%" stop-color="#e8c4c4" stop-opacity=".4"/></radialGradient>
+            <radialGradient id="sb2" cx="40%" cy="40%" r="60%"><stop offset="0%" stop-color="#fff" stop-opacity=".95"/><stop offset="100%" stop-color="#e8c0c0" stop-opacity=".5"/></radialGradient>
+            <radialGradient id="slg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c8d8c0" stop-opacity=".8"/><stop offset="100%" stop-color="#88a880" stop-opacity=".3"/></radialGradient>
+          </defs>
+          <ellipse cx="100" cy="240" rx="40" ry="17" transform="rotate(-30 100 240)" fill="url(#slg)" opacity=".7"/>
+          <ellipse cx="220" cy="244" rx="38" ry="15" transform="rotate(25 220 244)" fill="url(#slg)" opacity=".65"/>
+          <ellipse cx="160" cy="185" rx="50" ry="62" fill="url(#sb1)" opacity=".6"/>
+          <ellipse cx="95" cy="193" rx="46" ry="55" transform="rotate(-35 95 193)" fill="url(#sb1)" opacity=".55"/>
+          <ellipse cx="226" cy="190" rx="44" ry="53" transform="rotate(32 226 190)" fill="url(#sb1)" opacity=".55"/>
+          <ellipse cx="160" cy="174" rx="36" ry="46" fill="url(#sb2)" opacity=".7"/>
+          <ellipse cx="110" cy="180" rx="33" ry="42" transform="rotate(-28 110 180)" fill="url(#sb2)" opacity=".65"/>
+          <ellipse cx="210" cy="178" rx="32" ry="41" transform="rotate(25 210 178)" fill="url(#sb2)" opacity=".65"/>
+          <ellipse cx="160" cy="162" rx="18" ry="24" fill="url(#sb2)" opacity=".8"/>
+          <ellipse cx="160" cy="154" rx="11" ry="15" fill="#c0a0a0" opacity=".6"/>
+          <circle cx="159" cy="151" r="4.5" fill="#9a7070" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="brand-user js-user-name">My Journal</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item" data-route="#home" href="#home">
+        <span class="nav-icon">🌸</span>
+        <span class="nav-label">The Peony</span>
+      </a>
+      <a class="nav-item" data-route="#guide" href="#guide">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">User Guide</span>
+      </a>
+      <a class="nav-item active" data-route="#today" href="#today">
+        <span class="nav-icon">📖</span>
+        <span class="nav-label">Today's Entry</span>
+      </a>
+      <a class="nav-item" data-route="#freewrite" href="#freewrite">
+        <span class="nav-icon">✍️</span>
+        <span class="nav-label">Free Write</span>
+      </a>
+      <a class="nav-item" data-route="#calendar" href="#calendar">
+        <span class="nav-icon">🗓</span>
+        <span class="nav-label">Calendar</span>
+      </a>
+      <a class="nav-item" data-route="#goals" href="#goals">
+        <span class="nav-icon">🌸</span>
+        <span class="nav-label">Monthly Goals</span>
+      </a>
+      <a class="nav-item" data-route="#recap" href="#recap">
+        <span class="nav-icon">✨</span>
+        <span class="nav-label">Monthly Recap</span>
+      </a>
+      <a class="nav-item" data-route="#gallery" href="#gallery">
+        <span class="nav-icon">🖼️</span>
+        <span class="nav-label">Gallery</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="footer-date"></div>
+      <div style="display:flex;align-items:center;gap:var(--sp-2);margin-top:var(--sp-2)">
+        <div id="user-avatar"></div>
+        <div id="auth-status" style="font-size:var(--fs-xs);color:var(--color-text-light);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+        <button id="signout-btn" class="btn-ghost btn-sm" style="display:none;font-size:var(--fs-xs);padding:2px 6px" title="Sign out">↩</button>
+      </div>
+      <div style="margin-top:var(--sp-3);line-height:1.2">
+        <div style="font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:var(--fs-sm);color:var(--color-text-heading);">another day,</div>
+        <div style="font-family:'Dancing Script',cursive;font-weight:600;font-size:var(--fs-md);color:var(--color-accent-script);margin-top:-2px;">another chance</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Mobile Header ── -->
+  <header class="mobile-header" role="banner">
+    <div class="mobile-header-title" id="mobile-header-title">Today's Entry</div>
+  </header>
+
+  <!-- ── Main Content ── -->
+  <main class="main-content" role="main">
+
+    <!-- Page header (desktop) -->
+    <div class="page-header" id="page-header">
+      <span class="page-header-title" id="page-header-title">Today's Entry</span>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ══════════════════════════════════════
+           SECTION: HOME — PEONY MEANING
+      ══════════════════════════════════════ -->
+      <section id="section-home" class="page-section" aria-label="The peony flower">
+        <div class="home-page">
+          <img src="assets/floral-bg.svg" alt="" class="home-floral-bg" aria-hidden="true">
+
+          <h1 class="home-title animate-fade-in" style="font-family:'Playfair Display',Georgia,serif;">the peony flower</h1>
+          <div class="home-journal-title animate-fade-in">
+            <span class="home-journal-day">another day,</span>
+            <span class="home-journal-chance">another chance</span>
+          </div>
+
+          <div class="home-meanings stagger">
+            <!-- Eternal love -->
+            <div class="home-meaning-block animate-slide-up">
+              <div class="home-meaning-word rose">eternal love</div>
+              <div class="home-divider"></div>
+              <p class="home-meaning-quote">
+                Choose yourself, every day.<br>Never give up on yourself.
+              </p>
+            </div>
+
+            <!-- Forgiveness -->
+            <div class="home-meaning-block right animate-slide-up">
+              <div class="home-meaning-word sage">forgiveness</div>
+              <div class="home-divider"></div>
+              <p class="home-meaning-quote">
+                On your hardest days,<br>choose to forgive yourself.
+              </p>
+            </div>
+
+            <!-- Healing -->
+            <div class="home-meaning-block animate-slide-up">
+              <div class="home-meaning-word rose" style="color:#e8b4c0">healing</div>
+              <div class="home-divider"></div>
+              <p class="home-meaning-quote">
+                Growth is not linear.<br>Every bloom takes time.
+              </p>
+            </div>
+          </div>
+
+          <div class="home-peony" style="display:none">
+            <svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="op1" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"   stop-color="#f9e8e8" stop-opacity=".95"/>
+                  <stop offset="60%"  stop-color="#f0d4d4" stop-opacity=".75"/>
+                  <stop offset="100%" stop-color="#e8c4c4" stop-opacity=".45"/>
+                </radialGradient>
+                <radialGradient id="op2" cx="40%" cy="40%" r="60%">
+                  <stop offset="0%"   stop-color="#ffffff" stop-opacity=".98"/>
+                  <stop offset="50%"  stop-color="#fde8e8" stop-opacity=".85"/>
+                  <stop offset="100%" stop-color="#e8c0c0" stop-opacity=".55"/>
+                </radialGradient>
+                <radialGradient id="op3" cx="60%" cy="35%" r="55%">
+                  <stop offset="0%"   stop-color="#fdf0f0" stop-opacity=".95"/>
+                  <stop offset="70%"  stop-color="#f5d8d8" stop-opacity=".65"/>
+                  <stop offset="100%" stop-color="#ddb8b8" stop-opacity=".35"/>
+                </radialGradient>
+                <radialGradient id="olg" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"   stop-color="#c8d8c0" stop-opacity=".85"/>
+                  <stop offset="60%"  stop-color="#a8c0a0" stop-opacity=".65"/>
+                  <stop offset="100%" stop-color="#88a880" stop-opacity=".35"/>
+                </radialGradient>
+                <radialGradient id="ocg" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"   stop-color="#c0a0a0" stop-opacity=".9"/>
+                  <stop offset="100%" stop-color="#8c6868" stop-opacity=".6"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Leaves -->
+              <ellipse cx="100" cy="240" rx="42" ry="18" transform="rotate(-30 100 240)" fill="url(#olg)" opacity=".7"/>
+              <ellipse cx="220" cy="245" rx="40" ry="16" transform="rotate(25 220 245)"  fill="url(#olg)" opacity=".65"/>
+              <ellipse cx="160" cy="258" rx="38" ry="14" transform="rotate(5 160 258)"   fill="url(#olg)" opacity=".6"/>
+              <ellipse cx="75"  cy="215" rx="36" ry="14" transform="rotate(-50 75 215)"  fill="url(#olg)" opacity=".55"/>
+              <ellipse cx="248" cy="220" rx="34" ry="13" transform="rotate(45 248 220)"  fill="url(#olg)" opacity=".55"/>
+
+              <!-- Outer petals — layer 1 -->
+              <ellipse cx="160" cy="185" rx="52" ry="65" fill="url(#op1)" opacity=".65"/>
+              <ellipse cx="95"  cy="195" rx="48" ry="58" transform="rotate(-35 95 195)"  fill="url(#op1)" opacity=".60"/>
+              <ellipse cx="228" cy="192" rx="46" ry="56" transform="rotate(32 228 192)"  fill="url(#op1)" opacity=".60"/>
+              <ellipse cx="120" cy="148" rx="44" ry="60" transform="rotate(-20 120 148)" fill="url(#op2)" opacity=".55"/>
+              <ellipse cx="200" cy="150" rx="43" ry="58" transform="rotate(18 200 150)"  fill="url(#op2)" opacity=".55"/>
+              <ellipse cx="160" cy="130" rx="42" ry="55" fill="url(#op1)" opacity=".60"/>
+
+              <!-- Mid petals — layer 2 -->
+              <ellipse cx="160" cy="175" rx="38" ry="48" fill="url(#op2)" opacity=".72"/>
+              <ellipse cx="108" cy="182" rx="35" ry="44" transform="rotate(-28 108 182)" fill="url(#op2)" opacity=".68"/>
+              <ellipse cx="212" cy="180" rx="34" ry="43" transform="rotate(25 212 180)"  fill="url(#op2)" opacity=".68"/>
+              <ellipse cx="128" cy="144" rx="33" ry="46" transform="rotate(-15 128 144)" fill="url(#op3)" opacity=".62"/>
+              <ellipse cx="188" cy="146" rx="32" ry="44" transform="rotate(14 188 146)"  fill="url(#op3)" opacity=".62"/>
+              <ellipse cx="160" cy="138" rx="32" ry="42" fill="url(#op2)" opacity=".68"/>
+
+              <!-- Inner petals — layer 3 -->
+              <ellipse cx="160" cy="168" rx="26" ry="34" fill="url(#op3)" opacity=".78"/>
+              <ellipse cx="130" cy="168" rx="24" ry="32" transform="rotate(-20 130 168)" fill="url(#op2)" opacity=".72"/>
+              <ellipse cx="190" cy="168" rx="23" ry="31" transform="rotate(18 190 168)"  fill="url(#op2)" opacity=".72"/>
+              <ellipse cx="148" cy="148" rx="22" ry="32" transform="rotate(-10 148 148)" fill="url(#op3)" opacity=".70"/>
+              <ellipse cx="172" cy="148" rx="21" ry="31" transform="rotate(8 172 148)"   fill="url(#op3)" opacity=".70"/>
+
+              <!-- Innermost petals — layer 4 -->
+              <ellipse cx="160" cy="162" rx="18" ry="24" fill="url(#op1)" opacity=".82"/>
+              <ellipse cx="145" cy="158" rx="16" ry="22" transform="rotate(-15 145 158)" fill="url(#op2)" opacity=".78"/>
+              <ellipse cx="175" cy="158" rx="16" ry="22" transform="rotate(12 175 158)"  fill="url(#op2)" opacity=".78"/>
+              <ellipse cx="160" cy="148" rx="15" ry="22" fill="url(#op3)" opacity=".74"/>
+
+              <!-- Center -->
+              <ellipse cx="160" cy="155" rx="12" ry="16" fill="url(#ocg)" opacity=".62"/>
+              <ellipse cx="158" cy="152" rx="6"  ry="9"  fill="#b89090"   opacity=".52"/>
+              <circle  cx="157" cy="150" r="2.5"          fill="#9a7070"   opacity=".62"/>
+              <circle  cx="163" cy="152" r="2"            fill="#a07878"   opacity=".56"/>
+            </svg>
+          </div>
+
+          <div class="home-cta-area animate-fade-in">
+            <div class="home-cta-label" style="font-family:var(--font-heading);font-size:var(--fs-lg);color:var(--color-text-muted);font-weight:400;font-style:italic;letter-spacing:0.04em;margin-bottom:var(--sp-4);">Your journal awaits</div>
+            <a href="#today" class="btn btn-primary btn-lg" onclick="Router.navigate('#today')">
+              Begin Today's Entry ✦
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION: USER GUIDE
+      ══════════════════════════════════════ -->
+      <section id="section-guide" class="page-section" aria-label="User guide">
+        <div class="page-content">
+
+          <!-- Welcome message -->
+          <div class="guide-welcome-card">
+            <div class="guide-welcome-peony">🌸</div>
+            <h1 class="guide-welcome-title">welcome, beautiful soul</h1>
+            <div class="guide-welcome-script">another day, another chance</div>
+            <p class="guide-welcome-msg">
+              Hi! I'm Yuni, and I made this journal just for you. 💕<br><br>
+              Every single day you open these pages, you're choosing yourself — and that takes courage.
+              Whether you're processing a hard day, celebrating small wins, or just trying to put your
+              thoughts somewhere safe, I want you to know: <strong>I'm cheering for you.</strong><br><br>
+              Because every day truly is another day, and another chance to grow, heal, and begin again. 🌿
+            </p>
+          </div>
+
+          <!-- Guide sections -->
+          <h2 class="guide-section-heading">how to use your journal</h2>
+
+          <!-- Morning vs Evening -->
+          <div class="card guide-card">
+            <div class="guide-card-header">
+              <span class="guide-card-icon">🌤️ 🌙</span>
+              <div>
+                <div class="guide-card-title">Morning or Evening Entry</div>
+                <div class="guide-card-sub">Choose the mode that fits your moment</div>
+              </div>
+            </div>
+            <div class="guide-card-body">
+              <p>When you open <strong>Today's Entry</strong>, you'll see two options at the top of the page:</p>
+              <div class="guide-mode-pair">
+                <div class="guide-mode-block morning">
+                  <div class="guide-mode-label">🌤️ Good morning</div>
+                  <p>For starting your day with intention. You'll be asked what you're looking forward to, how you can make today better, what you're grateful for, and how your day is going.</p>
+                </div>
+                <div class="guide-mode-block evening">
+                  <div class="guide-mode-label">🌙 Good night</div>
+                  <p>For ending your day with reflection. You'll walk through how the day went, what could have been better, something kind you did or noticed, something you want to let go of, and a private message to yourself.</p>
+                </div>
+              </div>
+              <p class="guide-tip">💡 <em>You can switch between morning and evening mode anytime — the prompts will update right away.</em></p>
+            </div>
+          </div>
+
+          <!-- Daily entry -->
+          <div class="card guide-card">
+            <div class="guide-card-header">
+              <span class="guide-card-icon">📖</span>
+              <div>
+                <div class="guide-card-title">Today's Entry</div>
+                <div class="guide-card-sub">Your daily guided reflection</div>
+              </div>
+            </div>
+            <div class="guide-card-body">
+              <p>Each day starts fresh. Here's what you'll find:</p>
+              <ul class="guide-list">
+                <li><strong>Daily scripture</strong> — a verse chosen just for today, to ground you before you begin.</li>
+                <li><strong>Mood check-in</strong> — pick one or more emojis that match how you feel. No judgment, ever.</li>
+                <li><strong>Guided prompts</strong> — gentle questions to help you reflect (changes based on morning or evening mode).</li>
+                <li><strong>Gratitude</strong> — three things you're thankful for today, big or small.</li>
+                <li><strong>Day rating</strong> — a 1–5 star rating so you can look back and see your patterns over time.</li>
+                <li><strong>Photos &amp; Videos</strong> — capture a moment from today. These stay private on your device.</li>
+              </ul>
+              <p class="guide-tip">💡 <em>You don't have to fill in everything. Even one line is enough. Showing up is what matters.</em></p>
+            </div>
+          </div>
+
+          <!-- Free Write -->
+          <div class="card guide-card">
+            <div class="guide-card-header">
+              <span class="guide-card-icon">✍️</span>
+              <div>
+                <div class="guide-card-title">Free Write</div>
+                <div class="guide-card-sub">No prompts, no rules — just you</div>
+              </div>
+            </div>
+            <div class="guide-card-body">
+              <p>Sometimes you just need to write. Free Write is a blank, open page where you can let it all out — your prayers, your feelings, a letter to someone, a poem, a rant, a dream. Whatever it is, it's safe here.</p>
+              <p>You can choose a paper style (lined, dotted, blank, or journal-ruled) to make it feel like your own notebook. Your writing saves automatically as you type.</p>
+              <p class="guide-tip">💡 <em>There's no right or wrong way to use this page. Write a single sentence or fill the whole page — it's yours.</em></p>
+            </div>
+          </div>
+
+          <!-- Monthly Goals -->
+          <div class="card guide-card">
+            <div class="guide-card-header">
+              <span class="guide-card-icon">🌿</span>
+              <div>
+                <div class="guide-card-title">Monthly Goals</div>
+                <div class="guide-card-sub">Set intentions, track what matters</div>
+              </div>
+            </div>
+            <div class="guide-card-body">
+              <p>At the start of each month, head to <strong>Monthly Goals</strong> and write down what you want to focus on. The categories are <em>yours to name</em> — tap any category title to rename it to something personal, like "faith", "self-care", "work", or "family".</p>
+              <ul class="guide-list">
+                <li>Add as many goals as you want under each category.</li>
+                <li>Check them off as you go — each tick is a small win worth celebrating. 🎉</li>
+                <li>Your goals are saved month by month, so you can always look back.</li>
+              </ul>
+              <p class="guide-tip">💡 <em>Start with 1–2 goals per category so it feels achievable, not overwhelming. Small steps add up.</em></p>
+            </div>
+          </div>
+
+          <!-- Recap -->
+          <div class="card guide-card">
+            <div class="guide-card-header">
+              <span class="guide-card-icon">📊</span>
+              <div>
+                <div class="guide-card-title">Monthly Recap</div>
+                <div class="guide-card-sub">See your whole month in one place</div>
+              </div>
+            </div>
+            <div class="guide-card-body">
+              <p>At the end of the month (or anytime, really), open <strong>Monthly Recap</strong> to see a snapshot of your journey: how many days you wrote, what your most common moods were, your overall rating for the month, and space to write a personal reflection on how the month went.</p>
+              <p class="guide-tip">💡 <em>Reading back on your own growth is one of the most powerful things you can do. Don't skip this one. 🌷</em></p>
+            </div>
+          </div>
+
+          <!-- Gallery -->
+          <div class="card guide-card">
+            <div class="guide-card-header">
+              <span class="guide-card-icon">🖼️</span>
+              <div>
+                <div class="guide-card-title">Gallery</div>
+                <div class="guide-card-sub">Your memories, all in one place</div>
+              </div>
+            </div>
+            <div class="guide-card-body">
+              <p>Every photo or video you attach to a journal entry gets saved to your <strong>Gallery</strong>. Think of it as a visual diary — a collection of moments that made up your days.</p>
+              <p>Tap any photo to see which entry it came from, so the memory always has context and meaning.</p>
+              <p class="guide-tip">💡 <em>You don't need to write a lot on the days you upload a photo. Sometimes a picture really is worth a thousand words.</em></p>
+            </div>
+          </div>
+
+          <!-- Theme colors -->
+          <div class="card guide-card">
+            <div class="guide-card-header">
+              <span class="guide-card-icon">🎨</span>
+              <div>
+                <div class="guide-card-title">Color Themes</div>
+                <div class="guide-card-sub">Make it yours — change the color anytime</div>
+              </div>
+            </div>
+            <div class="guide-card-body">
+              <p>Your journal comes in five soft, pastel palettes. To switch, look for the <strong>🎨 palette icon</strong> in the top-right corner of any page and tap it.</p>
+              <div class="guide-theme-swatches">
+                <div class="guide-theme-chip" style="background:#fdf0f0; border-color:#f0c4c4;">
+                  <span class="guide-theme-dot" style="background:#f0c4c4;"></span> Blush
+                </div>
+                <div class="guide-theme-chip" style="background:#f5f0fd; border-color:#c4b8e8;">
+                  <span class="guide-theme-dot" style="background:#c4b8e8;"></span> Lavender
+                </div>
+                <div class="guide-theme-chip" style="background:#f0fdf5; border-color:#a8d8b8;">
+                  <span class="guide-theme-dot" style="background:#a8d8b8;"></span> Mint
+                </div>
+                <div class="guide-theme-chip" style="background:#fdf5f0; border-color:#e8c098;">
+                  <span class="guide-theme-dot" style="background:#e8c098;"></span> Peach
+                </div>
+                <div class="guide-theme-chip" style="background:#f0f5fd; border-color:#a8c4e8;">
+                  <span class="guide-theme-dot" style="background:#a8c4e8;"></span> Sky
+                </div>
+              </div>
+              <p class="guide-tip">💡 <em>Your theme is saved automatically — it'll be waiting for you every time you come back.</em></p>
+            </div>
+          </div>
+
+          <!-- Closing note from Yuni -->
+          <div class="guide-closing-card">
+            <div class="guide-closing-icon">🌸</div>
+            <p class="guide-closing-text">
+              You're already doing something beautiful just by being here.
+              This journal is your safe space — no one judges you, no one grades you,
+              and there are no wrong answers. Every entry you write, no matter how short,
+              is proof that you chose yourself today.
+            </p>
+            <div class="guide-closing-sig">with love &amp; all the cheers,</div>
+            <div class="guide-closing-name">Yuni 🌷</div>
+            <div class="guide-closing-quote">"every day is another day, and another chance."</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION: TODAY'S ENTRY (Guided)
+      ══════════════════════════════════════ -->
+      <section id="section-today" class="page-section active" aria-label="Today's guided entry">
+
+        <!-- Scripture (top of day, like the physical journal) -->
+        <div id="entry-scripture" style="margin-bottom:var(--sp-5)"></div>
+
+        <!-- Entry header -->
+        <div class="entry-hero" style="position:relative">
+          <div id="entry-script-date" class="entry-hero-date">june</div>
+          <div class="entry-hero-day">
+            <span id="entry-day-name"></span> <span id="entry-date-num"></span>
+          </div>
+          <div class="entry-hero-year" id="entry-month-year"></div>
+          <img src="assets/floral-corner.svg" alt="" class="entry-floral-header" aria-hidden="true">
+        </div>
+
+        <!-- Session toggle -->
+        <div id="session-toggle" style="margin-bottom:var(--sp-4)"></div>
+
+        <!-- Entry tabs -->
+        <div class="entry-tabs">
+          <button class="entry-tab active" data-route="#today" onclick="Router.navigate('#today')">📖 Guided Prompts</button>
+          <button class="entry-tab" data-route="#freewrite" onclick="Router.navigate('#freewrite')">✍️ Free Write</button>
+        </div>
+
+        <!-- Guided form -->
+        <form class="entry-form" id="guided-form" onsubmit="return false">
+
+          <!-- Mood -->
+          <div class="card card-rose">
+            <div class="card-label">How are you feeling today?</div>
+            <div id="mood-grid" class="mood-grid"></div>
+          </div>
+
+          <!-- Conditional prompts -->
+          <div class="card">
+            <div class="field-group">
+              <label class="field-label" id="prompt-look-label">
+                <span class="label-icon">🌸</span> What is one thing you're looking forward to today?
+                <span class="field-optional">Optional</span>
+              </label>
+              <textarea id="prompt-look" class="textarea textarea-lg"
+                placeholder="Something that brings you joy or excitement..."></textarea>
+            </div>
+            <hr class="divider">
+            <div class="field-group mb-2">
+              <label class="field-label" id="prompt-better-label">
+                <span class="label-icon">💡</span> How can you make today better?
+                <span class="field-optional">Optional</span>
+              </label>
+              <textarea id="prompt-better" class="textarea"
+                placeholder="A small intention, habit, or act of kindness..."></textarea>
+            </div>
+          </div>
+
+          <!-- Gratitude -->
+          <div class="card">
+            <div class="card-label">What are you grateful for today?</div>
+            <div class="gratitude-list">
+              <div class="gratitude-item">
+                <span class="gratitude-num">1</span>
+                <input type="text" id="prompt-gratitude-0" class="input" placeholder="I'm grateful for...">
+              </div>
+              <div class="gratitude-item">
+                <span class="gratitude-num">2</span>
+                <input type="text" id="prompt-gratitude-1" class="input" placeholder="I'm grateful for...">
+              </div>
+              <div class="gratitude-item">
+                <span class="gratitude-num">3</span>
+                <input type="text" id="prompt-gratitude-2" class="input" placeholder="I'm grateful for...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Kind thing (evening only) -->
+          <div class="card" id="kind-card">
+            <div class="field-group mb-2">
+              <label class="field-label">
+                <span class="label-icon">🤍</span> A kind thing I did or noticed today
+                <span class="field-optional">Optional</span>
+              </label>
+              <textarea id="prompt-kind" class="textarea"
+                placeholder="Small acts of love matter deeply..."></textarea>
+            </div>
+          </div>
+
+          <!-- Let go (always visible) -->
+          <div class="card">
+            <div class="field-group mb-2">
+              <label class="field-label">
+                <span class="label-icon">🕊️</span> One thing I want to let go of
+                <span class="field-optional">Optional</span>
+              </label>
+              <textarea id="prompt-letgo" class="textarea"
+                placeholder="Release it gently, without judgment..."></textarea>
+            </div>
+          </div>
+
+          <!-- Prayer note (private) -->
+          <div class="card" style="border-style: dashed; border-color: var(--color-border);">
+            <div class="field-group mb-2">
+              <label class="field-label">
+                <span class="label-icon">✨</span> A message to myself
+                <span class="field-optional" style="background:#f8f8f8;padding:2px 6px;border-radius:4px;">private</span>
+              </label>
+              <textarea id="prompt-prayer" class="textarea textarea-lg"
+                placeholder="A short message to myself..."></textarea>
+            </div>
+          </div>
+
+          <!-- Day Rating -->
+          <div class="card">
+            <div class="card-label">How was your day?</div>
+            <div id="star-rating" class="star-rating mt-2"></div>
+          </div>
+
+          <!-- Media Upload -->
+          <div class="card">
+            <div class="card-label">Photos & Videos</div>
+            <div id="media-upload"></div>
+          </div>
+
+          <!-- Save -->
+          <div class="entry-save-row">
+            <button type="button" id="save-entry-btn" class="btn-save">Save Entry</button>
+          </div>
+          <p id="save-message" class="entry-save-message text-center mb-8"></p>
+
+        </form>
+
+        <!-- Quick-glance stat widgets -->
+        <div id="today-widgets" class="today-widgets-row"></div>
+
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION: FREE WRITE
+      ══════════════════════════════════════ -->
+      <section id="section-freewrite" class="page-section" aria-label="Free write page">
+
+        <!-- Entry tabs -->
+        <div class="entry-tabs">
+          <button class="entry-tab" data-route="#today" onclick="Router.navigate('#today')">📖 Guided Prompts</button>
+          <button class="entry-tab active" data-route="#freewrite" onclick="Router.navigate('#freewrite')">✍️ Free Write</button>
+        </div>
+
+        <div class="freewrite-container">
+          <div class="freewrite-header">
+            <div class="freewrite-title">My thoughts</div>
+            <div id="paper-style-toggle"></div>
+          </div>
+
+          <div id="freewrite-paper" class="freewrite-paper paper-lined">
+            <textarea
+              id="freewrite-textarea"
+              class="freewrite-textarea"
+              placeholder="This space is yours. Write freely, without judgment. Let your thoughts flow..."></textarea>
+          </div>
+
+          <div class="freewrite-footer">
+            <div id="freewrite-autosave" class="freewrite-autosave">
+              <span class="freewrite-autosave-dot"></span> Auto-saves
+            </div>
+            <div id="freewrite-counts" class="freewrite-counts">0 words · 0 chars</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION: CALENDAR
+      ══════════════════════════════════════ -->
+      <section id="section-calendar" class="page-section" aria-label="Calendar view">
+        <div class="calendar-nav">
+          <div>
+            <div class="calendar-month-label" id="cal-month-label"></div>
+            <span class="calendar-month-sub" id="cal-year-label"></span>
+          </div>
+          <div style="display:flex;gap:var(--sp-2)">
+            <button id="cal-prev-btn" class="btn btn-secondary btn-sm" aria-label="Previous month">‹</button>
+            <button id="cal-next-btn" class="btn btn-secondary btn-sm" aria-label="Next month">›</button>
+          </div>
+        </div>
+
+        <!-- Day names header -->
+        <div class="calendar-grid-header">
+          <div class="cal-day-name">Sun</div>
+          <div class="cal-day-name">Mon</div>
+          <div class="cal-day-name">Tue</div>
+          <div class="cal-day-name">Wed</div>
+          <div class="cal-day-name">Thu</div>
+          <div class="cal-day-name">Fri</div>
+          <div class="cal-day-name">Sat</div>
+        </div>
+
+        <div id="calendar-grid" class="calendar-grid"></div>
+
+        <!-- Entry preview panel -->
+        <div id="entry-preview-panel" class="entry-preview-panel"></div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION: MONTHLY GOALS
+      ══════════════════════════════════════ -->
+      <section id="section-goals" class="page-section" aria-label="Monthly goals">
+
+        <!-- Month navigation -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-2)">
+          <button id="goals-prev-btn" class="btn btn-secondary btn-sm" aria-label="Previous month">‹</button>
+          <div class="goals-hero" style="flex:1;padding:0 var(--sp-4)">
+            <div class="goals-hero-title">Monthly Goals</div>
+            <div class="goals-month-label" id="goals-month-label"></div>
+          </div>
+          <button id="goals-next-btn" class="btn btn-secondary btn-sm" aria-label="Next month">›</button>
+        </div>
+
+
+        <div id="goals-categories"></div>
+
+        <div style="text-align:center;padding:var(--sp-6) 0 var(--sp-4)">
+          <p class="text-muted" style="font-size:var(--fs-sm)">Goals auto-save as you type ✨</p>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION: MONTHLY RECAP
+      ══════════════════════════════════════ -->
+      <section id="section-recap" class="page-section" aria-label="Monthly recap">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-2)">
+          <button id="recap-prev-btn" class="btn btn-secondary btn-sm" aria-label="Previous month">‹</button>
+          <div class="recap-hero" style="flex:1;padding:0 var(--sp-4)">
+            <div class="recap-title">Monthly Recap</div>
+            <div class="recap-subtitle" id="recap-month-label"></div>
+          </div>
+          <button id="recap-next-btn" class="btn btn-secondary btn-sm" aria-label="Next month">›</button>
+        </div>
+
+        <div id="recap-stats"></div>
+
+        <!-- Personal reflection -->
+        <div class="card mt-4">
+          <div class="card-label">Personal Reflection</div>
+          <p class="text-muted mb-4" style="font-size:var(--fs-sm)">Looking back on this month — what stands out most? What are you proud of? What do you want to carry forward?</p>
+          <textarea id="recap-reflection" class="textarea" style="min-height:160px"
+            placeholder="Reflect on your month with kindness and gratitude..."></textarea>
+          <div style="text-align:right;margin-top:var(--sp-4)">
+            <button id="recap-save-btn" class="btn btn-primary">Save Reflection</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SECTION: GALLERY
+      ══════════════════════════════════════ -->
+      <section id="section-gallery" class="page-section" aria-label="Photo gallery">
+        <div style="margin-bottom:var(--sp-6)">
+          <h2 class="heading" style="font-size:var(--fs-2xl);margin-bottom:var(--sp-1)">Gallery</h2>
+          <p class="text-muted">Your moments, collected beautifully.</p>
+        </div>
+
+        <div id="gallery-filters" class="gallery-filters"></div>
+        <div id="gallery-grid" class="gallery-grid"></div>
+      </section>
+
+    </div><!-- /page-content -->
+  </main><!-- /main-content -->
+
+  <!-- ── Mobile Bottom Nav ── -->
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <div class="mobile-nav-inner">
+      <button class="mobile-nav-item" data-route="#home" onclick="Router.navigate('#home')">
+        <span class="mobile-nav-icon">🌸</span>
+        <span class="mobile-nav-label">Home</span>
+      </button>
+      <button class="mobile-nav-item active" data-route="#today" onclick="Router.navigate('#today')">
+        <span class="mobile-nav-icon">📖</span>
+        <span class="mobile-nav-label">Today</span>
+      </button>
+      <button class="mobile-nav-item" data-route="#freewrite" onclick="Router.navigate('#freewrite')">
+        <span class="mobile-nav-icon">✍️</span>
+        <span class="mobile-nav-label">Write</span>
+      </button>
+      <button class="mobile-nav-item" data-route="#calendar" onclick="Router.navigate('#calendar')">
+        <span class="mobile-nav-icon">🗓</span>
+        <span class="mobile-nav-label">Calendar</span>
+      </button>
+      <button class="mobile-nav-item" data-route="#goals" onclick="Router.navigate('#goals')">
+        <span class="mobile-nav-icon">💫</span>
+        <span class="mobile-nav-label">Goals</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Theme Picker ── -->
+  <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Choose color theme" title="Choose theme">🎨</button>
+  <div id="theme-picker" class="theme-picker" role="dialog" aria-label="Color theme picker">
+    <div class="theme-picker-title">Choose your palette</div>
+    <div class="theme-swatches"></div>
+  </div>
+
+  <!-- ── Font Picker ── -->
+  <button id="font-toggle-btn" class="theme-toggle-btn" aria-label="Choose writing font" title="Choose font" style="bottom:4.5rem;">Aa</button>
+  <div id="font-picker" class="theme-picker font-picker" role="dialog" aria-label="Writing font picker">
+    <div class="theme-picker-title">Choose your writing font</div>
+    <div class="font-options"></div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- JS (order matters: dependencies first) -->
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/crypto.js"></script>
+<script src="js/payment.js"></script>
+<script src="js/db.js"></script>
+<script src="js/scripture.js"></script>
+<script src="js/router.js"></script>
+<script src="js/home.js"></script>
+<script src="js/entry.js"></script>
+<script src="js/freewrite.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/goals.js"></script>
+<script src="js/recap.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import xml.etree.ElementTree as ET; t=ET.parse\\('assets/logo.svg'\\); print\\('SVG valid — viewBox:', t.getroot\\(\\).attrib['viewBox']\\)\")",
+      "Bash(open -a \"Google Chrome\" \"http://localhost:8765/assets/logo.svg\")",
+      "Bash(open -a \"Google Chrome\" \"http://localhost:8765/index.html\")",
+      "Bash(curl -s http://localhost:8765/js/entry.js)",
+      "Bash(curl -s http://localhost:8765/css/components.css)",
+      "Bash(curl -s -o /dev/null -w \"index.html HTTP %{http_code}\\\\n\" http://localhost:8765/index.html)",
+      "Bash(curl -s http://localhost:8765/index.html)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8765/css/components.css)",
+      "Bash(open -a \"Google Chrome\" \"http://localhost:8765/index.html#today\")",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8765/index.html)"
+    ]
+  }
+}

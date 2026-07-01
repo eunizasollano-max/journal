@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <style>
+      .petal { fill: #f5d8d8; opacity: 0.5; }
+      .petal-inner { fill: #e8c4c4; opacity: 0.4; }
+      .leaf { fill: #b8cdb0; opacity: 0.45; }
+      .stem { stroke: #c0b0a8; stroke-width: 1; fill: none; opacity: 0.5; }
+    </style>
+  </defs>
+
+  <!-- Main stem -->
+  <path d="M10 190 Q30 160 45 130 Q60 100 80 75 Q100 50 130 30" class="stem" stroke-width="1.5"/>
+
+  <!-- Branch stems -->
+  <path d="M45 130 Q35 115 25 110" class="stem"/>
+  <path d="M65 108 Q55 90 40 85" class="stem"/>
+  <path d="M80 75 Q90 62 85 50" class="stem"/>
+  <path d="M100 55 Q115 40 120 28" class="stem"/>
+
+  <!-- Large flower at top right -->
+  <ellipse cx="135" cy="25" rx="14" ry="18" transform="rotate(-15 135 25)" class="petal"/>
+  <ellipse cx="148" cy="22" rx="13" ry="17" transform="rotate(10 148 22)" class="petal"/>
+  <ellipse cx="142" cy="12" rx="12" ry="16" class="petal"/>
+  <ellipse cx="125" cy="18" rx="11" ry="15" transform="rotate(-25 125 18)" class="petal"/>
+  <ellipse cx="155" cy="32" rx="11" ry="14" transform="rotate(20 155 32)" class="petal"/>
+  <circle cx="140" cy="22" r="8" class="petal-inner"/>
+  <circle cx="140" cy="22" r="4" fill="#c4a0a0" opacity="0.35"/>
+
+  <!-- Small flower mid-left -->
+  <ellipse cx="22" cy="108" rx="9" ry="12" transform="rotate(-20 22 108)" class="petal"/>
+  <ellipse cx="32" cy="106" rx="8" ry="11" transform="rotate(15 32 106)" class="petal"/>
+  <ellipse cx="28" cy="97" rx="8" ry="11" class="petal"/>
+  <ellipse cx="15" cy="102" rx="7" ry="10" transform="rotate(-30 15 102)" class="petal"/>
+  <circle cx="27" cy="105" r="5" class="petal-inner"/>
+  <circle cx="27" cy="105" r="2.5" fill="#c4a0a0" opacity="0.3"/>
+
+  <!-- Small bud lower -->
+  <ellipse cx="40" cy="85" rx="6" ry="9" transform="rotate(-10 40 85)" class="petal"/>
+  <ellipse cx="48" cy="83" rx="5" ry="8" transform="rotate(8 48 83)" class="petal"/>
+  <circle cx="44" cy="84" r="4" class="petal-inner"/>
+
+  <!-- Leaves scattered -->
+  <ellipse cx="55" cy="120" rx="14" ry="7" transform="rotate(-40 55 120)" class="leaf"/>
+  <ellipse cx="35" cy="140" rx="12" ry="6" transform="rotate(-60 35 140)" class="leaf"/>
+  <ellipse cx="70" cy="95" rx="13" ry="5" transform="rotate(-30 70 95)" class="leaf"/>
+  <ellipse cx="88" cy="68" rx="12" ry="5" transform="rotate(-20 88 68)" class="leaf"/>
+  <ellipse cx="105" cy="45" rx="11" ry="5" transform="rotate(-15 105 45)" class="leaf"/>
+  <ellipse cx="155" cy="38" rx="10" ry="4" transform="rotate(20 155 38)" class="leaf"/>
+  <ellipse cx="168" cy="18" rx="9" ry="4" transform="rotate(10 168 18)" class="leaf"/>
+
+  <!-- Tiny accent flowers -->
+  <circle cx="85" cy="52" r="5" class="petal"/>
+  <circle cx="85" cy="52" r="2.5" class="petal-inner"/>
+  <circle cx="120" cy="30" r="4" class="petal"/>
+  <circle cx="120" cy="30" r="2" class="petal-inner"/>
+
+  <!-- Small berries/buds -->
+  <circle cx="60" cy="100" r="3" fill="#d4b0b0" opacity="0.4"/>
+  <circle cx="65" cy="96" r="2.5" fill="#e0c0c0" opacity="0.35"/>
+  <circle cx="70" cy="104" r="3" fill="#d4b0b0" opacity="0.38"/>
+
+  <!-- Leaf vein details -->
+  <path d="M50 122 Q55 117 60 122" stroke="#88a880" stroke-width="0.4" opacity="0.4" fill="none"/>
+  <path d="M30 142 Q35 137 40 140" stroke="#88a880" stroke-width="0.4" opacity="0.4" fill="none"/>
+</svg>

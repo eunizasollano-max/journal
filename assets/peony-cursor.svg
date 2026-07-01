@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 52 52">
+  <defs>
+    <!-- Petal gradients — warm pinks, nice and saturated -->
+    <radialGradient id="pOuter" cx="40%" cy="35%" r="65%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="45%"  stop-color="#fcd8e0" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#f0a8bc" stop-opacity="0.85"/>
+    </radialGradient>
+    <radialGradient id="pMid" cx="35%" cy="30%" r="70%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="40%"  stop-color="#fde8ee" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#f4b8cc" stop-opacity="0.9"/>
+    </radialGradient>
+    <radialGradient id="pInner" cx="45%" cy="40%" r="60%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="55%"  stop-color="#fce0e8" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#f0aec0" stop-opacity="0.9"/>
+    </radialGradient>
+    <radialGradient id="pCenter" cx="50%" cy="40%" r="55%">
+      <stop offset="0%"  stop-color="#fdf0c8" stop-opacity="1"/>
+      <stop offset="60%" stop-color="#f8d888" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#e8b860" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="lGrad" cx="50%" cy="30%" r="60%">
+      <stop offset="0%"   stop-color="#c8e0b8" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#88b878" stop-opacity="0.8"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Leaves at base -->
+  <ellipse cx="14" cy="38" rx="7" ry="3.2" transform="rotate(-42 14 38)" fill="url(#lGrad)"/>
+  <ellipse cx="13.5" cy="38.5" rx="6.5" ry="2.2" transform="rotate(-42 13.5 38.5)" fill="#a8c898" opacity="0.5"/>
+  <ellipse cx="36" cy="39" rx="6.5" ry="3" transform="rotate(38 36 39)" fill="url(#lGrad)"/>
+  <ellipse cx="36" cy="39" rx="6" ry="2" transform="rotate(38 36 39)" fill="#a8c898" opacity="0.5"/>
+
+  <!-- Outermost petals — 5 big round petals -->
+  <ellipse cx="25" cy="13" rx="7.5"  ry="10"   fill="url(#pOuter)" opacity="0.88"/>
+  <ellipse cx="38" cy="19" rx="7.5"  ry="10"   transform="rotate(72 38 19)"  fill="url(#pOuter)" opacity="0.85"/>
+  <ellipse cx="34" cy="35" rx="7.5"  ry="10"   transform="rotate(144 34 35)" fill="url(#pOuter)" opacity="0.85"/>
+  <ellipse cx="16" cy="35" rx="7.5"  ry="10"   transform="rotate(216 16 35)" fill="url(#pOuter)" opacity="0.85"/>
+  <ellipse cx="12" cy="19" rx="7.5"  ry="10"   transform="rotate(288 12 19)" fill="url(#pOuter)" opacity="0.88"/>
+
+  <!-- Second petal layer — slightly smaller, rotated 36° -->
+  <ellipse cx="25" cy="15" rx="6"    ry="8.5"  fill="url(#pMid)" opacity="0.9"/>
+  <ellipse cx="36" cy="22" rx="6"    ry="8.5"  transform="rotate(72 36 22)"  fill="url(#pMid)" opacity="0.88"/>
+  <ellipse cx="32" cy="34" rx="6"    ry="8.5"  transform="rotate(144 32 34)" fill="url(#pMid)" opacity="0.88"/>
+  <ellipse cx="18" cy="34" rx="6"    ry="8.5"  transform="rotate(216 18 34)" fill="url(#pMid)" opacity="0.88"/>
+  <ellipse cx="14" cy="22" rx="6"    ry="8.5"  transform="rotate(288 14 22)" fill="url(#pMid)" opacity="0.9"/>
+
+  <!-- Third layer — inner petals -->
+  <ellipse cx="25" cy="17" rx="4.5"  ry="7"    fill="url(#pInner)" opacity="0.92"/>
+  <ellipse cx="34" cy="22" rx="4.5"  ry="7"    transform="rotate(72 34 22)"  fill="url(#pInner)" opacity="0.9"/>
+  <ellipse cx="31" cy="32" rx="4.5"  ry="7"    transform="rotate(144 31 32)" fill="url(#pInner)" opacity="0.9"/>
+  <ellipse cx="19" cy="32" rx="4.5"  ry="7"    transform="rotate(216 19 32)" fill="url(#pInner)" opacity="0.9"/>
+  <ellipse cx="16" cy="22" rx="4.5"  ry="7"    transform="rotate(288 16 22)" fill="url(#pInner)" opacity="0.92"/>
+
+  <!-- Innermost tiny petals -->
+  <ellipse cx="25" cy="19" rx="3"    ry="4.5"  fill="#fef4f7" opacity="0.95"/>
+  <ellipse cx="31" cy="22" rx="3"    ry="4.5"  transform="rotate(72 31 22)"  fill="#fef4f7" opacity="0.93"/>
+  <ellipse cx="29" cy="29" rx="3"    ry="4.5"  transform="rotate(144 29 29)" fill="#fef4f7" opacity="0.93"/>
+  <ellipse cx="21" cy="29" rx="3"    ry="4.5"  transform="rotate(216 21 29)" fill="#fef4f7" opacity="0.93"/>
+  <ellipse cx="19" cy="22" rx="3"    ry="4.5"  transform="rotate(288 19 22)" fill="#fef4f7" opacity="0.95"/>
+
+  <!-- Golden center -->
+  <circle cx="25" cy="24" r="5.5" fill="url(#pCenter)"/>
+  <circle cx="25" cy="24" r="4"   fill="#f8e090"/>
+
+  <!-- Stamens (tiny dots around center) -->
+  <circle cx="25" cy="19.5" r="1"   fill="#e8a840" opacity="0.9"/>
+  <circle cx="28.8" cy="20.8" r="1" fill="#e8a840" opacity="0.9"/>
+  <circle cx="30.4" cy="24" r="1"   fill="#e8a840" opacity="0.9"/>
+  <circle cx="28.8" cy="27.2" r="1" fill="#e8a840" opacity="0.9"/>
+  <circle cx="25" cy="28.5" r="1"   fill="#e8a840" opacity="0.9"/>
+  <circle cx="21.2" cy="27.2" r="1" fill="#e8a840" opacity="0.9"/>
+  <circle cx="19.6" cy="24" r="1"   fill="#e8a840" opacity="0.9"/>
+  <circle cx="21.2" cy="20.8" r="1" fill="#e8a840" opacity="0.9"/>
+
+  <!-- Deep center dot -->
+  <circle cx="25" cy="24" r="2.2" fill="#c07830" opacity="0.75"/>
+  <circle cx="24.4" cy="23.5" r="0.9" fill="#fff" opacity="0.5"/>
+</svg>
