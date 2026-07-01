@@ -481,6 +481,10 @@ body {
 @media (max-width: 768px) {
   .sidebar { display: none; }
 
+  body {
+    background-attachment: scroll;
+  }
+
   .main-content {
     margin-left: 0;
     padding-top: var(--header-height);
