@@ -1380,6 +1380,11 @@
   text-shadow: 0 0 10px rgba(240,208,80,0.8);
 }
 
+[data-theme="midnight"] .mobile-nav-item[data-route="#home"]      .mobile-nav-icon { background: linear-gradient(135deg, #2a1830, #1e1228); }
+[data-theme="midnight"] .mobile-nav-item[data-route="#guide"]    .mobile-nav-icon { background: linear-gradient(135deg, #1e1a30, #16122a); }
+[data-theme="midnight"] .mobile-nav-item[data-route="#today"]    .mobile-nav-icon { background: linear-gradient(135deg, #2a1438, #1e0e2c); }
+[data-theme="midnight"] .mobile-nav-item[data-route="#goals"]    .mobile-nav-icon { background: linear-gradient(135deg, #0e2820, #0a1e18); }
+
 [data-theme="midnight"] .trial-banner {
   background: linear-gradient(90deg, #1a1030, #14102a);
   border-bottom-color: #2e2248;
@@ -1502,6 +1507,17 @@
 }
 
 .past-entry-back:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .past-entry-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  .entry-floral-header { display: none; }
+}
 
 /* ── Cursor glow ── */
 #cursor-glow {
