@@ -1,9 +1,17 @@
 let recapYear  = new Date().getFullYear();
 let recapMonth = new Date().getMonth() + 1;
+let recapLoading = false;
 
 async function init() {
   renderHeader();
   await renderStats();
+}
+
+function setNavLoading(loading) {
+  const prevBtn = document.getElementById('recap-prev-btn');
+  const nextBtn = document.getElementById('recap-next-btn');
+  if (prevBtn) prevBtn.disabled = loading;
+  if (nextBtn) nextBtn.disabled = loading;
 }
 
 function renderHeader() {
@@ -15,6 +23,7 @@ function renderHeader() {
 
   if (prevBtn) {
     prevBtn.onclick = () => {
+      if (recapLoading) return;
       recapMonth--;
       if (recapMonth < 1) { recapMonth = 12; recapYear--; }
       init();
@@ -22,6 +31,7 @@ function renderHeader() {
   }
   if (nextBtn) {
     nextBtn.onclick = () => {
+      if (recapLoading) return;
       recapMonth++;
       if (recapMonth > 12) { recapMonth = 1; recapYear++; }
       init();
@@ -30,9 +40,17 @@ function renderHeader() {
 }
 
 async function renderStats() {
-  const entries = await JournalDB.getEntriesForMonth(recapYear, recapMonth);
-  const saved   = await JournalDB.getRecap(recapYear, recapMonth);
-  const goalsRec = await JournalDB.getGoals(recapYear, recapMonth);
+  recapLoading = true;
+  setNavLoading(true);
+
+  const [entries, saved, goalsRec] = await Promise.all([
+    JournalDB.getEntriesForMonth(recapYear, recapMonth),
+    JournalDB.getRecap(recapYear, recapMonth),
+    JournalDB.getGoals(recapYear, recapMonth),
+  ]);
+
+  recapLoading = false;
+  setNavLoading(false);
 
   const statsContainer = document.getElementById('recap-stats');
   const reflectionEl   = document.getElementById('recap-reflection');
