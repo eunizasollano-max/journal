@@ -95,12 +95,20 @@ async function renderStats() {
   const uniqueGratitude = [...new Set(allGratitude)].slice(0, 8);
 
   // ── Render ──
+  const starRow = avgRating === '–' ? '' : (() => {
+    const filled = Math.round(parseFloat(avgRating));
+    return Array.from({ length: 10 }, (_, i) =>
+      `<span class="recap-star${i < filled ? ' filled' : ''}">★</span>`
+    ).join('');
+  })();
+
   if (statsContainer) {
     statsContainer.innerHTML = `
       <div class="recap-stats-grid stagger">
         <div class="recap-stat-card animate-slide-up">
           <div class="recap-stat-icon">⭐</div>
-          <div class="recap-stat-value">${avgRating}</div>
+          <div class="recap-star-row">${starRow || '–'}</div>
+          <div class="recap-stat-value" style="font-size:var(--fs-lg);margin-top:var(--sp-2)">${avgRating}<span style="font-size:var(--fs-xs);color:var(--color-text-light);font-weight:400"> /10</span></div>
           <div class="recap-stat-label">Average Day Rating</div>
         </div>
         <div class="recap-stat-card animate-slide-up">

@@ -261,7 +261,46 @@
   <!-- ── Mobile Header ── -->
   <header class="mobile-header" role="banner">
     <div class="mobile-header-title" id="mobile-header-title">Today's Entry</div>
+    <div class="mobile-header-actions">
+      <button class="mobile-header-action-btn" id="mobile-font-btn" aria-label="Choose font">Aa</button>
+      <button class="mobile-header-action-btn" id="mobile-theme-btn" aria-label="Choose theme">🎨</button>
+    </div>
   </header>
+
+  <!-- ── Mobile More Drawer ── -->
+  <div id="mobile-more-overlay" class="mobile-more-overlay hidden"></div>
+  <div id="mobile-more-drawer" class="mobile-more-drawer">
+    <div class="mobile-more-handle"></div>
+    <div class="mobile-more-grid">
+      <button class="mobile-more-item" data-route="#freewrite" id="more-freewrite-btn">
+        <span class="mobile-more-icon">✍️</span>
+        <span class="mobile-more-label">Write</span>
+      </button>
+      <button class="mobile-more-item" data-route="#calendar" id="more-calendar-btn">
+        <span class="mobile-more-icon">🗓</span>
+        <span class="mobile-more-label">Calendar</span>
+      </button>
+      <button class="mobile-more-item" data-route="#gallery" id="more-gallery-btn">
+        <span class="mobile-more-icon">🖼</span>
+        <span class="mobile-more-label">Gallery</span>
+      </button>
+      <button class="mobile-more-item" data-route="#recap" id="more-recap-btn">
+        <span class="mobile-more-icon">📝</span>
+        <span class="mobile-more-label">Recap</span>
+      </button>
+      <button class="mobile-more-item" id="more-sync-btn">
+        <span class="mobile-more-icon">⟳</span>
+        <span class="mobile-more-label">Sync</span>
+      </button>
+    </div>
+    <div class="mobile-more-nickname">
+      <span class="mobile-more-nickname-label">Your name</span>
+      <button class="mobile-more-nickname-val" id="more-nickname-btn">My Journal</button>
+    </div>
+    <div class="mobile-more-footer">
+      <button class="mobile-more-signout" id="more-signout-btn">Sign out</button>
+    </div>
+  </div>
 
   <!-- ── Main Content ── -->
   <main class="main-content" role="main">
@@ -860,21 +899,21 @@
         <span class="mobile-nav-icon">🌸</span>
         <span class="mobile-nav-label">Home</span>
       </button>
-      <button class="mobile-nav-item active" data-route="#today" onclick="Router.navigate('#today')">
+      <button class="mobile-nav-item" data-route="#guide" onclick="Router.navigate('#guide')">
         <span class="mobile-nav-icon">📖</span>
+        <span class="mobile-nav-label">Guide</span>
+      </button>
+      <button class="mobile-nav-item active" data-route="#today" onclick="Router.navigate('#today')">
+        <span class="mobile-nav-icon">✏️</span>
         <span class="mobile-nav-label">Today</span>
-      </button>
-      <button class="mobile-nav-item" data-route="#freewrite" onclick="Router.navigate('#freewrite')">
-        <span class="mobile-nav-icon">✍️</span>
-        <span class="mobile-nav-label">Write</span>
-      </button>
-      <button class="mobile-nav-item" data-route="#calendar" onclick="Router.navigate('#calendar')">
-        <span class="mobile-nav-icon">🗓</span>
-        <span class="mobile-nav-label">Calendar</span>
       </button>
       <button class="mobile-nav-item" data-route="#goals" onclick="Router.navigate('#goals')">
         <span class="mobile-nav-icon">💫</span>
         <span class="mobile-nav-label">Goals</span>
+      </button>
+      <button class="mobile-nav-item" id="mobile-more-btn">
+        <span class="mobile-nav-icon">···</span>
+        <span class="mobile-nav-label">More</span>
       </button>
     </div>
   </nav>

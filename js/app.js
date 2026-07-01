@@ -236,6 +236,8 @@ function applyUserName(name) {
   });
   const brandUser = document.querySelector('.brand-user');
   if (brandUser) brandUser.textContent = name + "'s Journal";
+  const mobileNick = document.getElementById('more-nickname-btn');
+  if (mobileNick) mobileNick.textContent = name;
 }
 
 /* ── Auth state UI ── */
@@ -333,6 +335,79 @@ function wrapSavesForViewOnly() {
   JournalDB.saveEntry = block('saveEntry');
   JournalDB.saveGoals = block('saveGoals');
   JournalDB.saveRecap = block('saveRecap');
+}
+
+/* ── Mobile More Drawer ── */
+function wireMobileMore() {
+  const drawer  = document.getElementById('mobile-more-drawer');
+  const overlay = document.getElementById('mobile-more-overlay');
+  if (!drawer) return;
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    overlay.classList.remove('hidden');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    overlay.classList.add('hidden');
+  }
+
+  document.getElementById('mobile-more-btn')?.addEventListener('click', openDrawer);
+  overlay.addEventListener('click', closeDrawer);
+
+  ['freewrite', 'calendar', 'gallery', 'recap'].forEach(route => {
+    document.getElementById(`more-${route}-btn`)?.addEventListener('click', () => {
+      closeDrawer();
+      Router.navigate(`#${route}`);
+    });
+  });
+
+  document.getElementById('more-sync-btn')?.addEventListener('click', async () => {
+    closeDrawer();
+    document.getElementById('sync-btn')?.click();
+  });
+
+  document.getElementById('more-signout-btn')?.addEventListener('click', () => {
+    closeDrawer();
+    document.getElementById('signout-btn')?.click();
+  });
+
+  document.getElementById('more-nickname-btn')?.addEventListener('click', () => {
+    const btn = document.getElementById('more-nickname-btn');
+    const current = localStorage.getItem('journal_user_name') || Auth.getUserDisplayName?.() || '';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = current;
+    input.className = 'input';
+    input.style.cssText = 'font-family:var(--font-script);font-size:var(--fs-md);color:var(--color-accent-script);padding:2px 6px;width:140px';
+    btn.replaceWith(input);
+    input.focus();
+    input.select();
+    const save = () => {
+      const n = input.value.trim() || current;
+      localStorage.setItem('journal_user_name', n);
+      applyUserName(n);
+      input.replaceWith(btn);
+      btn.textContent = n;
+    };
+    input.addEventListener('blur', save);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); save(); }
+      if (e.key === 'Escape') { input.replaceWith(btn); }
+    });
+  });
+
+  document.getElementById('mobile-theme-btn')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.getElementById('theme-picker')?.classList.toggle('open');
+    document.getElementById('font-picker')?.classList.remove('open');
+  });
+
+  document.getElementById('mobile-font-btn')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.getElementById('font-picker')?.classList.toggle('open');
+    document.getElementById('theme-picker')?.classList.remove('open');
+  });
 }
 
 /* ── Nickname editing ── */
@@ -523,6 +598,7 @@ function launchJournal(user) {
   initCursorGlow();
   wireSignOutButton();
   wireSyncButton();
+  wireMobileMore();
 
   Router.register('#home',      () => HomePage.init());
   Router.register('#today',     () => EntryPage.init());
