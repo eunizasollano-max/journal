@@ -1522,12 +1522,13 @@
 /* ── Cursor glow ── */
 #cursor-glow {
   position: fixed;
+  left: 0;
+  top: 0;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
-  transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.3s ease;
   background: radial-gradient(circle, var(--cursor-glow-color) 0%, transparent 70%);

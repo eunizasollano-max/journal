@@ -403,6 +403,60 @@
   font-family: var(--font-heading);
 }
 
+[data-theme="midnight"] .gratitude-num {
+  background: linear-gradient(135deg, #3d2a4a, #2e1e3a);
+  color: #e8d4f8;
+}
+
+/* ── Gratitude suggestion chips ── */
+.gratitude-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  align-items: center;
+}
+
+.gratitude-chip-label {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.gratitude-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px var(--sp-3);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-text-body);
+  font-size: var(--fs-xs);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.gratitude-chip:hover,
+.gratitude-chip:active {
+  background: var(--color-surface-warm);
+  border-color: var(--color-accent);
+  color: var(--color-text-heading);
+  transform: scale(0.97);
+}
+
+[data-theme="midnight"] .gratitude-chip {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+}
+
+[data-theme="midnight"] .gratitude-chip:hover,
+[data-theme="midnight"] .gratitude-chip:active {
+  background: rgba(200,170,240,0.15);
+  border-color: rgba(200,170,240,0.35);
+}
+
 /* ── Media Upload ── */
 .media-dropzone {
   border: 2px dashed var(--color-border);

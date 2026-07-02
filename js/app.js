@@ -117,10 +117,14 @@ function initCursorGlow() {
   glow.id = 'cursor-glow';
   document.body.appendChild(glow);
 
+  let _rafId = null;
   document.addEventListener('mousemove', (e) => {
-    glow.style.left = e.clientX + 'px';
-    glow.style.top  = e.clientY + 'px';
-    glow.style.opacity = '1';
+    if (_rafId) return;
+    _rafId = requestAnimationFrame(() => {
+      glow.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+      glow.style.opacity = '1';
+      _rafId = null;
+    });
   });
 
   document.addEventListener('mouseleave', () => {
@@ -492,7 +496,8 @@ async function showPassphraseModal(user, onComplete) {
     if (isFirstTime && !isEmailUser && confirm && pass !== confirm.value) {
       errEl.textContent = 'Passphrases do not match.'; errEl.classList.remove('hidden'); return;
     }
-    btn.textContent = 'Unlocking…'; btn.disabled = true; errEl.classList.add('hidden');
+    btn.textContent = isFirstTime ? 'Setting up…' : 'Unlocking…'; btn.disabled = true; errEl.classList.add('hidden');
+    await new Promise(r => setTimeout(r, 30));
     try {
       await JournalCrypto.initCrypto(pass, user.id);
       overlay.remove();

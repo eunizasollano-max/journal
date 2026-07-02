@@ -488,6 +488,20 @@ async function saveEntry() {
 function attachEventListeners() {
   const saveBtn = document.getElementById('save-entry-btn');
   if (saveBtn) saveBtn.addEventListener('click', saveEntry);
+
+  document.querySelectorAll('.gratitude-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.textContent;
+      for (let i = 0; i < 3; i++) {
+        const input = document.getElementById(`prompt-gratitude-${i}`);
+        if (input && !input.value.trim()) {
+          input.value = text;
+          input.focus();
+          break;
+        }
+      }
+    });
+  });
 }
 
 window.EntryPage = { init, MOODS };
