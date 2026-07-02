@@ -607,6 +607,7 @@ function launchJournal(user) {
   Router.register('#goals',     () => GoalsPage.init());
   Router.register('#recap',     () => RecapPage.init());
   Router.register('#gallery',   () => GalleryPage.init());
+  Router.register('#privacy',   () => {});
 
   Router.handleRoute();
 }
