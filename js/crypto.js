@@ -65,7 +65,10 @@ async function hasUserKey(userId) {
 }
 
 async function initCrypto(passphrase, userId) {
-  const { data } = await SupabaseClient.from('user_keys').select('*').eq('user_id', userId).maybeSingle();
+  const { data, error: selectErr } = await SupabaseClient
+    .from('user_keys').select('*').eq('user_id', userId).maybeSingle();
+
+  if (selectErr) throw new Error('Could not reach the server — check your connection and try again.');
 
   let key;
   if (data) {
@@ -81,7 +84,9 @@ async function initCrypto(passphrase, userId) {
     const salt = b64Enc(saltBytes);
     key = await deriveKey(passphrase, salt);
     const { iv, ct } = await aeEncrypt('ok', key);
-    await SupabaseClient.from('user_keys').insert({ user_id: userId, salt, verify_iv: iv, verify_ct: ct });
+    const { error: insertErr } = await SupabaseClient
+      .from('user_keys').insert({ user_id: userId, salt, verify_iv: iv, verify_ct: ct });
+    if (insertErr) throw new Error('Could not save your encryption key — check your connection and try again.');
   }
 
   _cryptoKey = key;

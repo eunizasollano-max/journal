@@ -66,6 +66,32 @@ const THEMES = [
 function initTheme() {
   const saved = localStorage.getItem('journal_theme') || 'blush';
   applyTheme(saved);
+  initNightMode();
+}
+
+/* ── Night mode ── */
+function initNightMode() {
+  const isNight = localStorage.getItem('journal_night_mode') === '1';
+  if (isNight) document.documentElement.classList.add('night-mode');
+  updateNightButtons(isNight);
+
+  document.getElementById('night-toggle-btn')?.addEventListener('click', toggleNightMode);
+  document.getElementById('mobile-night-btn')?.addEventListener('click', toggleNightMode);
+}
+
+function toggleNightMode() {
+  const isNight = document.documentElement.classList.toggle('night-mode');
+  localStorage.setItem('journal_night_mode', isNight ? '1' : '0');
+  updateNightButtons(isNight);
+}
+
+function updateNightButtons(isNight) {
+  const icon  = isNight ? '☀️' : '🌙';
+  const label = isNight ? 'Switch to day mode' : 'Switch to night mode';
+  const btn   = document.getElementById('night-toggle-btn');
+  const mBtn  = document.getElementById('mobile-night-btn');
+  if (btn)  { btn.textContent = icon; btn.title = label; btn.setAttribute('aria-label', label); }
+  if (mBtn) { mBtn.textContent = icon; mBtn.setAttribute('aria-label', label); }
 }
 
 function applyTheme(key) {

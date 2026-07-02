@@ -138,31 +138,31 @@
 
 /* ── Midnight Theme ── */
 [data-theme="midnight"] {
-  --color-bg:            #0a0a14;
-  --color-surface:       #12121e;
-  --color-surface-alt:   #181828;
-  --color-surface-warm:  #0f0f1a;
-  --color-border:        #2a2a42;
-  --color-border-light:  #1e1e32;
-  --color-accent-rose:   #b87fd4;
-  --color-accent-pink:   #d4a0f0;
-  --color-accent-deep:   #8a55b0;
-  --color-accent-script: #f080d0;
-  --color-accent-sage:   #4a9580;
-  --color-accent-sage-light: #3a7060;
+  --color-bg:            #0d0d1c;
+  --color-surface:       #181832;
+  --color-surface-alt:   #1f1f3e;
+  --color-surface-warm:  #141428;
+  --color-border:        #3e3e6a;
+  --color-border-light:  #2c2c52;
+  --color-accent-rose:   #c490e8;
+  --color-accent-pink:   #e0b8ff;
+  --color-accent-deep:   #9460c8;
+  --color-accent-script: #ff90e0;
+  --color-accent-sage:   #52aaa0;
+  --color-accent-sage-light: #3d8078;
   --color-text-heading:  #ffffff;
-  --color-text-body:     #e0d4f8;
-  --color-text-muted:    #b8a8e0;
-  --color-text-light:    #8878b8;
-  --color-star-fill:     #f0d050;
-  --color-star-empty:    #25203a;
-  --color-success:       #50c090;
-  --color-overlay:       rgba(5, 5, 15, 0.82);
-  --shadow-sm:  0 1px 4px rgba(0,0,0,0.4);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.5);
-  --shadow-lg:  0 8px 32px rgba(0,0,0,0.6);
-  --shadow-card: 0 2px 16px rgba(180,100,240,0.12);
-  --cursor-glow-color:   rgba(240, 128, 208, 0.8);
+  --color-text-body:     #f0eaff;
+  --color-text-muted:    #c8b8f0;
+  --color-text-light:    #9080c8;
+  --color-star-fill:     #ffd060;
+  --color-star-empty:    #28234a;
+  --color-success:       #58d8a8;
+  --color-overlay:       rgba(5, 5, 20, 0.88);
+  --shadow-sm:  0 1px 4px rgba(0,0,0,0.5);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.65);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.75);
+  --shadow-card: 0 2px 20px rgba(160, 90, 255, 0.18);
+  --cursor-glow-color:   rgba(255, 144, 224, 0.85);
 }
 
 /* ── Sky Theme ── */
@@ -183,3 +183,122 @@
   --color-overlay:       rgba(40, 55, 80, 0.4);
   --cursor-glow-color:   rgba(60, 100, 210, 0.5);
 }
+
+/* ══════════════════════════════════════════════════
+   Night Mode — darkened versions of each theme
+   Applied via html.night-mode class.
+   Each block is scoped to its specific data-theme so
+   the midnight theme is never touched.
+   ══════════════════════════════════════════════════ */
+
+/* Blush night */
+html.night-mode[data-theme="blush"] {
+  --color-bg:            #160d0d;
+  --color-surface:       #1e1414;
+  --color-surface-alt:   #261a1a;
+  --color-surface-warm:  #1a1010;
+  --color-border:        #3d2222;
+  --color-border-light:  #2a1818;
+  --color-text-heading:  #f5d8d8;
+  --color-text-body:     #d0a8a8;
+  --color-text-muted:    #8a6060;
+  --color-text-light:    #5c4040;
+  --color-accent-script: #f07090;
+  --color-star-fill:     #e08050;
+  --color-star-empty:    #381c1c;
+  --color-overlay:       rgba(0, 0, 0, 0.72);
+  --shadow-sm:           0 1px 4px rgba(0,0,0,0.45);
+  --shadow-md:           0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:           0 8px 32px rgba(0,0,0,0.65);
+  --shadow-card:         0 2px 12px rgba(200,80,100,0.15);
+  --cursor-glow-color:   rgba(240, 80, 120, 0.85);
+}
+
+html.night-mode[data-theme="lavender"] {
+  --color-bg:            #0e0c16;
+  --color-surface:       #14121e;
+  --color-surface-alt:   #1a1828;
+  --color-surface-warm:  #100e18;
+  --color-border:        #2c2848;
+  --color-border-light:  #201e38;
+  --color-text-heading:  #f0e4ff;
+  --color-text-body:     #c0a8e0;
+  --color-text-muted:    #7868a0;
+  --color-text-light:    #504878;
+  --color-accent-script: #c080ff;
+  --color-star-fill:     #b878e0;
+  --color-star-empty:    #201c38;
+  --color-overlay:       rgba(0, 0, 0, 0.72);
+  --shadow-sm:           0 1px 4px rgba(0,0,0,0.45);
+  --shadow-md:           0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:           0 8px 32px rgba(0,0,0,0.65);
+  --shadow-card:         0 2px 12px rgba(140,60,220,0.15);
+  --cursor-glow-color:   rgba(192, 128, 255, 0.85);
+}
+
+html.night-mode[data-theme="mint"] {
+  --color-bg:            #0a1610;
+  --color-surface:       #0e1c14;
+  --color-surface-alt:   #14221a;
+  --color-surface-warm:  #0c1812;
+  --color-border:        #1c3826;
+  --color-border-light:  #162a1e;
+  --color-text-heading:  #cceedd;
+  --color-text-body:     #8cc8a8;
+  --color-text-muted:    #487860;
+  --color-text-light:    #30543e;
+  --color-accent-script: #50d880;
+  --color-star-fill:     #58c888;
+  --color-star-empty:    #102218;
+  --color-overlay:       rgba(0, 0, 0, 0.72);
+  --shadow-sm:           0 1px 4px rgba(0,0,0,0.45);
+  --shadow-md:           0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:           0 8px 32px rgba(0,0,0,0.65);
+  --shadow-card:         0 2px 12px rgba(50,180,100,0.15);
+  --cursor-glow-color:   rgba(80, 216, 128, 0.75);
+}
+
+html.night-mode[data-theme="peach"] {
+  --color-bg:            #160f08;
+  --color-surface:       #1e160e;
+  --color-surface-alt:   #261c12;
+  --color-surface-warm:  #1a120a;
+  --color-border:        #3a2810;
+  --color-border-light:  #281e0c;
+  --color-text-heading:  #f5e0c0;
+  --color-text-body:     #d0a878;
+  --color-text-muted:    #806048;
+  --color-text-light:    #5a4030;
+  --color-accent-script: #f09050;
+  --color-star-fill:     #e08040;
+  --color-star-empty:    #381c08;
+  --color-overlay:       rgba(0, 0, 0, 0.72);
+  --shadow-sm:           0 1px 4px rgba(0,0,0,0.45);
+  --shadow-md:           0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:           0 8px 32px rgba(0,0,0,0.65);
+  --shadow-card:         0 2px 12px rgba(220,120,40,0.15);
+  --cursor-glow-color:   rgba(240, 144, 80, 0.85);
+}
+
+html.night-mode[data-theme="sky"] {
+  --color-bg:            #0a0e18;
+  --color-surface:       #0e1220;
+  --color-surface-alt:   #14182c;
+  --color-surface-warm:  #0c101a;
+  --color-border:        #1e2c44;
+  --color-border-light:  #161e30;
+  --color-text-heading:  #d8e4ff;
+  --color-text-body:     #98aed0;
+  --color-text-muted:    #506898;
+  --color-text-light:    #364870;
+  --color-accent-script: #70a8ff;
+  --color-star-fill:     #6090d8;
+  --color-star-empty:    #121c30;
+  --color-overlay:       rgba(0, 0, 0, 0.72);
+  --shadow-sm:           0 1px 4px rgba(0,0,0,0.45);
+  --shadow-md:           0 4px 16px rgba(0,0,0,0.55);
+  --shadow-lg:           0 8px 32px rgba(0,0,0,0.65);
+  --shadow-card:         0 2px 12px rgba(60,100,220,0.15);
+  --cursor-glow-color:   rgba(112, 168, 255, 0.85);
+}
+/* midnight is already dark — night-mode has no effect on it */
