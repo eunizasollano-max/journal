@@ -362,9 +362,15 @@
 }
 
 /* ── Night mode: only active on #section-today when "Good night" is selected ── */
-#section-today.night-mode .entry-hero-day  { color: rgba(255,255,255,0.95); }
-#section-today.night-mode .entry-hero-year { color: rgba(255,255,255,0.65); }
-#section-today.night-mode .entry-hero-date { color: rgba(255,255,255,0.80); }
+#section-today.night-mode .entry-hero {
+  background: linear-gradient(135deg, #1a0e2e 0%, #0e0a1e 100%);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--sp-4);
+  box-shadow: 0 4px 32px rgba(140, 60, 220, 0.18);
+}
+#section-today.night-mode .entry-hero-day  { color: rgba(255, 255, 255, 0.95); }
+#section-today.night-mode .entry-hero-year { color: rgba(200, 180, 240, 0.70); }
+#section-today.night-mode .entry-hero-date { color: rgba(240, 128, 208, 0.85); }
 
 .entry-section-title {
   font-family: var(--font-script);

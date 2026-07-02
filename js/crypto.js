@@ -59,16 +59,19 @@ async function restoreKeyFromSession() {
 }
 
 /* ── Supabase key record ── */
-async function hasUserKey(userId) {
-  const { data } = await SupabaseClient.from('user_keys').select('user_id').eq('user_id', userId).maybeSingle();
-  return !!data;
+async function getUserKey(userId) {
+  const { data } = await SupabaseClient.from('user_keys').select('*').eq('user_id', userId).maybeSingle();
+  return data || null;
 }
 
-async function initCrypto(passphrase, userId) {
-  const { data, error: selectErr } = await SupabaseClient
-    .from('user_keys').select('*').eq('user_id', userId).maybeSingle();
-
-  if (selectErr) throw new Error('Could not reach the server — check your connection and try again.');
+async function initCrypto(passphrase, userId, cachedKeyRecord = null) {
+  let data = cachedKeyRecord;
+  if (!data) {
+    const { data: fetched, error: selectErr } = await SupabaseClient
+      .from('user_keys').select('*').eq('user_id', userId).maybeSingle();
+    if (selectErr) throw new Error('Could not reach the server — check your connection and try again.');
+    data = fetched;
+  }
 
   let key;
   if (data) {
@@ -113,4 +116,4 @@ async function decrypt(data) {
 function getCryptoKey()  { return _cryptoKey; }
 function clearCryptoKey() { _cryptoKey = null; sessionStorage.removeItem(SESSION_KEY); }
 
-window.JournalCrypto = { initCrypto, restoreKeyFromSession, hasUserKey, getCryptoKey, clearCryptoKey, encrypt, decrypt };
+window.JournalCrypto = { initCrypto, restoreKeyFromSession, getUserKey, getCryptoKey, clearCryptoKey, encrypt, decrypt };

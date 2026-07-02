@@ -456,7 +456,8 @@ async function ensureCryptoKey(user) {
 
 async function showPassphraseModal(user, onComplete) {
   const isEmailUser  = user.app_metadata?.provider === 'email';
-  const isFirstTime  = !(await JournalCrypto.hasUserKey(user.id));
+  const existingKey  = await JournalCrypto.getUserKey(user.id);
+  const isFirstTime  = !existingKey;
 
   const title    = isFirstTime ? 'Protect your journal' : 'Unlock your journal';
   const subtitle = isFirstTime
@@ -498,9 +499,9 @@ async function showPassphraseModal(user, onComplete) {
       errEl.textContent = 'Passphrases do not match.'; errEl.classList.remove('hidden'); return;
     }
     btn.textContent = isFirstTime ? 'Setting up…' : 'Unlocking…'; btn.disabled = true; errEl.classList.add('hidden');
-    await new Promise(r => setTimeout(r, 30));
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
-      await JournalCrypto.initCrypto(pass, user.id);
+      await JournalCrypto.initCrypto(pass, user.id, existingKey);
       overlay.remove();
       onComplete?.();
     } catch (e) {
@@ -527,6 +528,7 @@ async function initApp() {
       return;
     }
 
+    Auth.hideLoginScreen?.();
     await JournalDB.openDB();
 
     if (window._viewOnly) {
