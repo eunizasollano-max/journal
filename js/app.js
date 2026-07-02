@@ -66,9 +66,6 @@ const THEMES = [
 function initTheme() {
   const saved = localStorage.getItem('journal_theme') || 'blush';
   applyTheme(saved);
-  // Restore night mode from saved session (evening = dark)
-  const savedSession = localStorage.getItem('journal_session');
-  document.documentElement.classList.toggle('night-mode', savedSession === 'evening');
 }
 
 function applyTheme(key) {
@@ -116,6 +113,7 @@ function initThemePicker() {
 
 /* ── Cursor glow ── */
 function initCursorGlow() {
+  if (document.getElementById('cursor-glow')) return;
   const glow = document.createElement('div');
   glow.id = 'cursor-glow';
   document.body.appendChild(glow);
@@ -596,7 +594,12 @@ function showBetaWelcome() {
   });
 }
 
+let _journalLaunched = false;
+
 function launchJournal(user) {
+  if (_journalLaunched) return;
+  _journalLaunched = true;
+
   updateSidebarDate();
   showBetaWelcome();
   initOnboarding();

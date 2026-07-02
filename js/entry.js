@@ -110,7 +110,7 @@ function renderDateHeader() {
     currentSession = new Date().getHours() < 12 ? 'morning' : 'evening';
   }
   // Darken the theme for evening entries
-  document.documentElement.classList.toggle('night-mode', currentSession === 'evening');
+  document.getElementById('section-today')?.classList.toggle('night-mode', currentSession === 'evening');
 }
 
 function renderPastEntryBanner() {
@@ -154,7 +154,7 @@ function setSession(session) {
   document.querySelectorAll('.session-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.session === session);
   });
-  document.documentElement.classList.toggle('night-mode', session === 'evening');
+  document.getElementById('section-today')?.classList.toggle('night-mode', session === 'evening');
   updateConditionalPrompts();
 }
 

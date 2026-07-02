@@ -361,34 +361,10 @@
   pointer-events: none;
 }
 
-/* ── Night mode overrides for elements on the page background ── */
-
-/* Entry date header */
-html.night-mode .entry-hero-day  { color: rgba(255,255,255,0.95); }
-html.night-mode .entry-hero-year { color: rgba(255,255,255,0.65); }
-html.night-mode .entry-hero-date { color: rgba(255,255,255,0.80); }
-
-/* Calendar weekday labels sit on the page bg */
-html.night-mode .cal-day-name { color: rgba(255,255,255,0.70); }
-
-/* Freewrite lined/dot paper: override hardcoded blush colors */
-html.night-mode .freewrite-paper.paper-lined {
-  background-color: var(--color-surface);
-  background-image: repeating-linear-gradient(
-    transparent, transparent 31px,
-    rgba(255,255,255,0.25) 31px,
-    rgba(255,255,255,0.25) 32px
-  );
-}
-html.night-mode .freewrite-paper.paper-dot {
-  background-image: radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-/* Freewrite placeholder: make it visible on the light card */
-html.night-mode .freewrite-textarea::placeholder {
-  color: var(--color-text-muted);
-  opacity: 1;
-}
+/* ── Night mode: only active on #section-today when "Good night" is selected ── */
+#section-today.night-mode .entry-hero-day  { color: rgba(255,255,255,0.95); }
+#section-today.night-mode .entry-hero-year { color: rgba(255,255,255,0.65); }
+#section-today.night-mode .entry-hero-date { color: rgba(255,255,255,0.80); }
 
 .entry-section-title {
   font-family: var(--font-script);
