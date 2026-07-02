@@ -82,6 +82,11 @@
   color: var(--color-accent-rose);
 }
 
+/* Night mode: accent-rose is not overridden so it stays light; use accent-script which is dark */
+html.night-mode .scripture-reference {
+  color: var(--color-accent-script);
+}
+
 /* ── Buttons ── */
 .btn {
   display: inline-flex;
