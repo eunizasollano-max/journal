@@ -190,118 +190,118 @@
    Each block scoped to its theme; midnight is untouched.
    ══════════════════════════════════════════════════ */
 
-/* Blush night → old rose */
+/* Blush night → old rose bg, light cards */
 html.night-mode[data-theme="blush"] {
-  --color-bg:            #c48888;
-  --color-surface:       #d8a8a8;
-  --color-surface-alt:   #bc8080;
-  --color-surface-warm:  #d0a0a0;
-  --color-border:        #a86868;
-  --color-border-light:  #be8888;
-  --color-text-heading:  #fff0f0;
-  --color-text-body:     #f5dada;
-  --color-text-muted:    #e0bcbc;
+  --color-bg:            #b87070;
+  --color-surface:       #f5e8e8;
+  --color-surface-alt:   #eedad8;
+  --color-surface-warm:  #f0e4e4;
+  --color-border:        #d4a0a0;
+  --color-border-light:  #e8cccc;
+  --color-text-heading:  #4a2020;
+  --color-text-body:     #6a3838;
+  --color-text-muted:    #a06868;
   --color-text-light:    #c89898;
-  --color-accent-script: #ffd0d8;
-  --color-star-fill:     #ffc0a0;
-  --color-star-empty:    #b87878;
+  --color-accent-script: #a02040;
+  --color-star-fill:     #c05040;
+  --color-star-empty:    #e8c8c8;
   --color-overlay:       rgba(60, 20, 20, 0.55);
-  --shadow-sm:           0 1px 4px rgba(60,20,20,0.18);
-  --shadow-md:           0 4px 16px rgba(60,20,20,0.24);
-  --shadow-lg:           0 8px 32px rgba(60,20,20,0.30);
-  --shadow-card:         0 2px 12px rgba(100,40,40,0.22);
-  --cursor-glow-color:   rgba(255, 200, 210, 0.7);
+  --shadow-sm:           0 1px 4px rgba(100,40,40,0.14);
+  --shadow-md:           0 4px 16px rgba(100,40,40,0.18);
+  --shadow-lg:           0 8px 32px rgba(100,40,40,0.22);
+  --shadow-card:         0 2px 12px rgba(140,60,60,0.18);
+  --cursor-glow-color:   rgba(160, 32, 64, 0.5);
 }
 
-/* Lavender night → dusty violet */
+/* Lavender night → dusty purple bg, light cards */
 html.night-mode[data-theme="lavender"] {
-  --color-bg:            #9880c0;
-  --color-surface:       #b09cd8;
-  --color-surface-alt:   #9078b8;
-  --color-surface-warm:  #a890cc;
-  --color-border:        #7860a8;
-  --color-border-light:  #9080bc;
-  --color-text-heading:  #f8f0ff;
-  --color-text-body:     #ead8f8;
-  --color-text-muted:    #d0b8e8;
-  --color-text-light:    #b898d0;
-  --color-accent-script: #f0d8ff;
-  --color-star-fill:     #e0b8ff;
-  --color-star-empty:    #a890c8;
+  --color-bg:            #8870b0;
+  --color-surface:       #f3eefb;
+  --color-surface-alt:   #e8e0f5;
+  --color-surface-warm:  #ede8f8;
+  --color-border:        #c4b0dc;
+  --color-border-light:  #dcd0f0;
+  --color-text-heading:  #2a1848;
+  --color-text-body:     #442c68;
+  --color-text-muted:    #7860a0;
+  --color-text-light:    #a890c8;
+  --color-accent-script: #5c30a8;
+  --color-star-fill:     #9060c8;
+  --color-star-empty:    #dcd0f0;
   --color-overlay:       rgba(30, 15, 60, 0.55);
-  --shadow-sm:           0 1px 4px rgba(30,15,60,0.18);
-  --shadow-md:           0 4px 16px rgba(30,15,60,0.24);
-  --shadow-lg:           0 8px 32px rgba(30,15,60,0.30);
-  --shadow-card:         0 2px 12px rgba(80,40,140,0.22);
-  --cursor-glow-color:   rgba(230, 200, 255, 0.7);
+  --shadow-sm:           0 1px 4px rgba(60,30,100,0.14);
+  --shadow-md:           0 4px 16px rgba(60,30,100,0.18);
+  --shadow-lg:           0 8px 32px rgba(60,30,100,0.22);
+  --shadow-card:         0 2px 12px rgba(80,40,140,0.18);
+  --cursor-glow-color:   rgba(100, 60, 180, 0.5);
 }
 
-/* Mint night → dusty sage */
+/* Mint night → sage bg, light cards */
 html.night-mode[data-theme="mint"] {
-  --color-bg:            #5a9878;
-  --color-surface:       #78b090;
-  --color-surface-alt:   #508870;
-  --color-surface-warm:  #6aa484;
-  --color-border:        #407860;
-  --color-border-light:  #5a9078;
-  --color-text-heading:  #f0fff5;
-  --color-text-body:     #d8f0e4;
-  --color-text-muted:    #b8d8c8;
-  --color-text-light:    #90b8a4;
-  --color-accent-script: #c8f0d8;
-  --color-star-fill:     #b8e8c8;
-  --color-star-empty:    #6a9880;
-  --color-overlay:       rgba(15, 40, 25, 0.55);
-  --shadow-sm:           0 1px 4px rgba(15,40,25,0.18);
-  --shadow-md:           0 4px 16px rgba(15,40,25,0.24);
-  --shadow-lg:           0 8px 32px rgba(15,40,25,0.30);
-  --shadow-card:         0 2px 12px rgba(30,90,55,0.22);
-  --cursor-glow-color:   rgba(190, 240, 210, 0.7);
+  --color-bg:            #4a8868;
+  --color-surface:       #edf8f2;
+  --color-surface-alt:   #dff0e8;
+  --color-surface-warm:  #e8f5ee;
+  --color-border:        #a8d0bc;
+  --color-border-light:  #c8e8d8;
+  --color-text-heading:  #0e2e1c;
+  --color-text-body:     #1e4830;
+  --color-text-muted:    #487860;
+  --color-text-light:    #78a890;
+  --color-accent-script: #1a6840;
+  --color-star-fill:     #3a9860;
+  --color-star-empty:    #c8e8d8;
+  --color-overlay:       rgba(10, 35, 20, 0.55);
+  --shadow-sm:           0 1px 4px rgba(20,70,40,0.14);
+  --shadow-md:           0 4px 16px rgba(20,70,40,0.18);
+  --shadow-lg:           0 8px 32px rgba(20,70,40,0.22);
+  --shadow-card:         0 2px 12px rgba(30,100,55,0.18);
+  --cursor-glow-color:   rgba(26, 104, 64, 0.5);
 }
 
-/* Peach night → warm terracotta */
+/* Peach night → terracotta bg, light cards */
 html.night-mode[data-theme="peach"] {
-  --color-bg:            #c07850;
-  --color-surface:       #d89070;
-  --color-surface-alt:   #b87048;
-  --color-surface-warm:  #cc8460;
-  --color-border:        #a06040;
-  --color-border-light:  #b87858;
-  --color-text-heading:  #fff5ee;
-  --color-text-body:     #f8dfc8;
-  --color-text-muted:    #e8c4a0;
-  --color-text-light:    #d0a078;
-  --color-accent-script: #ffd8b8;
-  --color-star-fill:     #ffc890;
-  --color-star-empty:    #c88060;
-  --color-overlay:       rgba(55, 25, 8, 0.55);
-  --shadow-sm:           0 1px 4px rgba(55,25,8,0.18);
-  --shadow-md:           0 4px 16px rgba(55,25,8,0.24);
-  --shadow-lg:           0 8px 32px rgba(55,25,8,0.30);
-  --shadow-card:         0 2px 12px rgba(110,55,15,0.22);
-  --cursor-glow-color:   rgba(255, 210, 175, 0.7);
+  --color-bg:            #b87050;
+  --color-surface:       #fdf3ec;
+  --color-surface-alt:   #f5e4d4;
+  --color-surface-warm:  #f8ede0;
+  --color-border:        #ddb090;
+  --color-border-light:  #eecdb0;
+  --color-text-heading:  #3c1808;
+  --color-text-body:     #5c2c18;
+  --color-text-muted:    #946040;
+  --color-text-light:    #c89060;
+  --color-accent-script: #903018;
+  --color-star-fill:     #c05828;
+  --color-star-empty:    #eecdb0;
+  --color-overlay:       rgba(55, 20, 5, 0.55);
+  --shadow-sm:           0 1px 4px rgba(100,45,15,0.14);
+  --shadow-md:           0 4px 16px rgba(100,45,15,0.18);
+  --shadow-lg:           0 8px 32px rgba(100,45,15,0.22);
+  --shadow-card:         0 2px 12px rgba(140,65,20,0.18);
+  --cursor-glow-color:   rgba(144, 48, 24, 0.5);
 }
 
-/* Sky night → dusk blue */
+/* Sky night → dusk blue bg, light cards */
 html.night-mode[data-theme="sky"] {
-  --color-bg:            #5878a8;
-  --color-surface:       #7090c0;
-  --color-surface-alt:   #5070a0;
-  --color-surface-warm:  #6484b4;
-  --color-border:        #406090;
-  --color-border-light:  #5878a8;
-  --color-text-heading:  #f0f5ff;
-  --color-text-body:     #d8e8f8;
-  --color-text-muted:    #b8ccec;
-  --color-text-light:    #90acd4;
-  --color-accent-script: #d0e8ff;
-  --color-star-fill:     #b8d8ff;
-  --color-star-empty:    #6888b8;
-  --color-overlay:       rgba(10, 20, 50, 0.55);
-  --shadow-sm:           0 1px 4px rgba(10,20,50,0.18);
-  --shadow-md:           0 4px 16px rgba(10,20,50,0.24);
-  --shadow-lg:           0 8px 32px rgba(10,20,50,0.30);
-  --shadow-card:         0 2px 12px rgba(20,45,110,0.22);
-  --cursor-glow-color:   rgba(200, 225, 255, 0.7);
+  --color-bg:            #4c6ea0;
+  --color-surface:       #eef3fb;
+  --color-surface-alt:   #dce8f5;
+  --color-surface-warm:  #e4edf8;
+  --color-border:        #a8bedd;
+  --color-border-light:  #c8d8f0;
+  --color-text-heading:  #0c1e3c;
+  --color-text-body:     #1c3258;
+  --color-text-muted:    #4a6898;
+  --color-text-light:    #7898c4;
+  --color-accent-script: #1848a0;
+  --color-star-fill:     #3060b0;
+  --color-star-empty:    #c8d8f0;
+  --color-overlay:       rgba(8, 18, 48, 0.55);
+  --shadow-sm:           0 1px 4px rgba(20,45,100,0.14);
+  --shadow-md:           0 4px 16px rgba(20,45,100,0.18);
+  --shadow-lg:           0 8px 32px rgba(20,45,100,0.22);
+  --shadow-card:         0 2px 12px rgba(30,60,130,0.18);
+  --cursor-glow-color:   rgba(24, 72, 160, 0.5);
 }
 /* midnight is already dark — night-mode has no effect on it */
