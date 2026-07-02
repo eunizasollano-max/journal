@@ -134,8 +134,10 @@ function renderLoginUI(mode = 'signin') {
       <div class="login-guest-row">
         <button class="btn-link text-muted" id="guest-mode-btn" type="button">Preview the app →</button>
       </div>
-      <div style="text-align:center;margin-top:var(--sp-3)">
+      <div style="text-align:center;margin-top:var(--sp-3);display:flex;gap:var(--sp-3);justify-content:center">
         <a href="#privacy" class="btn-link text-muted" style="font-size:var(--fs-xs)" onclick="Router.navigate('#privacy')">Privacy Policy</a>
+        <span style="font-size:var(--fs-xs);color:var(--color-text-light)">·</span>
+        <a href="#terms" class="btn-link text-muted" style="font-size:var(--fs-xs)" onclick="Router.navigate('#terms')">Terms of Service</a>
       </div>
     `;
     wireSignInButtons();

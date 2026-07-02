@@ -608,6 +608,7 @@ function launchJournal(user) {
   Router.register('#recap',     () => RecapPage.init());
   Router.register('#gallery',   () => GalleryPage.init());
   Router.register('#privacy',   () => {});
+  Router.register('#terms',     () => {});
 
   Router.handleRoute();
 }
