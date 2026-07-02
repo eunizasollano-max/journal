@@ -109,6 +109,8 @@ function renderDateHeader() {
   } else {
     currentSession = new Date().getHours() < 12 ? 'morning' : 'evening';
   }
+  // Darken the theme for evening entries
+  document.documentElement.classList.toggle('night-mode', currentSession === 'evening');
 }
 
 function renderPastEntryBanner() {
@@ -148,11 +150,11 @@ function renderSessionToggle() {
 
 function setSession(session) {
   currentSession = session;
-  // Update toggle UI
+  localStorage.setItem('journal_session', session);
   document.querySelectorAll('.session-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.session === session);
   });
-  // Update conditional prompts
+  document.documentElement.classList.toggle('night-mode', session === 'evening');
   updateConditionalPrompts();
 }
 
@@ -292,28 +294,36 @@ function renderRating() {
   const container = document.getElementById('star-rating');
   if (!container) return;
 
-  function draw(filled, hovered) {
+  function updateClasses(filled, hovered) {
+    container.querySelectorAll('.star-btn').forEach(btn => {
+      const n = parseInt(btn.dataset.val);
+      btn.classList.toggle('filled',  n <= filled);
+      btn.classList.toggle('hovered', n <= hovered && n > filled);
+    });
+    const label = document.getElementById('rating-label');
+    if (label) label.textContent = filled > 0 ? filled + '/10' : '';
+  }
+
+  // Only rebuild DOM when the button count changes (i.e. first render)
+  if (container.querySelectorAll('.star-btn').length !== 10) {
     container.innerHTML = Array.from({ length: 10 }, (_, i) => {
       const n = i + 1;
-      const isFilled  = n <= filled;
-      const isHovered = n <= hovered;
-      return `<button type="button" class="star-btn ${isFilled ? 'filled' : ''} ${isHovered && !isFilled ? 'hovered' : ''}"
-        data-val="${n}" aria-label="Rate ${n} out of 10">★</button>`;
-    }).join('') + `<span class="rating-label" id="rating-label">${filled > 0 ? filled + '/10' : ''}</span>`;
+      return `<button type="button" class="star-btn" data-val="${n}" aria-label="Rate ${n} out of 10">★</button>`;
+    }).join('') + `<span class="rating-label" id="rating-label"></span>`;
 
     container.querySelectorAll('.star-btn').forEach(btn => {
       const val = parseInt(btn.dataset.val);
       btn.addEventListener('click', () => {
         selectedRating = val;
         hoveredRating  = 0;
-        draw(selectedRating, 0);
+        updateClasses(selectedRating, 0);
       });
-      btn.addEventListener('mouseenter', () => { hoveredRating = val; draw(selectedRating, val); });
-      btn.addEventListener('mouseleave', () => { hoveredRating = 0; draw(selectedRating, 0); });
+      btn.addEventListener('mouseenter', () => { hoveredRating = val; updateClasses(selectedRating, val); });
+      btn.addEventListener('mouseleave', () => { hoveredRating = 0;   updateClasses(selectedRating, 0); });
     });
   }
 
-  draw(selectedRating, 0);
+  updateClasses(selectedRating, 0);
 }
 
 function renderMediaUpload() {
