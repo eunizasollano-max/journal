@@ -492,20 +492,27 @@ async function showPassphraseModal(user, onComplete) {
 
   setTimeout(() => input?.focus(), 80);
 
+  let _busy = false;
   const submit = async () => {
+    if (_busy) return;
     const pass = input.value;
     if (!pass) { errEl.textContent = 'Please enter a passphrase.'; errEl.classList.remove('hidden'); return; }
     if (isFirstTime && !isEmailUser && confirm && pass !== confirm.value) {
       errEl.textContent = 'Passphrases do not match.'; errEl.classList.remove('hidden'); return;
     }
-    btn.textContent = isFirstTime ? 'Setting up…' : 'Unlocking…'; btn.disabled = true; errEl.classList.add('hidden');
+    _busy = true;
+    btn.textContent = isFirstTime ? 'Setting up…' : 'Unlocking…';
+    btn.classList.add('loading');
+    errEl.classList.add('hidden');
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       await JournalCrypto.initCrypto(pass, user.id, existingKey);
       overlay.remove();
       onComplete?.();
     } catch (e) {
-      btn.textContent = btnLabel; btn.disabled = false;
+      _busy = false;
+      btn.textContent = btnLabel;
+      btn.classList.remove('loading');
       errEl.textContent = e.message === 'wrong_passphrase' ? 'Incorrect passphrase. Try again.' : 'Something went wrong. Try again.';
       errEl.classList.remove('hidden');
     }
@@ -613,15 +620,19 @@ function launchJournal(user) {
   wireSyncButton();
   wireMobileMore();
 
-  Router.register('#home',      () => HomePage.init());
-  Router.register('#today',     () => EntryPage.init());
-  Router.register('#freewrite', () => FreeWritePage.init());
-  Router.register('#calendar',  () => CalendarPage.init());
-  Router.register('#goals',     () => GoalsPage.init());
-  Router.register('#recap',     () => RecapPage.init());
-  Router.register('#gallery',   () => GalleryPage.init());
-  Router.register('#privacy',   () => {});
-  Router.register('#terms',     () => {});
+  Router.register('#home',      () => { document.documentElement.classList.remove('night-mode'); HomePage.init(); });
+  Router.register('#today',     () => {
+    const session = localStorage.getItem('journal_session');
+    document.documentElement.classList.toggle('night-mode', session === 'evening');
+    EntryPage.init();
+  });
+  Router.register('#freewrite', () => { document.documentElement.classList.remove('night-mode'); FreeWritePage.init(); });
+  Router.register('#calendar',  () => { document.documentElement.classList.remove('night-mode'); CalendarPage.init(); });
+  Router.register('#goals',     () => { document.documentElement.classList.remove('night-mode'); GoalsPage.init(); });
+  Router.register('#recap',     () => { document.documentElement.classList.remove('night-mode'); RecapPage.init(); });
+  Router.register('#gallery',   () => { document.documentElement.classList.remove('night-mode'); GalleryPage.init(); });
+  Router.register('#privacy',   () => { document.documentElement.classList.remove('night-mode'); });
+  Router.register('#terms',     () => { document.documentElement.classList.remove('night-mode'); });
 
   Router.handleRoute();
 }

@@ -112,6 +112,11 @@
 
 .btn-primary:active { transform: translateY(0); }
 
+.btn.loading {
+  opacity: 0.75;
+  pointer-events: none;
+}
+
 .btn-secondary {
   background: var(--color-surface-alt);
   color: var(--color-text-body);
