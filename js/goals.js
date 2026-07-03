@@ -1,3 +1,5 @@
+(function () {
+
 const DEFAULT_CATEGORIES = [
   { key: 'cat1', icon: '💫', color: '#fde8e8' },
   { key: 'cat2', icon: '💪', color: '#e8f5e8' },
@@ -26,8 +28,11 @@ async function init() {
 }
 
 function renderHeader() {
+  const monthName = App.MONTHS[goalsMonth - 1];
   const titleEl = document.getElementById('goals-month-label');
-  if (titleEl) titleEl.textContent = `${App.MONTHS[goalsMonth - 1]} ${goalsYear}`;
+  if (titleEl) {
+    titleEl.innerHTML = `<span class="goals-month-name">${monthName}</span><span class="goals-month-year">${goalsYear}</span>`;
+  }
 
   const prevBtn = document.getElementById('goals-prev-btn');
   const nextBtn = document.getElementById('goals-next-btn');
@@ -49,6 +54,7 @@ function renderHeader() {
 }
 
 async function reinit() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   renderHeader();
   await loadGoals();
   renderCategories();
@@ -186,6 +192,7 @@ function handleGoalChange(catKey, idx) {
 }
 
 let saveGoalsTimer = null;
+let _goalsCloudErrorShown = false;
 function scheduleGoalSave(catKey, idx) {
   handleGoalChange(catKey, idx);
   clearTimeout(saveGoalsTimer);
@@ -208,7 +215,14 @@ async function saveGoals() {
   });
 
   try {
-    await JournalDB.saveGoals(goalsYear, goalsMonth, goalsData, categoryNames);
+    const result = await JournalDB.saveGoals(goalsYear, goalsMonth, goalsData, categoryNames);
+    if (result?.cloudError && !_goalsCloudErrorShown) {
+      _goalsCloudErrorShown = true;
+      App.showToast(`Saved on this device only — cloud sync failed (${result.cloudError})`, 5000);
+      console.error('Cloud save error:', result.cloudError);
+    } else if (!result?.cloudError) {
+      _goalsCloudErrorShown = false;
+    }
   } catch (err) {
     console.error('Failed to save goals:', err);
   }
@@ -219,3 +233,5 @@ function escapeAttr(str) {
 }
 
 window.GoalsPage = { init };
+
+})();

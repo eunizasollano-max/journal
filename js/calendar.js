@@ -1,3 +1,5 @@
+(function () {
+
 let calYear  = new Date().getFullYear();
 let calMonth = new Date().getMonth() + 1;
 let allEntries = {};
@@ -169,3 +171,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.CalendarPage = { init };
+
+})();

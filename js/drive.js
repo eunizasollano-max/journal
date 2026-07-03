@@ -7,13 +7,22 @@
 
 const FOLDER_NAME = 'Another Day Journal';
 let _folderId = null;
+let _lastExpiredToastAt = 0;
+
+function notifyExpired() {
+  // Google's access token is only valid ~1hr and Supabase doesn't refresh
+  // it, so this fires often during a long session — debounce so a bulk
+  // sync (many files) doesn't spam the same toast per file.
+  const now = Date.now();
+  if (now - _lastExpiredToastAt < 10000) return;
+  _lastExpiredToastAt = now;
+  window.App?.showToast?.('Google session expired — please sign in again to sync photos.');
+}
 
 async function getDriveTokenAsync() {
   const { data } = await SupabaseClient.auth.getSession();
   const token = data?.session?.provider_token || null;
-  if (!token && isGoogleUser()) {
-    App?.showToast?.('Google session expired — please sign in again to sync photos.');
-  }
+  if (!token && isGoogleUser()) notifyExpired();
   return token;
 }
 
@@ -88,16 +97,25 @@ async function uploadFile(blob, filename, mimeType) {
   return data.id; // Drive file ID
 }
 
-async function getFileUrl(fileId) {
+async function downloadAsDataUrl(fileId) {
   const token = await getDriveTokenAsync();
-  if (!token) return null;
-  // Returns a blob URL for display
+  if (!token) { const err = new Error('No Drive token'); err.authExpired = true; throw err; }
+
   const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
     headers: { 'Authorization': `Bearer ${token}` },
   });
-  if (!res.ok) return null;
+  if (res.status === 401) { notifyExpired(); const err = new Error('Drive token expired'); err.authExpired = true; throw err; }
+  if (!res.ok) throw new Error(`Drive download failed: ${res.status}`);
+
   const blob = await res.blob();
-  return URL.createObjectURL(blob);
+  // A data: URL (not a blob: URL) so it can be written to IndexedDB and
+  // survive a reload — matches how locally-added photos are stored.
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload  = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
 }
 
 async function deleteFile(fileId) {
@@ -113,4 +131,4 @@ async function deleteFile(fileId) {
   }
 }
 
-window.JournalDrive = { isGoogleUser, uploadFile, getFileUrl, deleteFile };
+window.JournalDrive = { isGoogleUser, uploadFile, downloadAsDataUrl, deleteFile };

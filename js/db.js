@@ -3,11 +3,19 @@
   Logged-in users: reads/writes sync to Supabase (text) + IndexedDB (media).
   Guest users: IndexedDB only.
   Media (photos/videos) always stays in IndexedDB — too large for the DB.
+
+  Cross-device photos (Google users only): when a photo is uploaded to the
+  user's own Google Drive, a lightweight pointer {driveId, type, name} —
+  never the image bytes — rides along in the cloud copy of the entry.
+  Other devices pick that pointer up through the normal text sync, then
+  the Sync button (syncMediaFromCloud) downloads the actual files from
+  Drive into that device's IndexedDB. Email/password users have no Drive
+  access token, so their photos stay device-local only.
 */
 
 /* ── IndexedDB ── */
 const IDB_NAME    = 'journalDB';
-const IDB_VERSION = 1;
+const IDB_VERSION = 2;
 let idb = null;
 
 function openIDB() {
@@ -16,9 +24,11 @@ function openIDB() {
     const req = indexedDB.open(IDB_NAME, IDB_VERSION);
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
-      if (!db.objectStoreNames.contains('entries')) db.createObjectStore('entries', { keyPath: 'date' });
-      if (!db.objectStoreNames.contains('goals'))   db.createObjectStore('goals',   { keyPath: 'monthKey' });
-      if (!db.objectStoreNames.contains('recap'))   db.createObjectStore('recap',   { keyPath: 'monthKey' });
+      if (!db.objectStoreNames.contains('entries'))     db.createObjectStore('entries',     { keyPath: 'date' });
+      if (!db.objectStoreNames.contains('goals'))       db.createObjectStore('goals',       { keyPath: 'monthKey' });
+      if (!db.objectStoreNames.contains('recap'))       db.createObjectStore('recap',       { keyPath: 'monthKey' });
+      if (!db.objectStoreNames.contains('routines'))    db.createObjectStore('routines',    { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('routineLog'))  db.createObjectStore('routineLog',  { keyPath: 'date' });
     };
     req.onsuccess  = (e) => { idb = e.target.result; resolve(idb); };
     req.onerror    = () => reject(req.error);
@@ -48,7 +58,12 @@ function getUserId() {
 function entryForCloud(entry) {
   const e = { ...entry };
   e.mediaCount = (e.media || []).length;
-  delete e.media;
+  // Keep pointers only for files that made it to Drive — never the
+  // dataUrl bytes (too large for the 1MB row limit, and the whole point
+  // of keeping media out of the database).
+  e.media = (entry.media || [])
+    .filter(m => m.driveId)
+    .map(m => ({ driveId: m.driveId, type: m.type, name: m.name }));
   return e;
 }
 
@@ -60,7 +75,18 @@ async function openDB() {
 /* Months the cloud has confirmed empty this session — skip re-asking */
 const _cloudMiss = new Set();
 
-/* Pull all cloud entries into IndexedDB (media stays local-only).
+/* Merge cloud media pointers onto local media: keep every local item
+   (it may already have a downloaded dataUrl) and add any Drive pointer
+   the cloud knows about that this device hasn't seen yet. */
+function mergeMedia(localMedia, cloudMedia) {
+  const local = localMedia || [];
+  const seen  = new Set(local.filter(m => m.driveId).map(m => m.driveId));
+  const extra = (cloudMedia || []).filter(m => m.driveId && !seen.has(m.driveId));
+  return local.concat(extra);
+}
+
+/* Pull all cloud entries into IndexedDB (media stays local-only, but
+   Drive pointers are merged in so the Sync button can find them).
    Runs in the background so reads never wait on the network. */
 let _entriesRefreshed = false;
 async function cloudRefreshEntries() {
@@ -75,7 +101,7 @@ async function cloudRefreshEntries() {
       if (!entry?.date) continue;
       const local = await idbReq(idbTx('entries').get(entry.date));
       if (local?.updatedAt && entry.updatedAt && local.updatedAt > entry.updatedAt) continue;
-      if (local?.media) entry.media = local.media;
+      entry.media = mergeMedia(local?.media, entry.media);
       await idbReq(idbTx('entries', 'readwrite').put(entry));
     }
     _entriesRefreshed = true;
@@ -110,54 +136,80 @@ async function getEntry(date) {
 }
 
 async function uploadMediaToDrive(entry) {
-  if (!JournalDrive.isGoogleUser() || !entry.media?.length) return entry;
+  if (!entry.media?.length) return { entry, driveError: null, skipReason: null };
+  if (!JournalDrive.isGoogleUser()) {
+    return { entry, driveError: null, skipReason: 'not-google' };
+  }
   const uploaded = [];
+  let driveError = null;
   for (const item of entry.media) {
     if (item.driveId) { uploaded.push(item); continue; }
     try {
-      const res  = await fetch(item.url);
+      const res  = await fetch(item.dataUrl);
       const blob = await res.blob();
-      const driveId = await JournalDrive.uploadFile(blob, `journal-${entry.date}-${Date.now()}`, item.type || blob.type);
-      uploaded.push({ ...item, driveId, url: null });
+      const driveId = await JournalDrive.uploadFile(blob, item.name || `journal-${entry.date}-${Date.now()}`, item.type || blob.type);
+      // dataUrl is kept, not cleared — this device already has the photo
+      // and shouldn't need to re-download it from Drive to show it.
+      uploaded.push({ ...item, driveId });
     } catch (e) {
-      console.warn('Drive upload failed, keeping local:', e);
+      console.warn('Drive upload failed, keeping local-only:', e);
+      driveError = e?.message || String(e);
       uploaded.push(item);
     }
   }
-  return { ...entry, media: uploaded };
+  return { entry: { ...entry, media: uploaded }, driveError, skipReason: null };
 }
 
+/* Fills in dataUrl for any media this device only knows about as a Drive
+   pointer (arrived via cloud sync from another device). Downloaded files
+   are written back to IndexedDB so this only happens once per photo. */
 async function resolveMediaUrls(entry) {
-  if (!entry?.media?.length) return entry;
+  if (!entry?.media?.some(m => m.driveId && !m.dataUrl)) return entry;
+  let changed = false;
   const resolved = await Promise.all(entry.media.map(async (item) => {
-    if (item.driveId && !item.url) {
-      const url = await JournalDrive.getFileUrl(item.driveId).catch(() => null);
-      return { ...item, url };
+    if (item.driveId && !item.dataUrl) {
+      try {
+        const dataUrl = await JournalDrive.downloadAsDataUrl(item.driveId);
+        changed = true;
+        return { ...item, dataUrl };
+      } catch (e) {
+        console.warn('Drive fetch failed for', item.driveId, e);
+      }
     }
     return item;
   }));
-  return { ...entry, media: resolved };
+  const updated = { ...entry, media: resolved };
+  if (changed) idbReq(idbTx('entries', 'readwrite').put(updated)).catch(() => {});
+  return updated;
 }
 
 async function saveEntry(entry) {
   await openIDB();
   entry.updatedAt = new Date().toISOString();
 
-  entry = await uploadMediaToDrive(entry);
+  const upload = await uploadMediaToDrive(entry);
+  entry = upload.entry;
   await idbReq(idbTx('entries', 'readwrite').put(entry));
 
+  let cloudError = null;
   if (useSupabase()) {
     try {
-      await SupabaseClient.from('entries').upsert({
+      const { error } = await SupabaseClient.from('entries').upsert({
         user_id:     getUserId(),
         date:        entry.date,
         data:        await JournalCrypto.encrypt(entryForCloud(entry)),
         updated_at:  entry.updatedAt,
       }, { onConflict: 'user_id,date' });
+      if (error) throw error;
     } catch (e) {
       console.warn('Supabase saveEntry failed', e);
+      cloudError = e?.message || String(e);
     }
+  } else {
+    cloudError = 'not-logged-in';
   }
+
+  return { driveError: upload.driveError, skipReason: upload.skipReason, cloudError };
 }
 
 async function getAllEntries() {
@@ -212,16 +264,19 @@ async function saveGoals(year, month, goalsData, categoryNames) {
   await idbReq(idbTx('goals', 'readwrite').put(record));
   if (useSupabase()) {
     try {
-      await SupabaseClient.from('goals').upsert({
+      const { error } = await SupabaseClient.from('goals').upsert({
         user_id:    getUserId(),
         month_key:  key,
         data:       await JournalCrypto.encrypt(record),
         updated_at: record.updatedAt,
       }, { onConflict: 'user_id,month_key' });
+      if (error) throw error;
     } catch (e) {
       console.warn('Supabase saveGoals failed', e);
+      return { cloudError: e?.message || String(e) };
     }
   }
+  return { cloudError: null };
 }
 
 async function getRecap(year, month) {
@@ -256,41 +311,79 @@ async function saveRecap(year, month, reflection) {
   await idbReq(idbTx('recap', 'readwrite').put(record));
   if (useSupabase()) {
     try {
-      await SupabaseClient.from('recap').upsert({
+      const { error } = await SupabaseClient.from('recap').upsert({
         user_id:    getUserId(),
         month_key:  key,
         data:       await JournalCrypto.encrypt(record),
         updated_at: record.updatedAt,
       }, { onConflict: 'user_id,month_key' });
+      if (error) throw error;
     } catch (e) {
       console.warn('Supabase saveRecap failed', e);
+      return { cloudError: e?.message || String(e) };
     }
   }
+  return { cloudError: null };
+}
+
+/* Daily Routines — local-only for now (IndexedDB only, no Supabase sync)
+   while the feature is still being tried out. */
+async function getRoutines() {
+  await openIDB();
+  return idbReq(idbTx('routines').getAll());
+}
+
+async function saveRoutine(routine) {
+  await openIDB();
+  await idbReq(idbTx('routines', 'readwrite').put(routine));
+}
+
+async function deleteRoutine(id) {
+  await openIDB();
+  await idbReq(idbTx('routines', 'readwrite').delete(id));
+}
+
+async function getRoutineLog(date) {
+  await openIDB();
+  const log = await idbReq(idbTx('routineLog').get(date));
+  return log?.completed || {};
+}
+
+async function setRoutineDone(date, routineId, done) {
+  await openIDB();
+  const existing  = await idbReq(idbTx('routineLog').get(date)) || { date, completed: {} };
+  const completed = { ...existing.completed, [routineId]: done };
+  await idbReq(idbTx('routineLog', 'readwrite').put({ date, completed }));
 }
 
 async function syncFromCloud() {
-  if (!useSupabase()) return { entries: 0, goals: 0, recap: 0 };
+  if (!useSupabase()) return { entries: 0, goals: 0, recap: 0, debug: 'useSupabase() was false' };
   await openIDB();
   _cloudMiss.clear();
   const uid = getUserId();
   let counts = { entries: 0, goals: 0, recap: 0 };
+  const errors = [];
+
+  if (!uid) errors.push('no user id available (not signed in?)');
 
   try {
-    const { data: eRows } = await SupabaseClient.from('entries').select('*').eq('user_id', uid);
+    const { data: eRows, error } = await SupabaseClient.from('entries').select('*').eq('user_id', uid);
+    if (error) throw error;
     if (eRows?.length) {
       const store = idbTx('entries', 'readwrite');
       for (const row of eRows) {
         const entry = await JournalCrypto.decrypt(row.data);
         const local = await idbReq(idbTx('entries').get(row.date));
-        if (local?.media) entry.media = local.media;
+        entry.media = mergeMedia(local?.media, entry.media);
         await idbReq(store.put({ ...entry, date: row.date }));
       }
       counts.entries = eRows.length;
     }
-  } catch (e) { console.warn('Sync entries failed', e); }
+  } catch (e) { console.warn('Sync entries failed', e); errors.push(`entries: ${e?.message || e}`); }
 
   try {
-    const { data: gRows } = await SupabaseClient.from('goals').select('*').eq('user_id', uid);
+    const { data: gRows, error } = await SupabaseClient.from('goals').select('*').eq('user_id', uid);
+    if (error) throw error;
     if (gRows?.length) {
       const store = idbTx('goals', 'readwrite');
       for (const row of gRows) {
@@ -299,10 +392,11 @@ async function syncFromCloud() {
       }
       counts.goals = gRows.length;
     }
-  } catch (e) { console.warn('Sync goals failed', e); }
+  } catch (e) { console.warn('Sync goals failed', e); errors.push(`goals: ${e?.message || e}`); }
 
   try {
-    const { data: rRows } = await SupabaseClient.from('recap').select('*').eq('user_id', uid);
+    const { data: rRows, error } = await SupabaseClient.from('recap').select('*').eq('user_id', uid);
+    if (error) throw error;
     if (rRows?.length) {
       const store = idbTx('recap', 'readwrite');
       for (const row of rRows) {
@@ -311,9 +405,64 @@ async function syncFromCloud() {
       }
       counts.recap = rRows.length;
     }
-  } catch (e) { console.warn('Sync recap failed', e); }
+  } catch (e) { console.warn('Sync recap failed', e); errors.push(`recap: ${e?.message || e}`); }
+
+  counts.photos = await syncMediaFromCloud();
+  counts.debug = `uid=${uid || 'MISSING'}${errors.length ? '; errors: ' + errors.join(' | ') : ''}`;
 
   return counts;
 }
 
-window.JournalDB = { openDB, getEntry, saveEntry, getAllEntries, getEntriesForMonth, getGoals, saveGoals, getRecap, saveRecap, syncFromCloud };
+/* Downloads every Drive-hosted photo/video this device doesn't have yet.
+   Google users only — email/password accounts have no Drive access and
+   their media stays device-local, by design. Called by the Sync button
+   after entries/goals/recap text sync above has run. */
+async function syncMediaFromCloud() {
+  if (!useSupabase() || !JournalDrive.isGoogleUser()) return 0;
+
+  let downloaded = 0;
+  let authExpired = false;
+
+  try {
+    const { data: rows } = await SupabaseClient
+      .from('entries').select('date,data').eq('user_id', getUserId());
+
+    for (const row of rows || []) {
+      if (authExpired) break;
+      let cloudEntry;
+      try { cloudEntry = await JournalCrypto.decrypt(row.data); } catch { continue; }
+
+      const cloudMedia = (cloudEntry?.media || []).filter(m => m.driveId);
+      if (!cloudMedia.length) continue;
+
+      const local = await idbReq(idbTx('entries').get(row.date));
+      const haveIds = new Set((local?.media || []).filter(m => m.driveId).map(m => m.driveId));
+      const missing = cloudMedia.filter(m => !haveIds.has(m.driveId));
+      if (!missing.length) continue;
+
+      const newlyFetched = [];
+      for (const m of missing) {
+        try {
+          const dataUrl = await JournalDrive.downloadAsDataUrl(m.driveId);
+          newlyFetched.push({ ...m, dataUrl });
+          downloaded++;
+        } catch (e) {
+          if (e?.authExpired) { authExpired = true; break; }
+          console.warn('Drive download failed for', m.driveId, e);
+        }
+      }
+
+      if (newlyFetched.length) {
+        const base = local || cloudEntry;
+        const merged = { ...base, date: row.date, media: (local?.media || []).concat(newlyFetched) };
+        await idbReq(idbTx('entries', 'readwrite').put(merged));
+      }
+    }
+  } catch (e) {
+    console.warn('Sync media failed', e);
+  }
+
+  return downloaded;
+}
+
+window.JournalDB = { openDB, getEntry, saveEntry, getAllEntries, getEntriesForMonth, getGoals, saveGoals, getRecap, saveRecap, syncFromCloud, getRoutines, saveRoutine, deleteRoutine, getRoutineLog, setRoutineDone };

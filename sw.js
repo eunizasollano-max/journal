@@ -1,4 +1,4 @@
-const CACHE = 'journal-v4';
+const CACHE = 'journal-v6';
 const SHELL = [
   '/',
   '/index.html',
@@ -21,6 +21,7 @@ const SHELL = [
   '/js/freewrite.js',
   '/js/calendar.js',
   '/js/goals.js',
+  '/js/routines.js',
   '/js/recap.js',
   '/js/gallery.js',
   '/js/app.js',

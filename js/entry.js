@@ -493,8 +493,19 @@ async function saveEntry() {
   };
 
   try {
-    await JournalDB.saveEntry(entry);
-    App.showToast('Entry saved ✨');
+    const result = await JournalDB.saveEntry(entry);
+    if (result?.cloudError) {
+      App.showToast(`Saved on this device only — cloud sync failed (${result.cloudError})`, 5000);
+      console.error('Cloud save error:', result.cloudError);
+    } else if (result?.driveError) {
+      App.showToast(`Entry saved — photo couldn't reach Google Drive (${result.driveError})`, 4500);
+      console.error('Drive upload error:', result.driveError);
+    } else if (result?.skipReason === 'not-google') {
+      App.showToast("Entry saved — this session isn't recognized as Google sign-in, so the photo stayed on this device only", 5000);
+      console.error('Drive upload skipped: app_metadata.provider was not "google" for this session');
+    } else {
+      App.showToast('Entry saved ✨');
+    }
     const msgEl = document.getElementById('save-message');
     if (msgEl) {
       msgEl.textContent = 'Saved just now';

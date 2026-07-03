@@ -1,3 +1,5 @@
+(function () {
+
 let recapYear  = new Date().getFullYear();
 let recapMonth = new Date().getMonth() + 1;
 
@@ -7,8 +9,11 @@ async function init() {
 }
 
 function renderHeader() {
+  const monthName = App.MONTHS[recapMonth - 1];
   const titleEl = document.getElementById('recap-month-label');
-  if (titleEl) titleEl.textContent = `${App.MONTHS[recapMonth - 1]} ${recapYear}`;
+  if (titleEl) {
+    titleEl.innerHTML = `<span class="recap-month-name">${monthName}</span><span class="recap-month-year">${recapYear}</span>`;
+  }
 
   const prevBtn = document.getElementById('recap-prev-btn');
   const nextBtn = document.getElementById('recap-next-btn');
@@ -18,6 +23,7 @@ function renderHeader() {
     prevBtn.onclick = () => {
       recapMonth--;
       if (recapMonth < 1) { recapMonth = 12; recapYear--; }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       init();
     };
   }
@@ -26,6 +32,7 @@ function renderHeader() {
     nextBtn.onclick = () => {
       recapMonth++;
       if (recapMonth > 12) { recapMonth = 1; recapYear++; }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       init();
     };
   }
@@ -165,8 +172,13 @@ async function saveReflection() {
   if (!textarea) return;
 
   try {
-    await JournalDB.saveRecap(recapYear, recapMonth, textarea.value.trim());
-    App.showToast('Reflection saved ✨');
+    const result = await JournalDB.saveRecap(recapYear, recapMonth, textarea.value.trim());
+    if (result?.cloudError) {
+      App.showToast(`Saved on this device only — cloud sync failed (${result.cloudError})`, 5000);
+      console.error('Cloud save error:', result.cloudError);
+    } else {
+      App.showToast('Reflection saved ✨');
+    }
   } catch {
     App.showToast('Could not save reflection');
   }
@@ -178,3 +190,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.RecapPage = { init };
+
+})();

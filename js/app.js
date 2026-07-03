@@ -296,7 +296,14 @@ function wireSyncButton() {
     btn.style.opacity = '0.5';
     try {
       const counts = await JournalDB.syncFromCloud();
-      showToast(`Synced ${counts.entries} entries, ${counts.goals} goals, ${counts.recap} recaps ✓`);
+      const photoPart = counts.photos ? `, ${counts.photos} photo${counts.photos === 1 ? '' : 's'}` : '';
+      showToast(`Synced ${counts.entries} entries, ${counts.goals} goals, ${counts.recap} recaps${photoPart} ✓`);
+      // Temporary diagnostic: surface details when a sync looks off, since
+      // phone testing has no easy console access.
+      if (counts.debug && (counts.debug.includes('errors:') || counts.debug.includes('MISSING'))) {
+        console.error('Sync debug:', counts.debug);
+        alert(`Sync debug info:\n${counts.debug}`);
+      }
       Router.handleRoute?.();
     } catch (e) {
       showToast('Sync failed — check your connection.');
@@ -363,7 +370,7 @@ function wireMobileMore() {
   document.getElementById('mobile-more-btn')?.addEventListener('click', openDrawer);
   overlay.addEventListener('click', closeDrawer);
 
-  ['freewrite', 'calendar', 'gallery', 'recap'].forEach(route => {
+  ['freewrite', 'calendar', 'gallery', 'recap', 'routines'].forEach(route => {
     document.getElementById(`more-${route}-btn`)?.addEventListener('click', () => {
       closeDrawer();
       Router.navigate(`#${route}`);
@@ -650,6 +657,7 @@ function launchJournal(user) {
   Router.register('#freewrite', () => { document.documentElement.classList.remove('night-mode'); FreeWritePage.init(); });
   Router.register('#calendar',  () => { document.documentElement.classList.remove('night-mode'); CalendarPage.init(); });
   Router.register('#goals',     () => { document.documentElement.classList.remove('night-mode'); GoalsPage.init(); });
+  Router.register('#routines',  () => { document.documentElement.classList.remove('night-mode'); RoutinesPage.init(); });
   Router.register('#recap',     () => { document.documentElement.classList.remove('night-mode'); RecapPage.init(); });
   Router.register('#gallery',   () => { document.documentElement.classList.remove('night-mode'); GalleryPage.init(); });
   Router.register('#privacy',   () => { document.documentElement.classList.remove('night-mode'); });

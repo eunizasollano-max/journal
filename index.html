@@ -245,6 +245,10 @@
         <span class="nav-icon">🌸</span>
         <span class="nav-label">Monthly Goals</span>
       </a>
+      <a class="nav-item" data-route="#routines" href="#routines">
+        <span class="nav-icon">✅</span>
+        <span class="nav-label">Daily Routines</span>
+      </a>
       <a class="nav-item" data-route="#recap" href="#recap">
         <span class="nav-icon">✨</span>
         <span class="nav-label">Monthly Recap</span>
@@ -299,6 +303,10 @@
       <button class="mobile-more-item" data-route="#recap" id="more-recap-btn">
         <span class="mobile-more-icon">📝</span>
         <span class="mobile-more-label">Recap</span>
+      </button>
+      <button class="mobile-more-item" data-route="#routines" id="more-routines-btn">
+        <span class="mobile-more-icon">✅</span>
+        <span class="mobile-more-label">Routines</span>
       </button>
       <button class="mobile-more-item" id="more-sync-btn">
         <span class="mobile-more-icon">⟳</span>
@@ -859,6 +867,28 @@
       </section>
 
       <!-- ══════════════════════════════════════
+           SECTION: DAILY ROUTINES
+      ══════════════════════════════════════ -->
+      <section id="section-routines" class="page-section" aria-label="Daily routines">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-2)">
+          <button id="routines-prev-btn" class="btn btn-secondary btn-sm" aria-label="Previous day">‹</button>
+          <div class="goals-hero" style="flex:1;padding:0 var(--sp-4)">
+            <div class="goals-hero-title">Daily Routines</div>
+            <div class="goals-month-label" id="routines-date-label"></div>
+            <button id="routines-today-btn" class="btn-ghost btn-sm" style="margin-top:var(--sp-2)">Jump to today</button>
+          </div>
+          <button id="routines-next-btn" class="btn btn-secondary btn-sm" aria-label="Next day">›</button>
+        </div>
+
+        <div id="routines-body"></div>
+
+        <div style="text-align:center;padding:var(--sp-6) 0 var(--sp-4)">
+          <p class="text-muted" style="font-size:var(--fs-sm)">Routines auto-save as you go ✨</p>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
            SECTION: MONTHLY RECAP
       ══════════════════════════════════════ -->
       <section id="section-recap" class="page-section" aria-label="Monthly recap">
@@ -1068,6 +1098,7 @@
 <script src="js/freewrite.js"></script>
 <script src="js/calendar.js"></script>
 <script src="js/goals.js"></script>
+<script src="js/routines.js"></script>
 <script src="js/recap.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/app.js"></script>

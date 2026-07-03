@@ -673,6 +673,15 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   margin-bottom: var(--sp-3);
 }
 
+/* ── Month nav buttons (Goals + Recap) ── */
+#goals-prev-btn, #goals-next-btn,
+#recap-prev-btn, #recap-next-btn {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: var(--fs-lg);
+  flex-shrink: 0;
+}
+
 /* ═══════════════════════════════════
    MONTHLY GOALS PAGE
 ═══════════════════════════════════ */
@@ -689,10 +698,24 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 .goals-month-label {
-  font-family: var(--font-heading);
-  font-size: var(--fs-xl);
-  color: var(--color-text-heading);
   margin-top: var(--sp-2);
+  line-height: 1;
+}
+.goals-month-name {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--color-text-heading);
+  letter-spacing: 0.02em;
+}
+.goals-month-year {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--sp-1);
+  font-weight: 400;
 }
 
 .goal-category-card {
@@ -817,6 +840,319 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 /* ═══════════════════════════════════
+   DAILY ROUTINES PAGE
+═══════════════════════════════════ */
+
+#routines-prev-btn, #routines-next-btn {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: var(--fs-lg);
+  flex-shrink: 0;
+}
+
+/* ── Section (category) cards ── */
+.routine-cats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+
+.routine-cat-card {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4) var(--sp-3);
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+}
+
+.routine-cat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.routine-cat-card.dimmed { opacity: 0.4; }
+
+.routine-cat-card.active {
+  box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 5px currentColor;
+}
+
+.routine-cat-name {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.routine-cat-counts {
+  display: block;
+  font-size: var(--fs-xs);
+  opacity: 0.85;
+  margin-top: var(--sp-1);
+}
+
+.routine-cat-edit {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.routine-cat-card:hover .routine-cat-edit { opacity: 0.85; }
+
+.routine-cat-add {
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--fs-xl);
+  min-height: 74px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.routine-cat-add:hover {
+  border-color: var(--color-accent-rose);
+  color: var(--color-text-heading);
+  background: var(--color-surface-alt);
+}
+
+.routine-cat-form {
+  grid-column: 1 / -1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  box-shadow: var(--shadow-md);
+}
+
+.routine-color-dots {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.routine-color-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.routine-color-dot:hover { transform: scale(1.15); }
+
+.routine-color-dot.selected {
+  border-color: var(--color-text-heading);
+  transform: scale(1.15);
+}
+
+/* ── Day list pills ── */
+.routine-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+.routine-pill {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  border-radius: 16px;
+  padding: var(--sp-3) var(--sp-4);
+  box-shadow: var(--shadow-card);
+  transition: opacity 0.2s ease, transform var(--transition-fast);
+}
+
+.routine-pill.done { opacity: 0.55; }
+.routine-pill.done .routine-pill-text { text-decoration: line-through; }
+.routine-pill.preview { pointer-events: none; opacity: 0.75; }
+.routine-pill.preview.done { opacity: 0.45; }
+
+.routine-pill-check {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid color-mix(in srgb, currentColor 55%, transparent);
+  background: color-mix(in srgb, #ffffff 30%, transparent);
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.routine-pill-check:hover { border-color: currentColor; }
+
+.routine-pill-check.checked {
+  background: color-mix(in srgb, #ffffff 85%, transparent);
+  border-color: transparent;
+  color: #6b5140;
+}
+
+.routine-pill-text {
+  flex: 1;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-align: left;
+}
+
+.routine-pill-days {
+  flex-shrink: 0;
+  font-size: var(--fs-xs);
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+.routine-pill-action {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--transition-fast);
+}
+
+.routine-pill:hover .routine-pill-action { opacity: 0.7; }
+
+.routine-pill-action:hover {
+  opacity: 1 !important;
+  background: color-mix(in srgb, #ffffff 30%, transparent);
+}
+
+@media (hover: none) {
+  .routine-pill-action { opacity: 0.55; }
+}
+
+.routine-recur-icon {
+  flex-shrink: 0;
+  font-size: 1.05rem;
+  opacity: 0.9;
+}
+
+.routine-empty {
+  font-size: var(--fs-sm);
+  font-style: italic;
+  text-align: center;
+  padding: var(--sp-4) 0;
+}
+
+/* ── Add / edit form ── */
+.routine-add-launch {
+  width: 100%;
+  border: 1.5px dashed var(--color-border);
+  border-radius: 16px;
+  padding: var(--sp-3);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.routine-add-launch:hover {
+  border-color: var(--color-accent-rose);
+  color: var(--color-text-heading);
+  background: var(--color-surface-alt);
+}
+
+.routine-form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  box-shadow: var(--shadow-md);
+}
+
+.routine-form-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.routine-form-select {
+  width: auto;
+  flex: 1;
+  min-width: 130px;
+}
+
+.routine-day-chips {
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.routine-day-chips.hidden { display: none; }
+
+.routine-day-chip {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.routine-day-chip.active {
+  background: var(--color-accent-rose);
+  border-color: var(--color-accent-rose);
+  color: #fff;
+}
+
+.routine-form-actions {
+  display: flex;
+  gap: var(--sp-2);
+  justify-content: flex-end;
+}
+
+/* ── Tomorrow preview ── */
+.routine-tomorrow {
+  margin-top: var(--sp-8);
+}
+
+.routine-tomorrow-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--color-text-heading);
+}
+
+.routine-tomorrow-sub {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--sp-3);
+}
+
+/* ═══════════════════════════════════
    MONTHLY RECAP PAGE
 ═══════════════════════════════════ */
 
@@ -832,10 +1168,24 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 .recap-subtitle {
-  font-family: var(--font-heading);
-  font-size: var(--fs-xl);
-  color: var(--color-text-heading);
   margin-top: var(--sp-2);
+  line-height: 1;
+}
+.recap-month-name {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--color-text-heading);
+  letter-spacing: 0.02em;
+}
+.recap-month-year {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--sp-1);
+  font-weight: 400;
 }
 
 .recap-stats-grid {
