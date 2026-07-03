@@ -55,7 +55,12 @@ async function reinit() {
 }
 
 async function loadGoals() {
-  const saved = await JournalDB.getGoals(goalsYear, goalsMonth);
+  let saved = null;
+  try {
+    saved = await JournalDB.getGoals(goalsYear, goalsMonth);
+  } catch (e) {
+    console.error('Goals load failed:', e);
+  }
   if (saved?.data) {
     goalsData = saved.data;
     categoryNames = saved.categoryNames ? { ...DEFAULT_NAMES, ...saved.categoryNames } : { ...DEFAULT_NAMES };

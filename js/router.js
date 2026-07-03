@@ -40,9 +40,13 @@ function handleRoute() {
     document.documentElement.classList.remove('night-mode');
   }
 
-  // Run route handler
+  // Run route handler — a failing page must not leave the app half-rendered
   if (routes[route]) {
-    routes[route](hash);
+    try {
+      routes[route](hash);
+    } catch (e) {
+      console.error('Page init failed for', route, e);
+    }
   }
 
   currentRoute = route;

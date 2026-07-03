@@ -539,26 +539,24 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
    CALENDAR PAGE
 ═══════════════════════════════════ */
 
-.calendar-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--sp-6);
+.calendar-hero {
+  text-align: center;
+  padding: var(--sp-4) 0;
 }
 
-.calendar-month-label {
-  font-family: var(--font-heading);
-  font-size: var(--fs-xl);
-  color: var(--color-text-heading);
-  font-weight: 700;
-}
-
-.calendar-month-sub {
+.calendar-hero-month {
   font-family: var(--font-script);
-  font-size: var(--fs-md);
+  font-size: var(--fs-script-lg);
   color: var(--color-accent-script);
-  display: block;
-  line-height: 1;
+  line-height: 1.1;
+}
+
+.calendar-hero-year {
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
 }
 
 .calendar-grid-header {
