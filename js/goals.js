@@ -62,14 +62,17 @@ async function loadGoals() {
   } else {
     goalsData = {};
     categoryNames = { ...DEFAULT_NAMES };
-    DEFAULT_CATEGORIES.forEach(cat => {
+  }
+  // Every category starts with at least one row
+  DEFAULT_CATEGORIES.forEach(cat => {
+    if (!Array.isArray(goalsData[cat.key]) || goalsData[cat.key].length === 0) {
       goalsData[cat.key] = [
         { text: '', completed: false },
         { text: '', completed: false },
         { text: '', completed: false },
       ];
-    });
-  }
+    }
+  });
 }
 
 function renderCategories() {
@@ -106,8 +109,11 @@ function renderCategories() {
               placeholder="Add a goal..."
               value="${escapeAttr(goal.text || '')}"
               data-cat="${cat.key}" data-idx="${i}">
+            <button type="button" class="goal-remove-btn" data-cat="${cat.key}" data-idx="${i}"
+              aria-label="Remove this goal" title="Remove this goal">✕</button>
           </div>
         `).join('')}
+        <button type="button" class="goal-add-btn" data-cat="${cat.key}">＋ Add another goal</button>
       </div>
     `;
   }).join('');
@@ -127,6 +133,31 @@ function renderCategories() {
   container.querySelectorAll('.goal-input').forEach(input => {
     input.addEventListener('input',  () => scheduleGoalSave(input.dataset.cat, parseInt(input.dataset.idx)));
     input.addEventListener('change', () => handleGoalChange(input.dataset.cat, parseInt(input.dataset.idx)));
+  });
+
+  // Add another goal row
+  container.querySelectorAll('.goal-add-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      if (!goalsData[cat]) goalsData[cat] = [];
+      goalsData[cat].push({ text: '', completed: false });
+      renderCategories();
+      document.getElementById(`goal-text-${cat}-${goalsData[cat].length - 1}`)?.focus();
+      saveGoals();
+    });
+  });
+
+  // Remove a goal row
+  container.querySelectorAll('.goal-remove-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      const idx = parseInt(btn.dataset.idx);
+      if (!goalsData[cat]) return;
+      goalsData[cat].splice(idx, 1);
+      if (goalsData[cat].length === 0) goalsData[cat] = [{ text: '', completed: false }];
+      renderCategories();
+      saveGoals();
+    });
   });
 }
 

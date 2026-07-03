@@ -512,7 +512,7 @@
                 <li><strong>Mood check-in</strong> — pick one or more emojis that match how you feel. No judgment, ever.</li>
                 <li><strong>Guided prompts</strong> — gentle questions to help you reflect (changes based on morning or evening mode).</li>
                 <li><strong>Gratitude</strong> — three things you're thankful for today, big or small.</li>
-                <li><strong>Day rating</strong> — a 1–5 star rating so you can look back and see your patterns over time.</li>
+                <li><strong>Day rating</strong> — a 1–10 star rating so you can look back and see your patterns over time.</li>
                 <li><strong>Photos &amp; Videos</strong> — capture a moment from today. These stay private on your device.</li>
               </ul>
               <p class="guide-tip">💡 <em>You don't have to fill in everything. Even one line is enough. Showing up is what matters.</em></p>
@@ -596,7 +596,7 @@
               </div>
             </div>
             <div class="guide-card-body">
-              <p>Your journal comes in five soft, pastel palettes. To switch, look for the <strong>🎨 palette icon</strong> in the top-right corner of any page and tap it.</p>
+              <p>Your journal comes in six palettes — five soft pastels plus a starry Midnight. To switch, look for the <strong>🎨 palette icon</strong> in the top-right corner of any page and tap it.</p>
               <div class="guide-theme-swatches">
                 <div class="guide-theme-chip" style="background:#fdf0f0; border-color:#f0c4c4;">
                   <span class="guide-theme-dot" style="background:#f0c4c4;"></span> Blush
@@ -709,17 +709,6 @@
                 <input type="text" id="prompt-gratitude-2" class="input" placeholder="I'm grateful for...">
               </div>
             </div>
-            <div class="gratitude-chips" id="gratitude-chips">
-              <span class="gratitude-chip-label">Try:</span>
-              <button class="gratitude-chip" type="button">my family</button>
-              <button class="gratitude-chip" type="button">good health</button>
-              <button class="gratitude-chip" type="button">God's grace</button>
-              <button class="gratitude-chip" type="button">a good meal</button>
-              <button class="gratitude-chip" type="button">nature's beauty</button>
-              <button class="gratitude-chip" type="button">a kind moment</button>
-              <button class="gratitude-chip" type="button">rest & peace</button>
-              <button class="gratitude-chip" type="button">today's blessings</button>
-            </div>
           </div>
 
           <!-- Kind thing (evening only) -->
@@ -751,7 +740,7 @@
             <div class="field-group mb-2">
               <label class="field-label">
                 <span class="label-icon">✨</span> A message to myself
-                <span class="field-optional" style="background:#f8f8f8;padding:2px 6px;border-radius:4px;">private</span>
+                <span class="field-optional" style="background:var(--color-surface-alt);padding:2px 6px;border-radius:4px;">private</span>
               </label>
               <textarea id="prompt-prayer" class="textarea textarea-lg"
                 placeholder="A short message to myself..."></textarea>

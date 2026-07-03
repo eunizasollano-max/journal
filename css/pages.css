@@ -4,7 +4,7 @@
 
 .guide-welcome-card {
   text-align: center;
-  background: linear-gradient(135deg, #fff8f8, #fdf2f5);
+  background: linear-gradient(135deg, var(--color-surface-warm), var(--color-surface-alt));
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-xl);
   padding: var(--sp-10) var(--sp-8);
@@ -55,7 +55,7 @@
   color: var(--color-text-heading);
   margin-bottom: var(--sp-6);
   padding-left: var(--sp-2);
-  border-left: 3px solid #e8b4c0;
+  border-left: 3px solid var(--color-accent-pink);
 }
 
 .guide-card {
@@ -176,7 +176,7 @@
 
 .guide-closing-card {
   text-align: center;
-  background: linear-gradient(135deg, #fdf8f8, #fef2f5);
+  background: linear-gradient(135deg, var(--color-surface-warm), var(--color-surface-alt));
   border: 1.5px dashed var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--sp-10) var(--sp-8);
@@ -230,7 +230,8 @@
   border-radius: var(--radius-full);
   border: 1.5px solid;
   font-size: var(--fs-sm);
-  color: var(--color-text-body);
+  color: #5c4848; /* chips keep hard-coded light backgrounds, so the text
+                     must stay dark even in midnight theme */
   font-family: var(--font-heading);
 }
 
@@ -361,16 +362,13 @@
   pointer-events: none;
 }
 
-/* ── Night mode: only active on #section-today when "Good night" is selected ── */
-#section-today.night-mode .entry-hero {
-  background: linear-gradient(135deg, #1a0e2e 0%, #0e0a1e 100%);
-  border-radius: var(--radius-xl);
-  margin-bottom: var(--sp-4);
-  box-shadow: 0 4px 32px rgba(140, 60, 220, 0.18);
-}
-#section-today.night-mode .entry-hero-day  { color: rgba(255, 255, 255, 0.95); }
-#section-today.night-mode .entry-hero-year { color: rgba(200, 180, 240, 0.70); }
-#section-today.night-mode .entry-hero-date { color: rgba(240, 128, 208, 0.85); }
+/* ── Night mode: the hero sits directly on the darkened page background,
+   so its text must be light (the darkened theme vars are tuned for the
+   light card surfaces, not the bare background) ── */
+html.night-mode .entry-hero-date { color: rgba(255, 255, 255, 0.88); }
+html.night-mode .entry-hero-day  { color: #ffffff; }
+html.night-mode .entry-hero-year { color: rgba(255, 255, 255, 0.62); }
+html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 
 .entry-section-title {
   font-family: var(--font-script);
@@ -468,15 +466,15 @@
   background-image: repeating-linear-gradient(
     transparent,
     transparent 31px,
-    #f0d8d8 31px,
-    #f0d8d8 32px
+    var(--color-border-light) 31px,
+    var(--color-border-light) 32px
   );
   background-size: 100% 32px;
   background-position: 0 36px;
 }
 
 .freewrite-paper.paper-dot {
-  background-image: radial-gradient(circle, #e0c4c4 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
   background-size: 28px 28px;
   background-position: 14px 14px;
 }
@@ -609,12 +607,16 @@
 }
 
 .cal-day.today {
-  background: linear-gradient(135deg, #fde8e8, #f8d8d8);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-rose) 18%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-rose) 32%, var(--color-surface)));
   border-color: var(--color-accent-rose);
 }
 
 .cal-day.has-entry {
-  background: linear-gradient(135deg, #fef0f0, #fce8e8);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-rose) 8%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-rose) 15%, var(--color-surface)));
   border-color: var(--color-border-light);
 }
 
@@ -718,7 +720,9 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #fde8e8, #f8d8d8);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-rose) 14%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-rose) 28%, var(--color-surface)));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -777,6 +781,41 @@
 
 .goal-input {
   flex: 1;
+}
+
+.goal-remove-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--color-text-light);
+  transition: all var(--transition-fast);
+}
+
+.goal-remove-btn:hover {
+  color: #fff;
+  background: var(--color-accent-rose);
+}
+
+.goal-add-btn {
+  margin-top: var(--sp-2);
+  padding: var(--sp-1) var(--sp-4);
+  border-radius: var(--radius-full);
+  border: 1.5px dashed var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.goal-add-btn:hover {
+  border-color: var(--color-accent-rose);
+  color: var(--color-text-heading);
+  background: var(--color-surface-alt);
 }
 
 /* ═══════════════════════════════════
@@ -906,7 +945,9 @@
 
 .gallery-filter-btn:hover,
 .gallery-filter-btn.active {
-  background: linear-gradient(135deg, #fde8e8, #f8d8d8);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-rose) 16%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-rose) 30%, var(--color-surface)));
   border-color: var(--color-accent-rose);
   color: var(--color-text-heading);
 }
@@ -1303,8 +1344,32 @@
 
 .theme-swatch-label {
   font-size: var(--fs-sm);
-  color: var(--color-text-body);
-  font-weight: 500;
+  color: var(--color-text-heading);
+  font-weight: 600;
+}
+
+/* Midnight: keep the pickers on a light panel with dark text, so they
+   read exactly like they do in blush/lavender/mint/peach/sky */
+[data-theme="midnight"] .theme-picker {
+  background: #fdfbff;
+  border-color: #d8ccf0;
+}
+
+[data-theme="midnight"] .theme-picker-title,
+[data-theme="midnight"] .theme-swatch-label,
+[data-theme="midnight"] .font-option-sample {
+  color: #3a2a55;
+}
+
+[data-theme="midnight"] .font-option-label {
+  color: #8070a0;
+}
+
+[data-theme="midnight"] .theme-swatch-btn:hover,
+[data-theme="midnight"] .theme-swatch-btn.active,
+[data-theme="midnight"] .font-option-btn:hover,
+[data-theme="midnight"] .font-option-btn.active {
+  background: #f0e8fa;
 }
 
 /* ── Midnight glow effects ── */
@@ -1624,5 +1689,55 @@
 .privacy-footer {
   text-align: center;
   margin-top: var(--sp-10);
+}
+
+/* ═══════════════════════════════════
+   MOBILE POLISH
+═══════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* iOS Safari auto-zooms the whole page when focusing any input whose
+     font is under 16px — this keeps the view steady while typing */
+  .input,
+  .textarea,
+  .goal-category-name-input,
+  .freewrite-textarea,
+  .mood-custom-input {
+    font-size: 16px;
+  }
+
+  /* Comfortable touch target for deleting a goal */
+  .goal-remove-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .goal-add-btn {
+    padding: var(--sp-2) var(--sp-5);
+  }
+}
+
+@media (max-width: 480px) {
+  /* All 10 stars fit on one row */
+  .star-btn {
+    font-size: 1.15rem;
+    padding: 3px 1px;
+  }
+
+  /* Mood grid: 5 columns without clipping */
+  .mood-btn { padding: var(--sp-2) 2px; }
+  .mood-emoji { font-size: 1.35rem; }
+  .mood-label { font-size: 0.56rem; }
+
+  /* Good morning / Good night pills */
+  .session-btn {
+    font-size: var(--fs-xs);
+    padding: var(--sp-2) var(--sp-1);
+  }
+
+  /* Date header scaled for narrow screens */
+  .entry-hero-day  { font-size: 2.1rem; }
+  .entry-hero-date { font-size: 1.9rem; }
 }
 

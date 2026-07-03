@@ -6,21 +6,33 @@
 let currentUser        = null;
 let authReadyCb        = null;
 let _pendingPassphrase = null;
+let _lastNotifiedUid   = false; // false = never notified; null/uid afterwards
 
 async function initAuth() {
-  SupabaseClient.auth.onAuthStateChange(async (_event, session) => {
+  SupabaseClient.auth.onAuthStateChange((_event, session) => {
     currentUser = session?.user || null;
 
-    if (currentUser && _pendingPassphrase) {
-      try {
-        await JournalCrypto.initCrypto(_pendingPassphrase, currentUser.id);
-      } catch (e) {
-        console.warn('Crypto init failed during auth:', e);
-      }
-      _pendingPassphrase = null;
-    }
+    // Token refreshes and tab-focus re-fires must not restart the whole
+    // launch sequence (duplicate passphrase modals, payment re-checks).
+    const uid = currentUser?.id || null;
+    if (_lastNotifiedUid !== false && uid === _lastNotifiedUid) return;
+    _lastNotifiedUid = uid;
 
-    if (authReadyCb) authReadyCb(currentUser);
+    // Supabase holds an internal auth lock while this callback runs; any
+    // supabase query awaited here deadlocks until reload. Defer all work
+    // so the callback returns immediately and releases the lock.
+    setTimeout(async () => {
+      if (currentUser && _pendingPassphrase) {
+        try {
+          await JournalCrypto.initCrypto(_pendingPassphrase, currentUser.id);
+        } catch (e) {
+          console.warn('Crypto init failed during auth:', e);
+        }
+        _pendingPassphrase = null;
+      }
+
+      if (authReadyCb) authReadyCb(currentUser);
+    }, 0);
   });
 }
 
@@ -120,7 +132,10 @@ function renderLoginUI(mode = 'signin') {
         <input type="email" id="login-email" class="input" placeholder="Email address" autocomplete="email">
       </div>
       <div class="field-group">
-        <input type="password" id="login-password" class="input" placeholder="Password" autocomplete="current-password">
+        <div class="pw-field">
+          <input type="password" id="login-password" class="input" placeholder="Password" autocomplete="current-password">
+          <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
+        </div>
       </div>
       <div id="login-error" class="login-error hidden"></div>
       <button id="email-signin-btn" class="btn btn-primary" style="width:100%" type="button">Sign In</button>
@@ -151,7 +166,10 @@ function renderLoginUI(mode = 'signin') {
         <input type="email" id="signup-email" class="input" placeholder="Email address" autocomplete="email">
       </div>
       <div class="field-group">
-        <input type="password" id="signup-password" class="input" placeholder="Create a password (min 6 chars)" autocomplete="new-password">
+        <div class="pw-field">
+          <input type="password" id="signup-password" class="input" placeholder="Create a password (min 6 chars)" autocomplete="new-password">
+          <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
+        </div>
       </div>
       <div id="login-error" class="login-error hidden"></div>
       <button id="create-account-btn" class="btn btn-primary" style="width:100%" type="button">Create my account — free for 14 days</button>

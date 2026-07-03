@@ -16,7 +16,7 @@
 
 .card-rose {
   border-color: var(--color-border);
-  background: linear-gradient(135deg, #ffffff, #fdf8f8);
+  background: linear-gradient(135deg, var(--color-surface), var(--color-surface-warm));
 }
 
 .card-header {
@@ -36,7 +36,7 @@
 
 /* ── Scripture Banner ── */
 .scripture-card {
-  background: linear-gradient(135deg, #fdf8f8, #fef4f0);
+  background: linear-gradient(135deg, var(--color-surface-warm), var(--color-surface-alt));
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--sp-5) var(--sp-6);
@@ -99,14 +99,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #d4a0a0, #c48888);
+  background: linear-gradient(135deg, var(--color-accent-rose), var(--color-accent-deep));
   color: #ffffff;
-  box-shadow: 0 2px 12px rgba(196, 136, 136, 0.4);
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--color-accent-deep) 40%, transparent);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #c48888, #b47878);
-  box-shadow: 0 4px 18px rgba(196, 136, 136, 0.5);
+  background: linear-gradient(135deg, var(--color-accent-deep), color-mix(in srgb, var(--color-accent-deep) 85%, black));
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--color-accent-deep) 50%, transparent);
   transform: translateY(-1px);
 }
 
@@ -154,12 +154,12 @@
 }
 
 .btn-save {
-  background: linear-gradient(135deg, #c4a0a0, #b48888);
+  background: linear-gradient(135deg, var(--color-accent-rose), var(--color-accent-deep));
   color: #fff;
   padding: var(--sp-4) var(--sp-10);
   font-size: var(--fs-md);
   border-radius: var(--radius-full);
-  box-shadow: 0 4px 20px rgba(180, 120, 120, 0.35);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-accent-deep) 35%, transparent);
   transition: all var(--transition-spring);
   position: relative;
   overflow: hidden;
@@ -167,7 +167,7 @@
 
 .btn-save:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(180, 120, 120, 0.45);
+  box-shadow: 0 6px 24px color-mix(in srgb, var(--color-accent-deep) 45%, transparent);
 }
 
 .btn-save.saving::after {
@@ -262,13 +262,15 @@
 
 .mood-btn:hover {
   border-color: var(--color-accent-rose);
-  background: #fdf0f0;
+  background: var(--color-surface-alt);
   transform: scale(1.05);
 }
 
 .mood-btn.selected {
   border-color: var(--color-accent-rose);
-  background: linear-gradient(135deg, #fde8e8, #fdd8d8);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-rose) 16%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-rose) 28%, var(--color-surface)));
   box-shadow: var(--shadow-sm);
   transform: scale(1.08);
 }
@@ -310,9 +312,18 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 0.95rem;
   outline: none;
   color: var(--color-text-heading);
+}
+
+/* Custom moods typed as words (not a single emoji) render smaller so they fit */
+.mood-emoji-text {
+  font-size: 0.82rem;
+  line-height: 1.25;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  max-width: 100%;
 }
 
 /* ── Star Rating ── */
@@ -339,7 +350,10 @@
 .star-btn:hover { transform: scale(1.15); }
 
 .star-btn.filled { color: var(--color-star-fill); }
-.star-btn.hovered { color: #e8aa80; transform: scale(1.1); }
+.star-btn.hovered {
+  color: color-mix(in srgb, var(--color-star-fill) 70%, var(--color-surface));
+  transform: scale(1.1);
+}
 
 .rating-label {
   font-size: var(--fs-xs);
@@ -397,7 +411,7 @@
   width: 24px;
   height: 24px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, #f5d8d8, #e8c4c4);
+  background: linear-gradient(135deg, var(--color-border-light), var(--color-border));
   color: var(--color-text-heading);
   font-size: var(--fs-xs);
   font-weight: 700;
@@ -411,55 +425,6 @@
 [data-theme="midnight"] .gratitude-num {
   background: linear-gradient(135deg, #3d2a4a, #2e1e3a);
   color: #e8d4f8;
-}
-
-/* ── Gratitude suggestion chips ── */
-.gratitude-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-2);
-  margin-top: var(--sp-3);
-  align-items: center;
-}
-
-.gratitude-chip-label {
-  font-size: var(--fs-xs);
-  color: var(--color-text-muted);
-  font-weight: 500;
-}
-
-.gratitude-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px var(--sp-3);
-  border-radius: var(--radius-full);
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border-light);
-  color: var(--color-text-body);
-  font-size: var(--fs-xs);
-  font-family: var(--font-body);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  white-space: nowrap;
-}
-
-.gratitude-chip:hover,
-.gratitude-chip:active {
-  background: var(--color-surface-warm);
-  border-color: var(--color-accent);
-  color: var(--color-text-heading);
-  transform: scale(0.97);
-}
-
-[data-theme="midnight"] .gratitude-chip {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,255,255,0.12);
-}
-
-[data-theme="midnight"] .gratitude-chip:hover,
-[data-theme="midnight"] .gratitude-chip:active {
-  background: rgba(200,170,240,0.15);
-  border-color: rgba(200,170,240,0.35);
 }
 
 /* ── Media Upload ── */
@@ -476,7 +441,7 @@
 .media-dropzone:hover,
 .media-dropzone.drag-over {
   border-color: var(--color-accent-rose);
-  background: #fdf0f0;
+  background: var(--color-surface-alt);
 }
 
 .media-dropzone-icon { font-size: 2rem; margin-bottom: var(--sp-2); opacity: 0.6; }
@@ -563,7 +528,7 @@
   left: 50%;
   transform: translateX(-50%) translateY(80px);
   background: var(--color-text-heading);
-  color: #fff;
+  color: var(--color-bg); /* not #fff — midnight's heading color IS white */
   padding: var(--sp-3) var(--sp-6);
   border-radius: var(--radius-full);
   font-size: var(--fs-sm);
@@ -605,7 +570,9 @@
 }
 
 .badge-rose {
-  background: linear-gradient(135deg, #fde8e8, #f8d8d8);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-rose) 15%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-rose) 28%, var(--color-surface)));
   color: var(--color-text-heading);
 }
 
@@ -788,13 +755,15 @@
 
 .onboard-mode-btn:hover {
   border-color: var(--color-accent-pink);
-  background: #fef5f8;
+  background: var(--color-surface-warm);
 }
 
 .onboard-mode-btn.selected {
   border-color: var(--color-accent-script);
-  background: linear-gradient(135deg, #fde8ee, #fdf5f8);
-  box-shadow: 0 2px 12px rgba(192,100,120,.15);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-pink) 25%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-pink) 10%, var(--color-surface)));
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--color-accent-script) 15%, transparent);
 }
 
 .onboard-mode-icon { font-size: 1.6rem; }
@@ -813,7 +782,7 @@
   justify-content: center;
   gap: var(--sp-3);
   padding: var(--sp-2) var(--sp-4);
-  background: linear-gradient(90deg, #fde8ee, #fdf0f8);
+  background: linear-gradient(90deg, var(--color-surface-alt), var(--color-surface-warm));
   border-bottom: 1px solid var(--color-border-light);
   font-size: var(--fs-sm);
   color: var(--color-text-body);
@@ -995,6 +964,31 @@
   transform: translateY(-1px);
 }
 
+/* ── Show/hide password ── */
+.pw-field {
+  position: relative;
+  width: 100%;
+}
+
+.pw-field .input {
+  padding-right: 44px;
+}
+
+.pw-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.pw-toggle:hover { opacity: 1; }
+
 .login-divider {
   display: flex;
   align-items: center;
@@ -1076,7 +1070,7 @@
 }
 
 .checkbox-input:checked {
-  background: linear-gradient(135deg, #d4a0a0, #c48888);
+  background: linear-gradient(135deg, var(--color-accent-rose), var(--color-accent-deep));
   border-color: var(--color-accent-deep);
 }
 

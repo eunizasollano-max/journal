@@ -10,6 +10,9 @@
   --color-accent-pink:   #e8b4b8;
   --color-accent-deep:   #b08888;
   --color-accent-script: #c06478;
+  /* Generic accent — follows the theme because it references the
+     accent-deep var, which every theme overrides. */
+  --color-accent:        var(--color-accent-deep);
   --color-accent-sage:  #a8b5a0;
   --color-accent-sage-light: #c8d5c0;
   --color-text-heading: #5c3d3d;
@@ -185,11 +188,83 @@
 }
 
 /* ══════════════════════════════════════════════════
-   Night Mode — richer, moodier pastels (not dark/black).
-   Think "evening glow": same hue, noticeably deeper.
-   Each block scoped to its theme; midnight is untouched.
+   Night Mode — deeper, moodier version of each theme.
+   Applied to <html> only while on the Today's Entry page
+   with "Good night" selected; stripped on navigation away.
    ══════════════════════════════════════════════════ */
 
-/* Night-mode visual tweaks are scoped to specific page elements
-   in pages.css (.entry-hero-*, .freewrite-paper, etc.) so that
-   the home page and sidebar always show normal theme colors. */
+html.night-mode[data-theme="blush"] {
+  --color-bg:            #c08080;
+  --color-surface:       #f5e8e8;
+  --color-surface-alt:   #ead8d8;
+  --color-surface-warm:  #f0e0e0;
+  --color-border:        #c89898;
+  --color-border-light:  #deb8b8;
+  --color-accent-script: #a02040;
+  --color-text-heading:  #3a1010;
+  --color-text-body:     #5a2828;
+  --color-text-muted:    #9a6060;
+  --color-text-light:    #c09090;
+  --color-star-fill:     #b84030;
+}
+
+html.night-mode[data-theme="lavender"] {
+  --color-bg:            #9070c0;
+  --color-surface:       #f3eefb;
+  --color-surface-alt:   #e8e0f5;
+  --color-surface-warm:  #ede8f8;
+  --color-border:        #c4b0dc;
+  --color-border-light:  #dcd0f0;
+  --color-accent-script: #5c30a8;
+  --color-text-heading:  #1e0e3a;
+  --color-text-body:     #382058;
+  --color-text-muted:    #7060a0;
+  --color-text-light:    #a890c8;
+  --color-star-fill:     #8050c0;
+}
+
+html.night-mode[data-theme="mint"] {
+  --color-bg:            #509870;
+  --color-surface:       #edf8f2;
+  --color-surface-alt:   #dff0e8;
+  --color-surface-warm:  #e8f5ee;
+  --color-border:        #a8d0bc;
+  --color-border-light:  #c8e8d8;
+  --color-accent-script: #1a6840;
+  --color-text-heading:  #082010;
+  --color-text-body:     #184028;
+  --color-text-muted:    #407858;
+  --color-text-light:    #70a888;
+  --color-star-fill:     #309850;
+}
+
+html.night-mode[data-theme="peach"] {
+  --color-bg:            #c07858;
+  --color-surface:       #fdf3ec;
+  --color-surface-alt:   #f5e4d4;
+  --color-surface-warm:  #f8ede0;
+  --color-border:        #ddb090;
+  --color-border-light:  #eecdb0;
+  --color-accent-script: #903018;
+  --color-text-heading:  #2c1000;
+  --color-text-body:     #4c2010;
+  --color-text-muted:    #8c5830;
+  --color-text-light:    #bc8858;
+  --color-star-fill:     #b84818;
+}
+
+html.night-mode[data-theme="sky"] {
+  --color-bg:            #4e70b0;
+  --color-surface:       #eef3fb;
+  --color-surface-alt:   #dce8f5;
+  --color-surface-warm:  #e4edf8;
+  --color-border:        #a8bedd;
+  --color-border-light:  #c8d8f0;
+  --color-accent-script: #1848a0;
+  --color-text-heading:  #081428;
+  --color-text-body:     #182848;
+  --color-text-muted:    #486898;
+  --color-text-light:    #7898c4;
+  --color-star-fill:     #2858b0;
+}
+/* midnight is already dark — night-mode has no extra effect */

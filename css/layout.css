@@ -129,7 +129,9 @@ body {
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, #fde8e8, #f8d8d8);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-rose) 16%, var(--color-surface)),
+    color-mix(in srgb, var(--color-accent-rose) 30%, var(--color-surface)));
   color: var(--color-text-heading);
   font-weight: 600;
   box-shadow: var(--shadow-sm);

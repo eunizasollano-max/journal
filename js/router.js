@@ -35,6 +35,11 @@ function handleRoute() {
     mobileTitle.textContent = label ? label.textContent : 'Journal';
   }
 
+  // Strip night-mode when leaving the Today section
+  if (route !== '#today') {
+    document.documentElement.classList.remove('night-mode');
+  }
+
   // Run route handler
   if (routes[route]) {
     routes[route](hash);
@@ -42,8 +47,8 @@ function handleRoute() {
 
   currentRoute = route;
 
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Scroll to top instantly — smooth scrolling here made page switches feel slow
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 window.addEventListener('hashchange', handleRoute);

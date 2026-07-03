@@ -57,9 +57,37 @@ async function openDB() {
   await openIDB();
 }
 
+/* Months the cloud has confirmed empty this session — skip re-asking */
+const _cloudMiss = new Set();
+
+/* Pull all cloud entries into IndexedDB (media stays local-only).
+   Runs in the background so reads never wait on the network. */
+let _entriesRefreshed = false;
+async function cloudRefreshEntries() {
+  if (!useSupabase()) return;
+  try {
+    const { data } = await SupabaseClient
+      .from('entries')
+      .select('data')
+      .eq('user_id', getUserId());
+    for (const row of data || []) {
+      const entry = await JournalCrypto.decrypt(row.data);
+      if (!entry?.date) continue;
+      const local = await idbReq(idbTx('entries').get(entry.date));
+      if (local?.updatedAt && entry.updatedAt && local.updatedAt > entry.updatedAt) continue;
+      if (local?.media) entry.media = local.media;
+      await idbReq(idbTx('entries', 'readwrite').put(entry));
+    }
+    _entriesRefreshed = true;
+  } catch (e) {
+    console.warn('Background entries refresh failed', e);
+  }
+}
+
 async function getEntry(date) {
   await openIDB();
-  if (useSupabase()) {
+  let local = await idbReq(idbTx('entries').get(date));
+  if (!local && useSupabase() && !_cloudMiss.has('entry:' + date)) {
     try {
       const { data } = await SupabaseClient
         .from('entries')
@@ -69,16 +97,15 @@ async function getEntry(date) {
         .maybeSingle();
 
       if (data) {
-        const cloudEntry = await JournalCrypto.decrypt(data.data);
-        const localEntry = await idbReq(idbTx('entries').get(date));
-        if (localEntry?.media) cloudEntry.media = localEntry.media;
-        return resolveMediaUrls(cloudEntry);
+        local = await JournalCrypto.decrypt(data.data);
+        if (local?.date) await idbReq(idbTx('entries', 'readwrite').put(local));
+      } else {
+        _cloudMiss.add('entry:' + date);
       }
     } catch (e) {
       console.warn('Supabase getEntry failed, using IndexedDB', e);
     }
   }
-  const local = await idbReq(idbTx('entries').get(date));
   return resolveMediaUrls(local);
 }
 
@@ -135,25 +162,16 @@ async function saveEntry(entry) {
 
 async function getAllEntries() {
   await openIDB();
-  if (useSupabase()) {
-    try {
-      const { data } = await SupabaseClient
-        .from('entries')
-        .select('data')
-        .eq('user_id', getUserId());
-
-      if (data && data.length > 0) {
-        const cloudEntries = await Promise.all(data.map(row => JournalCrypto.decrypt(row.data)));
-        const localEntries = await idbReq(idbTx('entries').getAll());
-        const localMap = {};
-        localEntries.forEach(e => { localMap[e.date] = e; });
-        return cloudEntries.map(ce => ({ ...ce, media: localMap[ce.date]?.media || [] }));
-      }
-    } catch (e) {
-      console.warn('Supabase getAllEntries failed, using IndexedDB', e);
-    }
+  let local = await idbReq(idbTx('entries').getAll());
+  if (local.length === 0 && useSupabase() && !_entriesRefreshed) {
+    // First use on this device: wait for the cloud copy once
+    await cloudRefreshEntries();
+    local = await idbReq(idbTx('entries').getAll());
+  } else if (!_entriesRefreshed) {
+    // Otherwise answer instantly from local and refresh quietly
+    cloudRefreshEntries();
   }
-  return idbReq(idbTx('entries').getAll());
+  return local;
 }
 
 async function getEntriesForMonth(year, month) {
@@ -165,7 +183,8 @@ async function getEntriesForMonth(year, month) {
 async function getGoals(year, month) {
   await openIDB();
   const key = `${year}-${String(month).padStart(2, '0')}`;
-  if (useSupabase()) {
+  let local = await idbReq(idbTx('goals').get(key));
+  if (!local && useSupabase() && !_cloudMiss.has('goals:' + key)) {
     try {
       const { data } = await SupabaseClient
         .from('goals')
@@ -173,12 +192,17 @@ async function getGoals(year, month) {
         .eq('user_id', getUserId())
         .eq('month_key', key)
         .maybeSingle();
-      if (data) return JournalCrypto.decrypt(data.data);
+      if (data) {
+        local = await JournalCrypto.decrypt(data.data);
+        if (local) await idbReq(idbTx('goals', 'readwrite').put({ ...local, monthKey: key }));
+      } else {
+        _cloudMiss.add('goals:' + key);
+      }
     } catch (e) {
       console.warn('Supabase getGoals failed', e);
     }
   }
-  return idbReq(idbTx('goals').get(key));
+  return local;
 }
 
 async function saveGoals(year, month, goalsData, categoryNames) {
@@ -203,7 +227,8 @@ async function saveGoals(year, month, goalsData, categoryNames) {
 async function getRecap(year, month) {
   await openIDB();
   const key = `${year}-${String(month).padStart(2, '0')}`;
-  if (useSupabase()) {
+  let local = await idbReq(idbTx('recap').get(key));
+  if (!local && useSupabase() && !_cloudMiss.has('recap:' + key)) {
     try {
       const { data } = await SupabaseClient
         .from('recap')
@@ -211,12 +236,17 @@ async function getRecap(year, month) {
         .eq('user_id', getUserId())
         .eq('month_key', key)
         .maybeSingle();
-      if (data) return JournalCrypto.decrypt(data.data);
+      if (data) {
+        local = await JournalCrypto.decrypt(data.data);
+        if (local) await idbReq(idbTx('recap', 'readwrite').put({ ...local, monthKey: key }));
+      } else {
+        _cloudMiss.add('recap:' + key);
+      }
     } catch (e) {
       console.warn('Supabase getRecap failed', e);
     }
   }
-  return idbReq(idbTx('recap').get(key));
+  return local;
 }
 
 async function saveRecap(year, month, reflection) {
@@ -241,6 +271,7 @@ async function saveRecap(year, month, reflection) {
 async function syncFromCloud() {
   if (!useSupabase()) return { entries: 0, goals: 0, recap: 0 };
   await openIDB();
+  _cloudMiss.clear();
   const uid = getUserId();
   let counts = { entries: 0, goals: 0, recap: 0 };
 

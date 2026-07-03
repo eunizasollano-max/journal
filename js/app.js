@@ -119,10 +119,13 @@ function initCursorGlow() {
   document.body.appendChild(glow);
 
   let _rafId = null;
+  let _x = 0, _y = 0;
   document.addEventListener('mousemove', (e) => {
+    _x = e.clientX;
+    _y = e.clientY;
     if (_rafId) return;
     _rafId = requestAnimationFrame(() => {
-      glow.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+      glow.style.transform = `translate(calc(${_x}px - 50%), calc(${_y}px - 50%))`;
       glow.style.opacity = '1';
       _rafId = null;
     });
@@ -451,6 +454,7 @@ function initNicknameEdit() {
 async function ensureCryptoKey(user) {
   if (JournalCrypto.getCryptoKey()) return;
   if (await JournalCrypto.restoreKeyFromSession()) return;
+  if (document.getElementById('passphrase-overlay')) return;
   return new Promise((resolve) => showPassphraseModal(user, resolve));
 }
 
@@ -474,10 +478,15 @@ async function showPassphraseModal(user, onComplete) {
       <div style="font-size:2rem;margin-bottom:var(--sp-3)">🔒</div>
       <h2 class="modal-title">${title}</h2>
       <p class="modal-desc" style="margin-bottom:var(--sp-4)">${subtitle}</p>
-      <input type="password" id="pp-input" class="input" placeholder="${placeholder}"
-        style="margin-bottom:var(--sp-3)" autocomplete="${isFirstTime ? 'new-password' : 'current-password'}">
-      ${isFirstTime && !isEmailUser ? `<input type="password" id="pp-confirm" class="input" placeholder="Confirm passphrase"
-        style="margin-bottom:var(--sp-3)" autocomplete="new-password">` : ''}
+      <div class="pw-field" style="margin-bottom:var(--sp-3)">
+        <input type="password" id="pp-input" class="input" placeholder="${placeholder}"
+          autocomplete="${isFirstTime ? 'new-password' : 'current-password'}">
+        <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
+      </div>
+      ${isFirstTime && !isEmailUser ? `<div class="pw-field" style="margin-bottom:var(--sp-3)">
+        <input type="password" id="pp-confirm" class="input" placeholder="Confirm passphrase" autocomplete="new-password">
+        <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
+      </div>` : ''}
       ${isFirstTime && !isEmailUser ? `<p style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--sp-4)">Remember this — it cannot be recovered if lost.</p>` : ''}
       <div id="pp-error" class="login-error hidden"></div>
       <button id="pp-btn" class="btn btn-primary" style="width:100%" type="button">${btnLabel}</button>
@@ -522,6 +531,18 @@ async function showPassphraseModal(user, onComplete) {
   input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
   confirm?.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
 }
+
+/* ── Show/hide password toggles (works for any .pw-field, incl. dynamic ones) ── */
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.pw-toggle');
+  if (!btn) return;
+  const input = btn.parentElement.querySelector('input');
+  if (!input) return;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+  btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+});
 
 /* ── App init ── */
 async function initApp() {

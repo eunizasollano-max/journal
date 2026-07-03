@@ -1,4 +1,4 @@
-const CACHE = 'journal-v1';
+const CACHE = 'journal-v4';
 const SHELL = [
   '/',
   '/index.html',
@@ -56,16 +56,16 @@ self.addEventListener('fetch', (e) => {
     url.hostname.includes('googleusercontent.com')
   ) return;
 
+  // Network-first: users always get the latest app code on first load
+  // (cache-first meant every update needed an extra reload to appear).
+  // The cache is only used when offline.
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const network = fetch(e.request).then(res => {
-        if (res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return res;
-      }).catch(() => cached);
-      return cached || network;
-    })
+    fetch(e.request).then(res => {
+      if (res.ok) {
+        const clone = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+      }
+      return res;
+    }).catch(() => caches.match(e.request))
   );
 });

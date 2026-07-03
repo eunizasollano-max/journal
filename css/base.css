@@ -5,16 +5,17 @@
   cursor: url('../assets/peony-cursor.svg') 16 15, auto;
 }
 
-a, button, [role="button"], [tabindex="0"],
+/* The peony must win over every scattered `cursor: pointer` rule and
+   inline style, or the cursor flips between peony and the system hand
+   as you move around — hence the !important. */
+a, button, [role="button"], [tabindex="0"], [onclick],
 input[type="submit"], input[type="button"], input[type="reset"],
+input[type="checkbox"], input[type="radio"],
 label, select,
-.nav-item, .mood-btn, .star-btn, .cal-day,
-.gallery-item, .theme-swatch-btn, .session-btn,
-.entry-tab, .paper-style-btn, .gallery-filter-btn,
-.btn, .btn-save, .btn-primary, .btn-secondary,
-.mobile-nav-item, .media-dropzone, .media-remove-btn,
-.lightbox-close, .theme-toggle-btn {
-  cursor: url('../assets/peony-cursor.svg') 16 15, pointer;
+.cal-day:not(.other-month), .gallery-item, .media-dropzone, .brand-user,
+a *, button *, [onclick] *,
+.cal-day:not(.other-month) *, .gallery-item *, .media-dropzone * {
+  cursor: url('../assets/peony-cursor.svg') 16 15, pointer !important;
 }
 
 html {
@@ -99,7 +100,6 @@ textarea, input, select {
 }
 
 button {
-  cursor: pointer;
   font-family: inherit;
   border: none;
   background: none;

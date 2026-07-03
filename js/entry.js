@@ -70,7 +70,7 @@ async function renderWidgets() {
         <div class="widget-label">entries</div>
       </div>
       <div class="widget-card">
-        <div class="widget-icon" style="font-size:1.8rem">${lastMoods.map(m => m.emoji).join('') || '✨'}</div>
+        <div class="widget-icon" style="font-size:1.8rem">${lastMoods[0]?.emoji || '✨'}</div>
         <div class="widget-label" style="margin-top:4px">last mood</div>
       </div>
     `;
@@ -110,7 +110,7 @@ function renderDateHeader() {
     currentSession = new Date().getHours() < 12 ? 'morning' : 'evening';
   }
   // Darken the theme for evening entries
-  document.getElementById('section-today')?.classList.toggle('night-mode', currentSession === 'evening');
+  document.documentElement.classList.toggle('night-mode', currentSession === 'evening');
 }
 
 function renderPastEntryBanner() {
@@ -154,7 +154,7 @@ function setSession(session) {
   document.querySelectorAll('.session-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.session === session);
   });
-  document.getElementById('section-today')?.classList.toggle('night-mode', session === 'evening');
+  document.documentElement.classList.toggle('night-mode', session === 'evening');
   updateConditionalPrompts();
 }
 
@@ -207,7 +207,7 @@ function renderMoodGrid() {
   const customBtns = customMoods.map((m, i) => `
     <button class="mood-btn mood-btn-custom ${isMoodSelected(m) ? 'selected' : ''}" data-custom-index="${i}" type="button">
       <span class="mood-remove" data-remove-custom="${i}">✕</span>
-      <span class="mood-emoji">${m.emoji}</span>
+      <span class="mood-emoji${graphemes(m.emoji).length > 2 ? ' mood-emoji-text' : ''}">${m.emoji}</span>
       <span class="mood-label">${m.label}</span>
     </button>
   `).join('');
@@ -253,15 +253,28 @@ function renderMoodGrid() {
   if (addBtnEl) addBtnEl.addEventListener('click', () => startCustomMoodInput());
 }
 
+const CUSTOM_MOOD_MAX = 10; // visible characters (emoji count as one)
+
+function graphemes(str) {
+  if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+    return [...new Intl.Segmenter().segment(str)].map(s => s.segment);
+  }
+  return [...str];
+}
+
 function startCustomMoodInput() {
   const addBtnEl = document.getElementById('mood-add-btn');
   if (!addBtnEl) return;
   addBtnEl.outerHTML = `
     <span class="mood-btn mood-btn-input">
-      <input type="text" id="mood-custom-input" class="mood-custom-input" placeholder="emoji" maxlength="8" autocomplete="off">
+      <input type="text" id="mood-custom-input" class="mood-custom-input" placeholder="emoji or word" autocomplete="off">
     </span>
   `;
   const input = document.getElementById('mood-custom-input');
+  input.addEventListener('input', () => {
+    const g = graphemes(input.value);
+    if (g.length > CUSTOM_MOOD_MAX) input.value = g.slice(0, CUSTOM_MOOD_MAX).join('');
+  });
   input.focus();
   let done = false;
 
@@ -498,20 +511,6 @@ async function saveEntry() {
 function attachEventListeners() {
   const saveBtn = document.getElementById('save-entry-btn');
   if (saveBtn) saveBtn.addEventListener('click', saveEntry);
-
-  document.querySelectorAll('.gratitude-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const text = chip.textContent;
-      for (let i = 0; i < 3; i++) {
-        const input = document.getElementById(`prompt-gratitude-${i}`);
-        if (input && !input.value.trim()) {
-          input.value = text;
-          input.focus();
-          break;
-        }
-      }
-    });
-  });
 }
 
 window.EntryPage = { init, MOODS };
