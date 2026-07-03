@@ -24,6 +24,18 @@
   <link rel="stylesheet" href="css/pages.css">
   <link rel="stylesheet" href="css/animations.css">
 
+  <!-- Strip OAuth error params before Supabase initializes.
+       bad_oauth_state / expired state causes Supabase to fire SIGNED_OUT
+       and destroy the existing session. Clearing the params lets Supabase
+       fall back to the valid session already stored in localStorage. -->
+  <script>
+    (function () {
+      if (location.search.includes('error=')) {
+        history.replaceState(null, '', location.pathname + location.hash);
+      }
+    })();
+  </script>
+
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
