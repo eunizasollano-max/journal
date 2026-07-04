@@ -293,17 +293,17 @@ html.night-mode[data-theme="sky"] {
   --color-star-fill:     #2858b0;
 }
 html.night-mode[data-theme="rosewater"] {
-  --color-bg:            #8d686e;
+  --color-bg:            #bf5c6c;
   --color-surface:       #f7f0ee;
   --color-surface-alt:   #eee2de;
   --color-surface-warm:  #f2e6e2;
   --color-border:        #cdb2ac;
   --color-border-light:  #e0cbc5;
-  --color-accent-script: #8a4450;
-  --color-text-heading:  #2e2226;
-  --color-text-body:     #554248;
-  --color-text-muted:    #8d7278;
-  --color-text-light:    #b59ba0;
+  --color-accent-script: #8a443c;
+  --color-text-heading:  #2e2420;
+  --color-text-body:     #55463e;
+  --color-text-muted:    #8d766c;
+  --color-text-light:    #b59e94;
   --color-star-fill:     #b08838;
 }
 

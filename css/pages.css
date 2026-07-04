@@ -905,22 +905,23 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   position: absolute;
   top: 8px;
   right: 8px;
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  font-size: 0.75rem;
-  background: rgba(255,255,255,0.4);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  font-size: 0.55rem;
+  background: transparent;
+  opacity: 0.5;
+  transition: background var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast);
 }
 
-.routine-cat-card:hover .routine-cat-edit,
+.routine-cat-edit:hover,
 .routine-cat-edit:active {
-  background: rgba(255,255,255,0.65);
-  transform: scale(1.1);
+  background: #ffffff;
+  opacity: 1;
+  transform: scale(1.15);
 }
 
 .routine-cat-add {
