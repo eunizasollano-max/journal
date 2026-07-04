@@ -1,11 +1,11 @@
 (function () {
 
 const DEFAULT_CATEGORIES = [
-  { key: 'cat1', icon: '💫', color: '#fde8e8' },
-  { key: 'cat2', icon: '💪', color: '#e8f5e8' },
-  { key: 'cat3', icon: '💛', color: '#fff8e8' },
-  { key: 'cat4', icon: '📚', color: '#e8f0f8' },
-  { key: 'cat5', icon: '✨', color: '#f0e8f8' },
+  { key: 'cat1', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l1.8 5.2L19 11l-5.2 1.8L12 18l-1.8-5.2L5 11l5.2-1.8L12 4Z"/></svg>', color: '#f3e7e4' },
+  { key: 'cat2', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12h4l2-5 4.5 10 2-5h4.5"/></svg>', color: '#edf0e9' },
+  { key: 'cat3', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19s-6.7-4.3-8.4-8.1A4.7 4.7 0 0 1 12 7.2a4.7 4.7 0 0 1 8.4 3.7C18.7 14.7 12 19 12 19Z"/></svg>', color: '#f5efdf' },
+  { key: 'cat4', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.6-4.5-1.9-7-1.5V19c2.5-.4 5-.1 7 1.5 2-1.6 4.5-1.9 7-1.5V4.5C16.5 4.1 14 4.4 12 6Z"/><path d="M12 6v14.5"/></svg>', color: '#e9eef4' },
+  { key: 'cat5', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="7.5" rx="7" ry="3"/><path d="M5 7.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>', color: '#efe9f4' },
 ];
 
 const DEFAULT_NAMES = {
@@ -224,7 +224,11 @@ async function saveGoals() {
       _goalsCloudErrorShown = false;
     }
   } catch (err) {
-    console.error('Failed to save goals:', err);
+    if (err?.viewOnlyBlocked) {
+      App.showToast('Sign in to save your journal ✨');
+    } else {
+      console.error('Failed to save goals:', err);
+    }
   }
 }
 

@@ -1,33 +1,47 @@
 :root {
-  /* Colors */
-  --color-bg:           #fdf0f0;
+  /* Colors — Rosewater is the base theme: ivory ground, antique rose
+     accent, warm ink text */
+  --color-bg:           #faf7f3;
   --color-surface:      #ffffff;
-  --color-surface-alt:  #fdf5f5;
-  --color-surface-warm: #fef8f8;
-  --color-border:       #e8c4c4;
-  --color-border-light: #f2dada;
-  --color-accent-rose:   #c4a0a0;
-  --color-accent-pink:   #e8b4b8;
-  --color-accent-deep:   #b08888;
-  --color-accent-script: #c06478;
+  --color-surface-alt:  #f6f0ec;
+  --color-surface-warm: #f3e7e4;
+  --color-border:       #e0d0ca;
+  --color-border-light: #ede1dc;
+  --color-accent-rose:   #c08a92;
+  --color-accent-pink:   #d9afb4;
+  --color-accent-deep:   #b76e79;
+  --color-accent-script: #9e5a65;
   /* Generic accent — follows the theme because it references the
      accent-deep var, which every theme overrides. */
   --color-accent:        var(--color-accent-deep);
-  --color-accent-sage:  #a8b5a0;
-  --color-accent-sage-light: #c8d5c0;
-  --color-text-heading: #5c3d3d;
-  --color-text-body:    #7a5c5c;
-  --color-text-muted:   #b09090;
-  --color-text-light:   #c8a8a8;
-  --color-star-fill:    #d4956a;
-  --color-star-empty:   #e8d4d0;
-  --color-success:      #8fb888;
-  --color-overlay:      rgba(92, 61, 61, 0.4);
-  --cursor-glow-color:  rgba(192, 100, 120, 0.55);
+  /* Sage is the second accent — every theme pairs its primary hue with a
+     complementary partner here so icons/highlights read as two colors
+     instead of one monochrome tint. */
+  --color-accent-sage:  #97a58c;
+  --color-accent-sage-light: #c3cdb8;
+  --color-text-heading: #3f3338;
+  --color-text-body:    #6b5a60;
+  --color-text-muted:   #9c8a8f;
+  --color-text-light:   #c0b2b6;
+  --color-star-fill:    #c5a05a;
+  --color-star-empty:   #e7dad5;
+  --color-success:      #97a58c;
+  --color-overlay:      rgba(63, 51, 56, 0.4);
+  --cursor-glow-color:  rgba(183, 110, 121, 0.4);
 
   /* Fonts */
   --font-heading: 'Cormorant Garamond', Georgia, serif;
-  --font-script:  'Parisienne', cursive;
+  /* Titles render in the serif everywhere; cursive lives on only in the
+     brand wordmark, which sets its face inline. */
+  --font-script:  var(--font-heading);
+
+  /* Background washes — two whisper-quiet radial tints per theme,
+     replacing the tiled peony wallpaper */
+  --wash-a: rgba(183, 110, 121, 0.07);
+  --wash-b: rgba(151, 165, 140, 0.06);
+
+  /* Fine-line peony cursor, tinted per theme */
+  --cursor-flower: url('../assets/peony-cursor-line.svg') 16 15;
   --font-body:    'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Font sizes */
@@ -63,10 +77,10 @@
   --radius-full: 999px;
 
   /* Shadows */
-  --shadow-sm:  0 1px 4px rgba(92, 61, 61, 0.06);
-  --shadow-md:  0 4px 16px rgba(92, 61, 61, 0.10);
-  --shadow-lg:  0 8px 32px rgba(92, 61, 61, 0.13);
-  --shadow-card: 0 2px 12px rgba(180, 130, 130, 0.12);
+  --shadow-sm:  0 1px 4px rgba(63, 51, 56, 0.06);
+  --shadow-md:  0 4px 16px rgba(63, 51, 56, 0.10);
+  --shadow-lg:  0 8px 32px rgba(63, 51, 56, 0.13);
+  --shadow-card: 0 2px 12px rgba(158, 118, 128, 0.10);
 
   /* Transitions */
   --transition-fast:   0.15s ease;
@@ -97,8 +111,13 @@
   --color-text-muted:    #a898c0;
   --color-text-light:    #c8b8d8;
   --color-star-fill:     #b090d0;
+  --color-accent-sage:   #c9a24a;
+  --color-accent-sage-light: #e3cf94;
   --color-overlay:       rgba(70, 50, 90, 0.4);
   --cursor-glow-color:   rgba(140, 80, 210, 0.55);
+  --wash-a: rgba(122, 90, 170, 0.07);
+  --wash-b: rgba(144, 128, 184, 0.05);
+  --cursor-flower: url('../assets/peony-cursor-line-lavender.svg') 16 15;
 }
 
 /* ── Mint Theme ── */
@@ -116,8 +135,13 @@
   --color-text-muted:    #88a898;
   --color-text-light:    #b0c8b8;
   --color-star-fill:     #80b898;
+  --color-accent-sage:   #d98a95;
+  --color-accent-sage-light: #eec3c8;
   --color-overlay:       rgba(40, 70, 50, 0.4);
   --cursor-glow-color:   rgba(50, 150, 100, 0.5);
+  --wash-a: rgba(74, 136, 104, 0.07);
+  --wash-b: rgba(140, 170, 150, 0.05);
+  --cursor-flower: url('../assets/peony-cursor-line-mint.svg') 16 15;
 }
 
 /* ── Peach Theme ── */
@@ -135,8 +159,13 @@
   --color-text-muted:    #b09070;
   --color-text-light:    #d0b090;
   --color-star-fill:     #d49060;
+  --color-accent-sage:   #5f9690;
+  --color-accent-sage-light: #a8cac4;
   --color-overlay:       rgba(90, 60, 30, 0.4);
   --cursor-glow-color:   rgba(200, 110, 50, 0.55);
+  --wash-a: rgba(184, 104, 64, 0.07);
+  --wash-b: rgba(168, 181, 160, 0.06);
+  --cursor-flower: url('../assets/peony-cursor-line-peach.svg') 16 15;
 }
 
 /* ── Midnight Theme ── */
@@ -166,6 +195,9 @@
   --shadow-lg:  0 8px 32px rgba(0,0,0,0.75);
   --shadow-card: 0 2px 20px rgba(160, 90, 255, 0.18);
   --cursor-glow-color:   rgba(255, 144, 224, 0.85);
+  --wash-a: rgba(196, 144, 232, 0.10);
+  --wash-b: rgba(82, 170, 160, 0.08);
+  --cursor-flower: url('../assets/peony-cursor-line-midnight.svg') 16 15;
 }
 
 /* ── Sky Theme ── */
@@ -183,30 +215,23 @@
   --color-text-muted:    #8898b8;
   --color-text-light:    #b0c0d8;
   --color-star-fill:     #7098c8;
+  --color-accent-sage:   #d98a63;
+  --color-accent-sage-light: #eac0a8;
   --color-overlay:       rgba(40, 55, 80, 0.4);
   --cursor-glow-color:   rgba(60, 100, 210, 0.5);
+  --wash-a: rgba(72, 112, 168, 0.07);
+  --wash-b: rgba(140, 160, 190, 0.05);
+  --cursor-flower: url('../assets/peony-cursor-line-sky.svg') 16 15;
 }
+
+/* Rosewater is the base theme — its values live in :root above.
+   (The old Blush theme was retired when Rosewater replaced it.) */
 
 /* ══════════════════════════════════════════════════
    Night Mode — deeper, moodier version of each theme.
    Applied to <html> only while on the Today's Entry page
    with "Good night" selected; stripped on navigation away.
    ══════════════════════════════════════════════════ */
-
-html.night-mode[data-theme="blush"] {
-  --color-bg:            #c08080;
-  --color-surface:       #f5e8e8;
-  --color-surface-alt:   #ead8d8;
-  --color-surface-warm:  #f0e0e0;
-  --color-border:        #c89898;
-  --color-border-light:  #deb8b8;
-  --color-accent-script: #a02040;
-  --color-text-heading:  #3a1010;
-  --color-text-body:     #5a2828;
-  --color-text-muted:    #9a6060;
-  --color-text-light:    #c09090;
-  --color-star-fill:     #b84030;
-}
 
 html.night-mode[data-theme="lavender"] {
   --color-bg:            #9070c0;
@@ -267,4 +292,19 @@ html.night-mode[data-theme="sky"] {
   --color-text-light:    #7898c4;
   --color-star-fill:     #2858b0;
 }
+html.night-mode[data-theme="rosewater"] {
+  --color-bg:            #8d686e;
+  --color-surface:       #f7f0ee;
+  --color-surface-alt:   #eee2de;
+  --color-surface-warm:  #f2e6e2;
+  --color-border:        #cdb2ac;
+  --color-border-light:  #e0cbc5;
+  --color-accent-script: #8a4450;
+  --color-text-heading:  #2e2226;
+  --color-text-body:     #554248;
+  --color-text-muted:    #8d7278;
+  --color-text-light:    #b59ba0;
+  --color-star-fill:     #b08838;
+}
+
 /* midnight is already dark — night-mode has no extra effect */

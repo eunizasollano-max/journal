@@ -1,11 +1,12 @@
-/* ── Body background with peony pattern ── */
+/* ── Body background: two whisper-quiet washes per theme, like light
+   falling across paper — replaces the tiled peony wallpaper ── */
 body {
   background-color: var(--color-bg);
-  background-image: url('../assets/peony-bg-pattern.svg');
-  background-size: 480px 480px;
+  background-image:
+    radial-gradient(1100px 560px at 88% -8%, var(--wash-a), transparent 62%),
+    radial-gradient(900px 520px at -8% 104%, var(--wash-b), transparent 60%);
   background-attachment: fixed;
-  background-repeat: repeat;
-  background-position: 0 0;
+  background-repeat: no-repeat;
 }
 
 /* App wrapper */
@@ -15,53 +16,8 @@ body {
   position: relative;
 }
 
-/* ── Large corner peony decorations on main content ── */
-.main-content::before,
-.main-content::after {
-  content: '';
-  position: fixed;
-  pointer-events: none;
-  z-index: 0;
-  background-repeat: no-repeat;
-  background-size: contain;
-  opacity: 0.18;
-}
-
-/* Top-right large peony */
-.main-content::before {
-  top: -30px;
-  right: -30px;
-  width: 280px;
-  height: 280px;
-  background-image: url('../assets/peony-watercolor.svg');
-  transform: rotate(15deg) scaleX(-1);
-}
-
-/* Bottom-left large peony */
-.main-content::after {
-  bottom: 20px;
-  left: var(--sidebar-width);
-  width: 220px;
-  height: 220px;
-  background-image: url('../assets/peony-watercolor.svg');
-  transform: rotate(-10deg);
-  opacity: 0.13;
-}
-
-@media (max-width: 768px) {
-  .main-content::before {
-    width: 140px;
-    height: 140px;
-    top: 50px;
-    right: 0;
-  }
-  .main-content::after {
-    left: 0;
-    bottom: 80px;
-    width: 120px;
-    height: 120px;
-  }
-}
+/* (The large watercolor corner peonies were retired in the minimal
+   refresh — the background washes on <body> carry the warmth now.) */
 
 /* ── Sidebar ── */
 .sidebar {
@@ -157,15 +113,7 @@ body {
   box-shadow: 0 2px 8px rgba(180,130,130,0.14);
 }
 
-/* Per-route pastel pill colors */
-[data-route="#home"]      .nav-icon { background: linear-gradient(135deg, #fde8e8, #f8d8dc); }
-[data-route="#guide"]     .nav-icon { background: linear-gradient(135deg, #fdeee8, #f8e4d8); }
-[data-route="#today"]     .nav-icon { background: linear-gradient(135deg, #fde0e8, #f8ccd8); }
-[data-route="#freewrite"] .nav-icon { background: linear-gradient(135deg, #ede8fd, #e0d8f8); }
-[data-route="#calendar"]  .nav-icon { background: linear-gradient(135deg, #e8f0fd, #d8e4f8); }
-[data-route="#goals"]     .nav-icon { background: linear-gradient(135deg, #e8fdf0, #d8f0e4); }
-[data-route="#recap"]     .nav-icon { background: linear-gradient(135deg, #fdf0e8, #f8e4d8); }
-[data-route="#gallery"]   .nav-icon { background: linear-gradient(135deg, #eefde8, #e0f4d8); }
+/* Icon pills stay neutral — the line icons carry the theme accent */
 
 .nav-item .nav-label { flex: 1; }
 
@@ -298,11 +246,8 @@ body {
   box-shadow: 0 2px 8px rgba(180,130,130,0.14);
 }
 
-/* Per-route mobile pill colors */
-.mobile-nav-item[data-route="#home"]      .mobile-nav-icon { background: linear-gradient(135deg, #fde8e8, #f8d8dc); }
-.mobile-nav-item[data-route="#guide"]     .mobile-nav-icon { background: linear-gradient(135deg, #fef4e8, #fde8cc); }
-.mobile-nav-item[data-route="#today"]     .mobile-nav-icon { background: linear-gradient(135deg, #fde0e8, #f8ccd8); }
-.mobile-nav-item[data-route="#goals"]     .mobile-nav-icon { background: linear-gradient(135deg, #e8fdf0, #d8f0e4); }
+/* Mobile pills stay neutral — active state highlights via scale + shadow */
+.mobile-nav-item.active .mobile-nav-icon { background: var(--color-surface-alt); }
 
 .mobile-nav-label { font-size: 0.62rem; font-weight: 500; }
 

@@ -149,6 +149,10 @@ function renderLoginUI(mode = 'signin') {
       <div class="login-guest-row">
         <button class="btn-link text-muted" id="guest-mode-btn" type="button">Preview the app →</button>
       </div>
+      <div class="login-theme-block">
+        <div class="login-theme-label">Choose your colors</div>
+        <div class="login-theme-dots" id="login-theme-dots"></div>
+      </div>
       <div style="text-align:center;margin-top:var(--sp-3);display:flex;gap:var(--sp-3);justify-content:center">
         <a href="#privacy" class="btn-link text-muted" style="font-size:var(--fs-xs)" onclick="Router.navigate('#privacy')">Privacy Policy</a>
         <span style="font-size:var(--fs-xs);color:var(--color-text-light)">·</span>
@@ -233,6 +237,23 @@ function wireSignInButtons() {
     hideLoginScreen();
     if (authReadyCb) authReadyCb(null);
   });
+
+  // Theme dots on the login card — pick your colors before you even sign in.
+  // THEMES/applyTheme are globals from app.js, loaded by the time this renders.
+  const dotsRow = document.getElementById('login-theme-dots');
+  if (dotsRow && typeof THEMES !== 'undefined' && typeof applyTheme === 'function') {
+    const current = localStorage.getItem('journal_theme') || 'rosewater';
+    dotsRow.innerHTML = THEMES.map(t => `
+      <button type="button" class="login-theme-dot ${t.key === current ? 'active' : ''}"
+        data-theme="${t.key}" style="background:${t.dot}" aria-label="${t.label} theme" title="${t.label}"></button>
+    `).join('');
+    dotsRow.querySelectorAll('.login-theme-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        applyTheme(dot.dataset.theme);
+        dotsRow.querySelectorAll('.login-theme-dot').forEach(d => d.classList.toggle('active', d === dot));
+      });
+    });
+  }
 }
 
 function wireSignUpButtons() {

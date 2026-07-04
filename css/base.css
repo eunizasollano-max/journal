@@ -2,7 +2,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  cursor: url('../assets/peony-cursor.svg') 16 15, auto;
+  /* Fine-line peony cursor, tinted per theme via --cursor-flower */
+  cursor: var(--cursor-flower), auto;
 }
 
 /* The peony must win over every scattered `cursor: pointer` rule and
@@ -15,7 +16,7 @@ label, select,
 .cal-day:not(.other-month), .gallery-item, .media-dropzone, .brand-user,
 a *, button *, [onclick] *,
 .cal-day:not(.other-month) *, .gallery-item *, .media-dropzone * {
-  cursor: url('../assets/peony-cursor.svg') 16 15, pointer !important;
+  cursor: var(--cursor-flower), pointer !important;
 }
 
 html {

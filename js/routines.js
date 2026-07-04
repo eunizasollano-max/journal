@@ -100,10 +100,18 @@ function textColorFor(hex) {
 
 function visibleOn(routine, date, log) {
   const rec = routine.recurrence || { type: 'daily' };
-  if (rec.type === 'weekly') return (rec.days || []).includes(date.getDay());
   // One-time items stay visible (checked) on the day they were completed
   if (rec.type === 'once') return !routine.archived || !!log[routine.id];
+  // Recurring items with an end date stop appearing after it
+  if (rec.until && dateKeyFor(date) > rec.until) return false;
+  if (rec.type === 'weekly') return (rec.days || []).includes(date.getDay());
   return !routine.archived;
+}
+
+function untilLabel(until) {
+  if (!until) return '';
+  const [, m, d] = until.split('-').map(Number);
+  return `until ${App.MONTHS_SHORT[m - 1]} ${d}`;
 }
 
 function renderHeader() {
@@ -210,9 +218,10 @@ function pillHtml(r, log, preview) {
   const color = sec?.color || '#c9b0b6';
   const done  = !!log[r.id];
   const rec   = r.recurrence || { type: 'daily' };
-  const daysLabel = rec.type === 'weekly'
+  const daysPart = rec.type === 'weekly'
     ? (rec.days || []).slice().sort((a, b) => a - b).map(d => WEEKDAY_SHORT[d]).join(', ')
     : '';
+  const daysLabel = [daysPart, rec.type !== 'once' ? untilLabel(rec.until) : ''].filter(Boolean).join(' · ');
   return `
     <div class="routine-pill ${done ? 'done' : ''} ${preview ? 'preview' : ''}"
       style="background:${color};color:${textColorFor(color)}">
@@ -247,6 +256,10 @@ function formHtml(r) {
         <div class="routine-day-chips ${rec.type === 'weekly' ? '' : 'hidden'}" id="routine-form-chips">
           ${WEEKDAY_LETTER.map((l, i) => `<button type="button" class="routine-day-chip ${(rec.days || []).includes(i) ? 'active' : ''}" data-day="${i}">${l}</button>`).join('')}
         </div>
+        <label class="routine-form-until ${rec.type === 'once' ? 'hidden' : ''}" id="routine-form-until-wrap">
+          <span>until</span>
+          <input type="date" class="input" id="routine-form-until" value="${rec.until || ''}" title="Optional — leave empty to repeat forever">
+        </label>
       </div>
       <div class="routine-form-actions">
         ${r ? `<button type="button" class="btn-ghost btn-sm routine-form-delete-btn" data-id="${r.id}">Delete</button>` : ''}
@@ -341,6 +354,7 @@ function attach(body) {
   if (form) {
     form.querySelector('#routine-form-recur')?.addEventListener('change', (e) => {
       document.getElementById('routine-form-chips')?.classList.toggle('hidden', e.target.value !== 'weekly');
+      document.getElementById('routine-form-until-wrap')?.classList.toggle('hidden', e.target.value === 'once');
     });
     form.querySelectorAll('.routine-day-chip').forEach(chip => {
       chip.addEventListener('click', () => chip.classList.toggle('active'));
@@ -416,13 +430,14 @@ async function saveForm() {
   const days    = type === 'weekly'
     ? Array.from(document.querySelectorAll('#routine-form-chips .routine-day-chip.active')).map(b => parseInt(b.dataset.day, 10))
     : [];
+  const until   = type === 'once' ? null : (document.getElementById('routine-form-until')?.value || null);
 
   if (formState?.mode === 'edit') {
     const routine = allRoutines.find(r => r.id === formState.id);
     if (routine) {
       routine.text       = text;
       routine.section    = section;
-      routine.recurrence = { type, days };
+      routine.recurrence = { type, days, until };
       if (type !== 'once') routine.archived = false;
       await JournalDB.saveRoutine(routine);
     }
@@ -431,7 +446,7 @@ async function saveForm() {
       id:         (crypto.randomUUID ? crypto.randomUUID() : `r-${Date.now()}-${Math.random().toString(36).slice(2)}`),
       section,
       text,
-      recurrence: { type, days },
+      recurrence: { type, days, until },
       archived:   false,
       createdAt:  Date.now(),
     };

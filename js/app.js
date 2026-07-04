@@ -55,16 +55,18 @@ function showToast(message, duration = 2500) {
 
 /* ── Theme management ── */
 const THEMES = [
-  { key: 'blush',    label: 'Blush',    dot: '#f0c4c4' },
-  { key: 'lavender', label: 'Lavender', dot: '#c4b8e8' },
-  { key: 'mint',     label: 'Mint',     dot: '#a8d8b8' },
-  { key: 'peach',    label: 'Peach',    dot: '#e8c098' },
-  { key: 'sky',      label: 'Sky',      dot: '#a8c4e8' },
-  { key: 'midnight', label: 'Midnight', dot: '#2a1545' },
+  { key: 'rosewater', label: 'Rosewater', dot: '#b76e79' },
+  { key: 'lavender',  label: 'Lavender',  dot: '#c4b8e8' },
+  { key: 'mint',      label: 'Mint',      dot: '#a8d8b8' },
+  { key: 'peach',     label: 'Peach',     dot: '#e8c098' },
+  { key: 'sky',       label: 'Sky',       dot: '#a8c4e8' },
+  { key: 'midnight',  label: 'Midnight',  dot: '#2a1545' },
 ];
 
 function initTheme() {
-  const saved = localStorage.getItem('journal_theme') || 'blush';
+  let saved = localStorage.getItem('journal_theme') || 'rosewater';
+  // Blush was retired when Rosewater replaced it as the base theme
+  if (!THEMES.some(t => t.key === saved)) saved = 'rosewater';
   applyTheme(saved);
 }
 
@@ -84,7 +86,7 @@ function initThemePicker() {
   // Populate swatches
   const container = picker.querySelector('.theme-swatches');
   if (container) {
-    const current = localStorage.getItem('journal_theme') || 'blush';
+    const current = localStorage.getItem('journal_theme') || 'rosewater';
     container.innerHTML = THEMES.map(t => `
       <button class="theme-swatch-btn ${t.key === current ? 'active' : ''}" data-theme="${t.key}" type="button">
         <span class="theme-swatch-dot" style="background:${t.dot}"></span>
@@ -104,8 +106,15 @@ function initThemePicker() {
     picker.classList.toggle('open');
   });
 
+  const mobileBtn = document.getElementById('mobile-theme-btn');
+  mobileBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    picker.classList.toggle('open');
+    document.getElementById('font-picker')?.classList.remove('open');
+  });
+
   document.addEventListener('click', (e) => {
-    if (!picker.contains(e.target) && e.target !== toggleBtn) {
+    if (!picker.contains(e.target) && e.target !== toggleBtn && e.target !== mobileBtn) {
       picker.classList.remove('open');
     }
   });
@@ -183,8 +192,15 @@ function initFontPicker() {
     document.getElementById('theme-picker')?.classList.remove('open');
   });
 
+  const mobileBtn = document.getElementById('mobile-font-btn');
+  mobileBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    picker.classList.toggle('open');
+    document.getElementById('theme-picker')?.classList.remove('open');
+  });
+
   document.addEventListener('click', (e) => {
-    if (!picker.contains(e.target) && e.target !== toggleBtn) {
+    if (!picker.contains(e.target) && e.target !== toggleBtn && e.target !== mobileBtn) {
       picker.classList.remove('open');
     }
   });
@@ -296,8 +312,9 @@ function wireSyncButton() {
     btn.style.opacity = '0.5';
     try {
       const counts = await JournalDB.syncFromCloud();
-      const photoPart = counts.photos ? `, ${counts.photos} photo${counts.photos === 1 ? '' : 's'}` : '';
-      showToast(`Synced ${counts.entries} entries, ${counts.goals} goals, ${counts.recap} recaps${photoPart} ✓`);
+      const photoPart  = counts.photos ? `, ${counts.photos} photo${counts.photos === 1 ? '' : 's'}` : '';
+      const backupPart = counts.uploaded ? ` — backed up ${counts.uploaded} photo${counts.uploaded === 1 ? '' : 's'} to Drive` : '';
+      showToast(`Synced ${counts.entries} entries, ${counts.goals} goals, ${counts.recap} recaps${photoPart}${backupPart} ✓`);
       // Temporary diagnostic: surface details when a sync looks off, since
       // phone testing has no easy console access.
       if (counts.debug && (counts.debug.includes('errors:') || counts.debug.includes('MISSING'))) {
@@ -343,13 +360,18 @@ function showViewOnlyBanner() {
 }
 
 function wrapSavesForViewOnly() {
-  const block = (name) => async () => {
-    showToast('Sign in to save your journal ✨');
+  // Must throw, not resolve — callers show their own "saved" toast on any
+  // non-error return, which would silently overwrite this warning and lie
+  // to a previewing user about their data being saved.
+  const block = () => async () => {
     Auth.showLoginScreen();
+    const err = new Error('Sign in to save your journal ✨');
+    err.viewOnlyBlocked = true;
+    throw err;
   };
-  JournalDB.saveEntry = block('saveEntry');
-  JournalDB.saveGoals = block('saveGoals');
-  JournalDB.saveRecap = block('saveRecap');
+  JournalDB.saveEntry = block();
+  JournalDB.saveGoals = block();
+  JournalDB.saveRecap = block();
 }
 
 /* ── Mobile More Drawer ── */
@@ -412,17 +434,6 @@ function wireMobileMore() {
     });
   });
 
-  document.getElementById('mobile-theme-btn')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    document.getElementById('theme-picker')?.classList.toggle('open');
-    document.getElementById('font-picker')?.classList.remove('open');
-  });
-
-  document.getElementById('mobile-font-btn')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    document.getElementById('font-picker')?.classList.toggle('open');
-    document.getElementById('theme-picker')?.classList.remove('open');
-  });
 }
 
 /* ── Nickname editing ── */
@@ -554,6 +565,9 @@ document.addEventListener('click', (e) => {
 /* ── App init ── */
 async function initApp() {
   initTheme();
+  // Pickers work before login — choosing a theme shouldn't need an account
+  initThemePicker();
+  initFontPicker();
   await Scripture.loadScriptures();
   Auth.onAuthReady(async (user) => {
     updateAuthUI(user);
@@ -606,7 +620,7 @@ function showBetaWelcome() {
   overlay.className = 'modal-overlay';
   overlay.innerHTML = `
     <div class="modal-box" style="max-width:420px;text-align:center">
-      <div style="font-size:2.4rem;margin-bottom:var(--sp-3)">🌸</div>
+      <div style="width:64px;margin:0 auto var(--sp-3)"><svg viewBox="0 0 120 112" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="var(--color-accent-sage)" stroke-width="2" stroke-linecap="round"><path d="M60 104C60 78 59 64 60 52"/><path d="M60 80C48 76 40 68 38 58"/><path d="M60 90C72 87 80 80 83 70"/></g><g stroke="var(--color-accent-deep)" stroke-width="2" stroke-linejoin="round"><ellipse cx="60" cy="22" rx="10" ry="16"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(72 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(144 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(216 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(288 60 38)"/></g><circle cx="60" cy="38" r="4" fill="var(--color-star-fill)"/></svg></div>
       <h2 class="modal-title">Hey friend!</h2>
       <p class="modal-desc" style="line-height:1.85;margin-bottom:var(--sp-4)">
         Thank you so much for being an early tester — it truly means the world.
@@ -641,9 +655,8 @@ function launchJournal(user) {
   showBetaWelcome();
   initOnboarding();
   initNicknameEdit();
-  initThemePicker();
-  initFontPicker();
-  initCursorGlow();
+  // initCursorGlow() retired in the feminine-minimal refresh — the glow
+  // is hidden for every theme now, so don't pay for the mousemove listener.
   wireSignOutButton();
   wireSyncButton();
   wireMobileMore();

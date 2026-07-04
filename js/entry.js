@@ -136,10 +136,10 @@ function renderSessionToggle() {
   container.innerHTML = `
     <div class="session-toggle">
       <button class="session-btn ${currentSession === 'morning' ? 'active' : ''}" data-session="morning">
-        🌤 Good morning
+        Good morning
       </button>
       <button class="session-btn ${currentSession === 'evening' ? 'active' : ''}" data-session="evening">
-        🌙 Good night
+        Good night
       </button>
     </div>
   `;
@@ -170,7 +170,7 @@ function updateConditionalPrompts() {
     if (lookInput)   lookInput.placeholder   = 'Something that brings you joy or excitement...';
     if (betterInput) betterInput.placeholder = 'A small intention, habit, or act of kindness...';
   } else {
-    if (lookLabel)   lookLabel.textContent   = '🌙 How did your day go overall?';
+    if (lookLabel)   lookLabel.textContent   = 'How did your day go overall?';
     if (betterLabel) betterLabel.textContent = '🌿 What could have gone better today?';
     if (lookInput)   lookInput.placeholder   = 'Share how your day unfolded...';
     if (betterInput) betterInput.placeholder = 'Gently reflect — no judgment, only growth...';
@@ -498,7 +498,13 @@ async function saveEntry() {
       App.showToast(`Saved on this device only — cloud sync failed (${result.cloudError})`, 5000);
       console.error('Cloud save error:', result.cloudError);
     } else if (result?.driveError) {
-      App.showToast(`Entry saved — photo couldn't reach Google Drive (${result.driveError})`, 4500);
+      // Google's access token only lasts ~1hr, so this is the common case —
+      // the photo is safe locally and Sync retries the backup after a fresh
+      // sign-in (uploadPendingMedia in db.js).
+      const tokenIssue = /no drive token|expired|401/i.test(result.driveError);
+      App.showToast(tokenIssue
+        ? 'Entry saved 🌸 Your photo is safe on this device — sign in again and tap Sync ⟳ to back it up to Google Drive.'
+        : `Entry saved — photo couldn't reach Google Drive (${result.driveError})`, 6000);
       console.error('Drive upload error:', result.driveError);
     } else if (result?.skipReason === 'not-google') {
       App.showToast("Entry saved — this session isn't recognized as Google sign-in, so the photo stayed on this device only", 5000);
@@ -512,8 +518,12 @@ async function saveEntry() {
       msgEl.className = 'entry-save-message success';
     }
   } catch (err) {
-    App.showToast('Could not save — please try again');
-    console.error(err);
+    if (err?.viewOnlyBlocked) {
+      App.showToast('Sign in to save your journal ✨');
+    } else {
+      App.showToast('Could not save — please try again');
+      console.error(err);
+    }
   } finally {
     if (btn) { btn.classList.remove('saving'); btn.textContent = 'Save Entry'; }
   }

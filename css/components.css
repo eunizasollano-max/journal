@@ -99,14 +99,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-accent-rose), var(--color-accent-deep));
+  background: var(--color-accent-deep);
   color: #ffffff;
-  box-shadow: 0 2px 12px color-mix(in srgb, var(--color-accent-deep) 40%, transparent);
+  box-shadow: none;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--color-accent-deep), color-mix(in srgb, var(--color-accent-deep) 85%, black));
-  box-shadow: 0 4px 18px color-mix(in srgb, var(--color-accent-deep) 50%, transparent);
+  background: var(--color-accent-script);
+  box-shadow: none;
   transform: translateY(-1px);
 }
 
@@ -154,20 +154,21 @@
 }
 
 .btn-save {
-  background: linear-gradient(135deg, var(--color-accent-rose), var(--color-accent-deep));
+  background: var(--color-accent-deep);
   color: #fff;
   padding: var(--sp-4) var(--sp-10);
   font-size: var(--fs-md);
   border-radius: var(--radius-full);
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-accent-deep) 35%, transparent);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-spring);
   position: relative;
   overflow: hidden;
 }
 
 .btn-save:hover {
+  background: var(--color-accent-script);
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px color-mix(in srgb, var(--color-accent-deep) 45%, transparent);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-save.saving::after {
@@ -205,7 +206,8 @@
 
 .input::placeholder,
 .textarea::placeholder {
-  color: var(--color-text-light);
+  color: var(--color-text-muted);
+  opacity: 1;
   font-style: italic;
 }
 

@@ -125,7 +125,8 @@
 }
 
 .guide-list li::before {
-  content: '🌷';
+  content: '—';
+  color: var(--color-accent-deep);
   position: absolute;
   left: 0;
   font-size: 0.85rem;
@@ -157,13 +158,13 @@
 }
 
 .guide-mode-block.morning {
-  background: linear-gradient(135deg, #fffbf0, #fef4d8);
-  border: 1px solid #f0e0b0;
+  background: #f7f2e6;
+  border: 1px solid #e6dcc2;
 }
 
 .guide-mode-block.evening {
-  background: linear-gradient(135deg, #f5f0fd, #ede8fa);
-  border: 1px solid #d4c8f0;
+  background: #eeeaf5;
+  border: 1px solid #d5cde8;
 }
 
 .guide-mode-label {
@@ -183,7 +184,8 @@
   margin-top: var(--sp-4);
 }
 
-.guide-closing-icon { font-size: 2.4rem; margin-bottom: var(--sp-4); }
+.guide-closing-icon { margin-bottom: var(--sp-4); }
+.guide-closing-icon svg { width: 68px; height: auto; display: block; margin: 0 auto; }
 
 .guide-closing-text {
   font-size: var(--fs-md);
@@ -286,9 +288,9 @@
   top: 0; left: 0; right: 0;
   height: 3px;
 }
-.widget-card:nth-child(1)::before { background: linear-gradient(90deg, #fdc8d0, #f8a8b8); }
-.widget-card:nth-child(2)::before { background: linear-gradient(90deg, #c8d8fd, #a8b8f0); }
-.widget-card:nth-child(3)::before { background: linear-gradient(90deg, #c8f0d8, #a8d8c0); }
+.widget-card:nth-child(1)::before { background: #dfc3c8; }
+.widget-card:nth-child(2)::before { background: #c8d2dc; }
+.widget-card:nth-child(3)::before { background: #cbd5c1; }
 
 .widget-icon {
   font-size: 1.5rem;
@@ -501,7 +503,8 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 .freewrite-textarea::placeholder {
-  color: var(--color-text-light);
+  color: var(--color-text-muted);
+  opacity: 1;
   font-style: italic;
 }
 
@@ -778,7 +781,8 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 .goal-category-name-input::placeholder {
-  color: var(--color-text-light);
+  color: var(--color-text-muted);
+  opacity: 1;
   font-style: italic;
   font-weight: 400;
 }
@@ -900,11 +904,15 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   top: 6px;
   right: 8px;
   font-size: 0.75rem;
-  opacity: 0;
+  opacity: 0.45;
   transition: opacity var(--transition-fast);
 }
 
-.routine-cat-card:hover .routine-cat-edit { opacity: 0.85; }
+.routine-cat-card:hover .routine-cat-edit { opacity: 0.95; }
+
+@media (hover: none) {
+  .routine-cat-edit { opacity: 0.75; }
+}
 
 .routine-cat-add {
   border: 1.5px dashed var(--color-border);
@@ -1132,6 +1140,22 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   display: flex;
   gap: var(--sp-2);
   justify-content: flex-end;
+}
+
+.routine-form-until {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.routine-form-until.hidden { display: none; }
+
+.routine-form-until .input {
+  width: auto;
+  padding: var(--sp-1) var(--sp-2);
+  font-size: var(--fs-xs);
 }
 
 /* ── Tomorrow preview ── */
@@ -1771,18 +1795,18 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 [data-theme="midnight"] .btn-primary {
-  background: linear-gradient(135deg, #8a4ab0, #6a2a90);
-  box-shadow: 0 0 20px rgba(180,100,240,0.45);
+  background: #8a4ab0;
+  box-shadow: none;
 }
 
 [data-theme="midnight"] .btn-primary:hover {
-  background: linear-gradient(135deg, #9a5ac0, #7a3aa0);
-  box-shadow: 0 0 28px rgba(180,100,240,0.6);
+  background: #9a5ac0;
+  box-shadow: none;
 }
 
 [data-theme="midnight"] .btn-save {
-  background: linear-gradient(135deg, #8a4ab0, #6a2a90);
-  box-shadow: 0 0 20px rgba(180,100,240,0.45);
+  background: #8a4ab0;
+  box-shadow: none;
 }
 
 [data-theme="midnight"] .nav-item.active .nav-icon,
@@ -1804,10 +1828,7 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   text-shadow: 0 0 10px rgba(240,208,80,0.8);
 }
 
-[data-theme="midnight"] .mobile-nav-item[data-route="#home"]      .mobile-nav-icon { background: linear-gradient(135deg, #2a1830, #1e1228); }
-[data-theme="midnight"] .mobile-nav-item[data-route="#guide"]    .mobile-nav-icon { background: linear-gradient(135deg, #1e1a30, #16122a); }
-[data-theme="midnight"] .mobile-nav-item[data-route="#today"]    .mobile-nav-icon { background: linear-gradient(135deg, #2a1438, #1e0e2c); }
-[data-theme="midnight"] .mobile-nav-item[data-route="#goals"]    .mobile-nav-icon { background: linear-gradient(135deg, #0e2820, #0a1e18); }
+/* midnight mobile pills: neutral, like every other theme */
 
 [data-theme="midnight"] .trial-banner {
   background: linear-gradient(90deg, #1a1030, #14102a);
@@ -2089,3 +2110,105 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   .entry-hero-date { font-size: 1.9rem; }
 }
 
+
+/* ═══════════════════════════════════
+   FEMININE-MINIMAL REFINEMENTS (all themes)
+   One ornament per screen: no cursor glow, serif titles,
+   flat buttons, quiet florals. Backgrounds and cursors are
+   tinted per theme via --wash-a/--wash-b/--cursor-flower.
+═══════════════════════════════════ */
+
+/* No cursor glow — grace through restraint */
+#cursor-glow {
+  display: none !important;
+}
+
+/* Page titles render in the serif (via --font-script swap in
+   variables.css); give them a touch more presence at rest */
+.goals-hero-title,
+.recap-title {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Quiet the decorative floral imagery to one moment per page */
+.entry-floral-header { display: none; }
+.home-floral-bg { opacity: 0.45; }
+
+/* Slightly tighter card radii — soft, not bubbly */
+.card,
+.goal-category-card,
+.recap-stat-card {
+  border-radius: var(--radius-md);
+}
+
+/* Quiet feminine details where the hand actually touches the page */
+::selection {
+  background: var(--color-surface-warm);
+  color: var(--color-text-heading);
+}
+input,
+textarea {
+  caret-color: var(--color-accent-deep);
+}
+
+/* User guide: answer text a step smaller than the questions */
+.guide-card-body {
+  font-size: var(--fs-base);
+}
+.guide-card-body .guide-tip { font-size: var(--fs-sm) !important; }
+
+/* Theme dots on the login card */
+.login-theme-block { margin-top: var(--sp-4); text-align: center; }
+.login-theme-label {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+}
+.login-theme-dots { display: flex; gap: var(--sp-2); justify-content: center; }
+.login-theme-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--color-surface);
+  box-shadow: 0 0 0 1px var(--color-border-light);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.login-theme-dot:hover { transform: scale(1.15); }
+.login-theme-dot.active { box-shadow: 0 0 0 2px var(--color-accent-deep); }
+
+/* Fine-line nav icons — stroke inherits the theme accent. Alternating
+   rose/sage down the list so the sidebar reads as two colors instead of
+   one flat tint repeated nine times. */
+.nav-icon svg, .mobile-nav-icon svg { width: 18px; height: 18px; display: block; }
+.mobile-more-icon svg { width: 22px; height: 22px; display: block; }
+.nav-item .nav-icon,
+.mobile-nav-item .mobile-nav-icon,
+.mobile-more-item .mobile-more-icon { color: var(--color-accent-deep); }
+
+.nav-item:nth-of-type(even) .nav-icon,
+.mobile-nav-item:nth-of-type(even) .mobile-nav-icon,
+.mobile-more-item:nth-of-type(even) .mobile-more-icon { color: var(--color-accent-sage); }
+
+.nav-item:nth-of-type(even) .nav-icon { background: color-mix(in srgb, var(--color-accent-sage) 14%, var(--color-surface-alt)); }
+.nav-item:nth-of-type(odd) .nav-icon  { background: color-mix(in srgb, var(--color-accent-deep) 14%, var(--color-surface-alt)); }
+
+/* Line-icon sizing for spots that used to hold emoji */
+.guide-card-icon svg { width: 26px; height: 26px; display: block; }
+.guide-card-icon { color: var(--color-accent-deep); }
+.guide-card:nth-of-type(even) .guide-card-icon { color: var(--color-accent-sage); }
+.guide-welcome-peony svg { width: 72px; height: auto; display: block; margin: 0 auto; }
+.empty-state-icon svg { width: 56px; height: auto; display: block; margin: 0 auto; }
+.goal-category-icon svg { width: 20px; height: 20px; display: block; }
+.goal-category-icon { color: var(--color-accent-deep); }
+.recap-stat-icon svg { width: 24px; height: 24px; display: block; margin: 0 auto; }
+.recap-stat-icon { color: var(--color-accent-deep); }
+.recap-stat-card:nth-of-type(even) .recap-stat-icon { color: var(--color-accent-sage); }
+.onboard-mode-icon svg { width: 26px; height: 26px; display: block; margin: 0 auto; }
+.onboard-mode-icon { color: var(--color-accent-deep); }
+.onboard-mode-btn[data-mode="evening"] .onboard-mode-icon { color: var(--color-accent-sage); }
+.home-peony-mark { width: 92px; margin: 0 auto var(--sp-5); }
+.home-peony-mark svg { width: 100%; height: auto; display: block; }

@@ -1,4 +1,4 @@
-const CACHE = 'journal-v6';
+const CACHE = 'journal-v10';
 const SHELL = [
   '/',
   '/index.html',
@@ -67,6 +67,6 @@ self.addEventListener('fetch', (e) => {
         caches.open(CACHE).then(c => c.put(e.request, clone));
       }
       return res;
-    }).catch(() => caches.match(e.request))
+    }).catch(() => caches.match(e.request, { ignoreSearch: true }))
   );
 });

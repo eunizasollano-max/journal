@@ -30,8 +30,17 @@ function openIDB() {
       if (!db.objectStoreNames.contains('routines'))    db.createObjectStore('routines',    { keyPath: 'id' });
       if (!db.objectStoreNames.contains('routineLog'))  db.createObjectStore('routineLog',  { keyPath: 'date' });
     };
-    req.onsuccess  = (e) => { idb = e.target.result; resolve(idb); };
+    req.onsuccess  = (e) => {
+      idb = e.target.result;
+      // Let a future version upgrade proceed instead of blocking on this tab
+      idb.onversionchange = () => { idb.close(); idb = null; };
+      resolve(idb);
+    };
     req.onerror    = () => reject(req.error);
+    req.onblocked  = () => {
+      console.warn('IndexedDB upgrade blocked — another journal tab is open');
+      if (window.App?.showToast) App.showToast('Please close your other journal tabs, then reload 🌸', 6000);
+    };
   });
 }
 
@@ -370,12 +379,14 @@ async function syncFromCloud() {
     const { data: eRows, error } = await SupabaseClient.from('entries').select('*').eq('user_id', uid);
     if (error) throw error;
     if (eRows?.length) {
-      const store = idbTx('entries', 'readwrite');
       for (const row of eRows) {
         const entry = await JournalCrypto.decrypt(row.data);
         const local = await idbReq(idbTx('entries').get(row.date));
         entry.media = mergeMedia(local?.media, entry.media);
-        await idbReq(store.put({ ...entry, date: row.date }));
+        // Fresh transaction per row — IndexedDB transactions auto-commit
+        // while decrypt() is awaited, so a shared one would already be
+        // closed ("The transaction has finished") by the second put.
+        await idbReq(idbTx('entries', 'readwrite').put({ ...entry, date: row.date }));
       }
       counts.entries = eRows.length;
     }
@@ -385,10 +396,9 @@ async function syncFromCloud() {
     const { data: gRows, error } = await SupabaseClient.from('goals').select('*').eq('user_id', uid);
     if (error) throw error;
     if (gRows?.length) {
-      const store = idbTx('goals', 'readwrite');
       for (const row of gRows) {
         const record = await JournalCrypto.decrypt(row.data);
-        await idbReq(store.put({ ...record, monthKey: row.month_key }));
+        await idbReq(idbTx('goals', 'readwrite').put({ ...record, monthKey: row.month_key }));
       }
       counts.goals = gRows.length;
     }
@@ -398,19 +408,48 @@ async function syncFromCloud() {
     const { data: rRows, error } = await SupabaseClient.from('recap').select('*').eq('user_id', uid);
     if (error) throw error;
     if (rRows?.length) {
-      const store = idbTx('recap', 'readwrite');
       for (const row of rRows) {
         const record = await JournalCrypto.decrypt(row.data);
-        await idbReq(store.put({ ...record, monthKey: row.month_key }));
+        await idbReq(idbTx('recap', 'readwrite').put({ ...record, monthKey: row.month_key }));
       }
       counts.recap = rRows.length;
     }
   } catch (e) { console.warn('Sync recap failed', e); errors.push(`recap: ${e?.message || e}`); }
 
-  counts.photos = await syncMediaFromCloud();
+  counts.photos   = await syncMediaFromCloud();
+  counts.uploaded = await uploadPendingMedia();
   counts.debug = `uid=${uid || 'MISSING'}${errors.length ? '; errors: ' + errors.join(' | ') : ''}`;
 
   return counts;
+}
+
+/* Retries Drive uploads for photos that missed their backup — e.g. the
+   Google token had expired when the entry was saved. Media with a dataUrl
+   but no driveId is pending; runs during Sync so a fresh sign-in
+   self-heals the backlog. Stops at the first token failure instead of
+   erroring once per photo. */
+async function uploadPendingMedia() {
+  if (!useSupabase() || !JournalDrive.isGoogleUser()) return 0;
+  let uploaded = 0;
+  try {
+    const all = await idbReq(idbTx('entries').getAll());
+    for (const entry of all) {
+      if (!(entry.media || []).some(m => m.dataUrl && !m.driveId)) continue;
+      const before = (entry.media || []).filter(m => m.driveId).length;
+      const res    = await uploadMediaToDrive(entry);
+      const after  = (res.entry.media || []).filter(m => m.driveId).length;
+      if (after > before) {
+        uploaded += after - before;
+        // saveEntry pushes the new Drive pointers into the cloud copy;
+        // items that now have a driveId are skipped, not re-uploaded.
+        await saveEntry(res.entry);
+      }
+      if (res.driveError) break;
+    }
+  } catch (e) {
+    console.warn('Pending media upload failed', e);
+  }
+  return uploaded;
 }
 
 /* Downloads every Drive-hosted photo/video this device doesn't have yet.

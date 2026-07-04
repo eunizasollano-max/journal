@@ -62,7 +62,7 @@ async function renderStats() {
     if (statsContainer) {
       statsContainer.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">🌸</div>
+          <div class="empty-state-icon"><svg viewBox="0 0 120 112" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="var(--color-accent-sage)" stroke-width="2" stroke-linecap="round"><path d="M60 104C60 78 59 64 60 52"/><path d="M60 80C48 76 40 68 38 58"/><path d="M60 90C72 87 80 80 83 70"/></g><g stroke="var(--color-accent-deep)" stroke-width="2" stroke-linejoin="round"><ellipse cx="60" cy="22" rx="10" ry="16"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(72 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(144 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(216 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(288 60 38)"/></g><circle cx="60" cy="38" r="4" fill="var(--color-star-fill)"/></svg></div>
           <div class="empty-state-title">No entries yet</div>
           <p class="empty-state-desc">Start journaling this month to see your recap here.</p>
         </div>
@@ -123,7 +123,7 @@ async function renderStats() {
     statsContainer.innerHTML = `
       <div class="recap-stats-grid stagger">
         <div class="recap-stat-card animate-slide-up">
-          <div class="recap-stat-icon">⭐</div>
+          <div class="recap-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l2.4 5 5.6.7-4.1 3.8 1.1 5.5L12 16.4 7 19l1.1-5.5L4 9.7 9.6 9 12 4Z"/></svg></div>
           <div class="recap-star-row">${starRow || '–'}</div>
           <div class="recap-stat-value" style="font-size:var(--fs-lg);margin-top:var(--sp-2)">${avgRating}<span style="font-size:var(--fs-xs);color:var(--color-text-light);font-weight:400"> /10</span></div>
           <div class="recap-stat-label">Average Day Rating</div>
@@ -134,12 +134,12 @@ async function renderStats() {
           <div class="recap-stat-label">Most Common Mood</div>
         </div>
         <div class="recap-stat-card animate-slide-up">
-          <div class="recap-stat-icon">📖</div>
+          <div class="recap-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.6-4.5-1.9-7-1.5V19c2.5-.4 5-.1 7 1.5 2-1.6 4.5-1.9 7-1.5V4.5C16.5 4.1 14 4.4 12 6Z"/><path d="M12 6v14.5"/></svg></div>
           <div class="recap-stat-value">${entries.length}</div>
           <div class="recap-stat-label">Days Journaled</div>
         </div>
         <div class="recap-stat-card animate-slide-up">
-          <div class="recap-stat-icon">🌸</div>
+          <div class="recap-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg></div>
           <div class="recap-stat-value">${goalsSet > 0 ? goalsDone + '/' + goalsSet : '–'}</div>
           <div class="recap-stat-label">Goals Completed</div>
         </div>
@@ -179,8 +179,8 @@ async function saveReflection() {
     } else {
       App.showToast('Reflection saved ✨');
     }
-  } catch {
-    App.showToast('Could not save reflection');
+  } catch (err) {
+    App.showToast(err?.viewOnlyBlocked ? 'Sign in to save your journal ✨' : 'Could not save reflection');
   }
 }
 
