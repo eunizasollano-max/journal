@@ -109,8 +109,9 @@ function renderDateHeader() {
   } else {
     currentSession = new Date().getHours() < 12 ? 'morning' : 'evening';
   }
-  // Darken the theme for evening entries
+  // Darken the theme for evening entries, brighten it for morning ones
   document.documentElement.classList.toggle('night-mode', currentSession === 'evening');
+  document.documentElement.classList.toggle('day-mode', currentSession === 'morning');
 }
 
 function renderPastEntryBanner() {
@@ -155,6 +156,7 @@ function setSession(session) {
     b.classList.toggle('active', b.dataset.session === session);
   });
   document.documentElement.classList.toggle('night-mode', session === 'evening');
+  document.documentElement.classList.toggle('day-mode', session === 'morning');
   updateConditionalPrompts();
 }
 

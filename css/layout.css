@@ -1,10 +1,15 @@
-/* ── Body background: two whisper-quiet washes per theme, like light
-   falling across paper — replaces the tiled peony wallpaper ── */
+/* ── Body background: floral wallpaper + two whisper-quiet washes per
+   theme. Living on body (not inside any page card) means it spans the
+   full viewport and scrolls with nothing — it's never clipped to a
+   card's rounded corners the way a per-section <img> would be. ── */
 body {
   background-color: var(--color-bg);
   background-image:
+    url('../assets/floral-bg.svg'),
     radial-gradient(1100px 560px at 88% -8%, var(--wash-a), transparent 62%),
     radial-gradient(900px 520px at -8% 104%, var(--wash-b), transparent 60%);
+  background-size: cover, auto, auto;
+  background-position: center, initial, initial;
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
@@ -180,6 +185,7 @@ body {
 /* ── Page Sections ── */
 .page-section {
   display: none;
+  position: relative;
   animation: pageEnter 0.35s ease;
 }
 

@@ -1491,17 +1491,6 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   box-shadow: 0 2px 20px rgba(196, 160, 160, 0.08);
 }
 
-.home-floral-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.25;
-  pointer-events: none;
-  user-select: none;
-}
-
 .home-journal-title {
   display: flex;
   flex-direction: column;
@@ -2141,9 +2130,7 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   letter-spacing: 0.01em;
 }
 
-/* Quiet the decorative floral imagery to one moment per page */
 .entry-floral-header { display: none; }
-.home-floral-bg { opacity: 0.45; }
 
 /* Slightly tighter card radii — soft, not bubbly */
 .card,

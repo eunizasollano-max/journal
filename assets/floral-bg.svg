@@ -1,103 +1,224 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1100" fill="none">
   <defs>
     <style>
-      .fp { fill: #f0d0d0; opacity: 0.35; }
-      .fp2 { fill: #e8c4c4; opacity: 0.28; }
-      .fl { fill: #bccdb4; opacity: 0.3; }
-      .fs { stroke: #d4b8b0; stroke-width: 0.8; fill: none; opacity: 0.35; }
+      .fp { fill: #f0d0d0; opacity: 0.2; }
+      .fp2 { fill: #e8c4c4; opacity: 0.16; }
+      .fl { fill: #bccdb4; opacity: 0.18; }
+      .fs { stroke: #d4b8b0; stroke-width: 0.8; fill: none; opacity: 0.2; }
     </style>
   </defs>
 
   <!-- Top-left cluster -->
-  <ellipse cx="60" cy="55" rx="22" ry="28" transform="rotate(-20 60 55)" class="fp"/>
-  <ellipse cx="82" cy="48" rx="20" ry="26" transform="rotate(15 82 48)" class="fp"/>
-  <ellipse cx="72" cy="32" rx="18" ry="24" class="fp2"/>
-  <ellipse cx="45" cy="42" rx="16" ry="20" transform="rotate(-35 45 42)" class="fp2"/>
-  <circle cx="68" cy="48" r="10" class="fp2"/>
-  <circle cx="68" cy="48" r="5" fill="#d4a0a0" opacity="0.2"/>
-  <ellipse cx="35" cy="70" rx="18" ry="8" transform="rotate(-50 35 70)" class="fl"/>
-  <ellipse cx="90" cy="30" rx="16" ry="7" transform="rotate(20 90 30)" class="fl"/>
-  <ellipse cx="100" cy="62" rx="15" ry="6" transform="rotate(30 100 62)" class="fl"/>
+  <ellipse cx="60" cy="55" rx="13.2" ry="16.8" transform="rotate(-20 60 55)" class="fp"/>
+  <ellipse cx="82" cy="48" rx="12" ry="15.6" transform="rotate(15 82 48)" class="fp"/>
+  <ellipse cx="72" cy="32" rx="10.8" ry="14.4" class="fp2"/>
+  <ellipse cx="45" cy="42" rx="9.6" ry="12" transform="rotate(-35 45 42)" class="fp2"/>
+  <circle cx="68" cy="48" r="6" class="fp2"/>
+  <circle cx="68" cy="48" r="3" fill="#d4a0a0" opacity="0.15"/>
+  <ellipse cx="35" cy="70" rx="10.8" ry="4.8" transform="rotate(-50 35 70)" class="fl"/>
+  <ellipse cx="90" cy="30" rx="9.6" ry="4.2" transform="rotate(20 90 30)" class="fl"/>
+  <ellipse cx="100" cy="62" rx="9" ry="3.6" transform="rotate(30 100 62)" class="fl"/>
+
+  <!-- Top-center cluster -->
+  <ellipse cx="400" cy="45" rx="10.8" ry="13.8" transform="rotate(-12 400 45)" class="fp"/>
+  <ellipse cx="420" cy="55" rx="9.6" ry="12.6" transform="rotate(18 420 55)" class="fp2"/>
+  <circle cx="410" cy="48" r="4.8" class="fp2"/>
+  <ellipse cx="440" cy="35" rx="8.4" ry="3.6" transform="rotate(25 440 35)" class="fl"/>
+  <ellipse cx="378" cy="60" rx="7.8" ry="3" transform="rotate(-20 378 60)" class="fl"/>
 
   <!-- Top-right cluster -->
-  <ellipse cx="720" cy="40" rx="20" ry="26" transform="rotate(20 720 40)" class="fp"/>
-  <ellipse cx="745" cy="55" rx="18" ry="24" transform="rotate(-10 745 55)" class="fp"/>
-  <ellipse cx="730" cy="70" rx="16" ry="22" class="fp2"/>
-  <ellipse cx="705" cy="62" rx="15" ry="18" transform="rotate(-20 705 62)" class="fp2"/>
-  <circle cx="725" cy="55" r="9" class="fp2"/>
-  <ellipse cx="765" cy="35" rx="14" ry="6" transform="rotate(15 765 35)" class="fl"/>
-  <ellipse cx="695" cy="45" rx="15" ry="6" transform="rotate(-25 695 45)" class="fl"/>
+  <ellipse cx="720" cy="40" rx="12" ry="15.6" transform="rotate(20 720 40)" class="fp"/>
+  <ellipse cx="745" cy="55" rx="10.8" ry="14.4" transform="rotate(-10 745 55)" class="fp"/>
+  <ellipse cx="730" cy="70" rx="9.6" ry="13.2" class="fp2"/>
+  <ellipse cx="705" cy="62" rx="9" ry="10.8" transform="rotate(-20 705 62)" class="fp2"/>
+  <circle cx="725" cy="55" r="5.4" class="fp2"/>
+  <ellipse cx="765" cy="35" rx="8.4" ry="3.6" transform="rotate(15 765 35)" class="fl"/>
+  <ellipse cx="695" cy="45" rx="9" ry="3.6" transform="rotate(-25 695 45)" class="fl"/>
 
-  <!-- Left side scattered -->
-  <ellipse cx="25" cy="220" rx="12" ry="15" transform="rotate(-15 25 220)" class="fp"/>
-  <ellipse cx="38" cy="215" rx="11" ry="14" transform="rotate(10 38 215)" class="fp2"/>
-  <circle cx="30" cy="220" r="6" class="fp2"/>
-  <ellipse cx="15" cy="240" rx="12" ry="5" transform="rotate(-45 15 240)" class="fl"/>
+  <!-- Left side scattered, evenly spaced down the whole height -->
+  <ellipse cx="25" cy="220" rx="7.2" ry="9" transform="rotate(-15 25 220)" class="fp"/>
+  <ellipse cx="38" cy="215" rx="6.6" ry="8.4" transform="rotate(10 38 215)" class="fp2"/>
+  <circle cx="30" cy="220" r="3.6" class="fp2"/>
+  <ellipse cx="15" cy="240" rx="7.2" ry="3" transform="rotate(-45 15 240)" class="fl"/>
 
-  <ellipse cx="40" cy="450" rx="15" ry="19" transform="rotate(-10 40 450)" class="fp"/>
-  <ellipse cx="55" cy="445" rx="13" ry="17" transform="rotate(15 55 445)" class="fp2"/>
-  <circle cx="46" cy="450" r="7" class="fp2"/>
-  <ellipse cx="25" cy="468" rx="14" ry="6" transform="rotate(-50 25 468)" class="fl"/>
-  <ellipse cx="62" cy="430" rx="13" ry="5" transform="rotate(25 62 430)" class="fl"/>
+  <ellipse cx="45" cy="330" rx="7.8" ry="9.6" transform="rotate(18 45 330)" class="fp"/>
+  <ellipse cx="30" cy="336" rx="6.6" ry="8.4" transform="rotate(-12 30 336)" class="fp2"/>
+  <circle cx="38" cy="332" r="3.6" class="fp2"/>
 
-  <ellipse cx="20" cy="700" rx="18" ry="22" transform="rotate(-20 20 700)" class="fp"/>
-  <ellipse cx="38" cy="692" rx="16" ry="20" transform="rotate(12 38 692)" class="fp2"/>
-  <circle cx="28" cy="700" r="8" class="fp2"/>
-  <ellipse cx="12" cy="720" rx="15" ry="6" transform="rotate(-55 12 720)" class="fl"/>
+  <ellipse cx="40" cy="450" rx="9" ry="11.4" transform="rotate(-10 40 450)" class="fp"/>
+  <ellipse cx="55" cy="445" rx="7.8" ry="10.2" transform="rotate(15 55 445)" class="fp2"/>
+  <circle cx="46" cy="450" r="4.2" class="fp2"/>
+  <ellipse cx="25" cy="468" rx="8.4" ry="3.6" transform="rotate(-50 25 468)" class="fl"/>
+  <ellipse cx="62" cy="430" rx="7.8" ry="3" transform="rotate(25 62 430)" class="fl"/>
 
-  <!-- Right side scattered -->
-  <ellipse cx="770" cy="200" rx="14" ry="18" transform="rotate(15 770 200)" class="fp"/>
-  <ellipse cx="756" cy="210" rx="12" ry="16" transform="rotate(-10 756 210)" class="fp2"/>
-  <circle cx="764" cy="205" r="7" class="fp2"/>
-  <ellipse cx="785" cy="220" rx="13" ry="5" transform="rotate(40 785 220)" class="fl"/>
+  <ellipse cx="30" cy="575" rx="7.8" ry="10.2" transform="rotate(-22 30 575)" class="fp"/>
+  <ellipse cx="46" cy="580" rx="7.2" ry="9" transform="rotate(14 46 580)" class="fp2"/>
+  <circle cx="38" cy="577" r="3.6" class="fp2"/>
 
-  <ellipse cx="780" cy="480" rx="16" ry="20" transform="rotate(20 780 480)" class="fp"/>
-  <ellipse cx="762" cy="488" rx="14" ry="18" transform="rotate(-15 762 488)" class="fp2"/>
-  <circle cx="772" cy="482" r="8" class="fp2"/>
-  <ellipse cx="796" cy="500" rx="14" ry="5" transform="rotate(50 796 500)" class="fl"/>
+  <ellipse cx="20" cy="700" rx="10.8" ry="13.2" transform="rotate(-20 20 700)" class="fp"/>
+  <ellipse cx="38" cy="692" rx="9.6" ry="12" transform="rotate(12 38 692)" class="fp2"/>
+  <circle cx="28" cy="700" r="4.8" class="fp2"/>
+  <ellipse cx="12" cy="720" rx="9" ry="3.6" transform="rotate(-55 12 720)" class="fl"/>
+
+  <ellipse cx="42" cy="820" rx="8.4" ry="10.8" transform="rotate(16 42 820)" class="fp"/>
+  <ellipse cx="26" cy="826" rx="7.2" ry="9.6" transform="rotate(-14 26 826)" class="fp2"/>
+  <circle cx="34" cy="822" r="4.2" class="fp2"/>
+  <ellipse cx="55" cy="838" rx="7.8" ry="3" transform="rotate(35 55 838)" class="fl"/>
+
+  <ellipse cx="35" cy="950" rx="7.8" ry="9.6" transform="rotate(-18 35 950)" class="fp"/>
+  <ellipse cx="20" cy="944" rx="6.6" ry="8.4" transform="rotate(10 20 944)" class="fp2"/>
+  <circle cx="28" cy="948" r="3.6" class="fp2"/>
+
+  <!-- Right side scattered, evenly spaced down the whole height -->
+  <ellipse cx="770" cy="200" rx="8.4" ry="10.8" transform="rotate(15 770 200)" class="fp"/>
+  <ellipse cx="756" cy="210" rx="7.2" ry="9.6" transform="rotate(-10 756 210)" class="fp2"/>
+  <circle cx="764" cy="205" r="4.2" class="fp2"/>
+  <ellipse cx="785" cy="220" rx="7.8" ry="3" transform="rotate(40 785 220)" class="fl"/>
+
+  <ellipse cx="760" cy="330" rx="8.4" ry="10.2" transform="rotate(-16 760 330)" class="fp"/>
+  <ellipse cx="775" cy="336" rx="7.2" ry="9" transform="rotate(12 775 336)" class="fp2"/>
+  <circle cx="768" cy="332" r="3.6" class="fp2"/>
+
+  <ellipse cx="780" cy="480" rx="9.6" ry="12" transform="rotate(20 780 480)" class="fp"/>
+  <ellipse cx="762" cy="488" rx="8.4" ry="10.8" transform="rotate(-15 762 488)" class="fp2"/>
+  <circle cx="772" cy="482" r="4.8" class="fp2"/>
+  <ellipse cx="796" cy="500" rx="8.4" ry="3" transform="rotate(50 796 500)" class="fl"/>
+
+  <ellipse cx="765" cy="600" rx="7.8" ry="9.6" transform="rotate(14 765 600)" class="fp"/>
+  <ellipse cx="780" cy="606" rx="6.6" ry="8.4" transform="rotate(-18 780 606)" class="fp2"/>
+  <circle cx="772" cy="602" r="3.6" class="fp2"/>
+
+  <ellipse cx="775" cy="730" rx="9" ry="11.4" transform="rotate(-18 775 730)" class="fp"/>
+  <ellipse cx="758" cy="724" rx="7.8" ry="10.2" transform="rotate(14 758 724)" class="fp2"/>
+  <circle cx="768" cy="728" r="4.2" class="fp2"/>
+  <ellipse cx="790" cy="748" rx="7.8" ry="3" transform="rotate(-40 790 748)" class="fl"/>
+
+  <ellipse cx="758" cy="860" rx="7.8" ry="9.6" transform="rotate(18 758 860)" class="fp"/>
+  <ellipse cx="774" cy="854" rx="6.6" ry="8.4" transform="rotate(-12 774 854)" class="fp2"/>
+  <circle cx="766" cy="858" r="3.6" class="fp2"/>
+
+  <!-- Center clusters, spread through the middle so cropped/wide views still show blooms -->
+  <ellipse cx="380" cy="200" rx="9" ry="11.4" transform="rotate(-14 380 200)" class="fp"/>
+  <ellipse cx="398" cy="206" rx="7.8" ry="10.2" transform="rotate(16 398 206)" class="fp2"/>
+  <circle cx="390" cy="202" r="4.2" class="fp2"/>
+
+  <ellipse cx="230" cy="380" rx="8.4" ry="10.8" transform="rotate(20 230 380)" class="fp"/>
+  <ellipse cx="214" cy="386" rx="7.2" ry="9.6" transform="rotate(-15 214 386)" class="fp2"/>
+  <circle cx="222" cy="382" r="4.2" class="fp2"/>
+
+  <ellipse cx="560" cy="360" rx="7.8" ry="10.2" transform="rotate(-18 560 360)" class="fp"/>
+  <ellipse cx="576" cy="366" rx="6.6" ry="9" transform="rotate(14 576 366)" class="fp2"/>
+  <circle cx="568" cy="362" r="3.6" class="fp2"/>
+
+  <ellipse cx="420" cy="540" rx="9.6" ry="12" transform="rotate(15 420 540)" class="fp"/>
+  <ellipse cx="402" cy="546" rx="8.4" ry="10.8" transform="rotate(-18 402 546)" class="fp2"/>
+  <circle cx="411" cy="542" r="4.8" class="fp2"/>
+  <ellipse cx="438" cy="558" rx="8.4" ry="3" transform="rotate(35 438 558)" class="fl"/>
+
+  <ellipse cx="180" cy="560" rx="7.8" ry="9.6" transform="rotate(-16 180 560)" class="fp"/>
+  <ellipse cx="196" cy="566" rx="6.6" ry="8.4" transform="rotate(12 196 566)" class="fp2"/>
+  <circle cx="188" cy="562" r="3.6" class="fp2"/>
+
+  <ellipse cx="620" cy="560" rx="8.4" ry="10.8" transform="rotate(18 620 560)" class="fp"/>
+  <ellipse cx="636" cy="554" rx="7.2" ry="9.6" transform="rotate(-14 636 554)" class="fp2"/>
+  <circle cx="628" cy="558" r="4.2" class="fp2"/>
+
+  <ellipse cx="300" cy="700" rx="9" ry="11.4" transform="rotate(-16 300 700)" class="fp"/>
+  <ellipse cx="284" cy="694" rx="7.8" ry="10.2" transform="rotate(12 284 694)" class="fp2"/>
+  <circle cx="293" cy="698" r="4.2" class="fp2"/>
+  <ellipse cx="318" cy="716" rx="8.4" ry="3" transform="rotate(-30 318 716)" class="fl"/>
+
+  <ellipse cx="500" cy="730" rx="8.4" ry="10.8" transform="rotate(18 500 730)" class="fp"/>
+  <ellipse cx="516" cy="724" rx="7.2" ry="9.6" transform="rotate(-14 516 724)" class="fp2"/>
+  <circle cx="508" cy="728" r="4.2" class="fp2"/>
+
+  <ellipse cx="400" cy="850" rx="9.6" ry="12" transform="rotate(-14 400 850)" class="fp"/>
+  <ellipse cx="382" cy="856" rx="8.4" ry="10.8" transform="rotate(16 382 856)" class="fp2"/>
+  <circle cx="391" cy="852" r="4.8" class="fp2"/>
+  <ellipse cx="418" cy="868" rx="8.4" ry="3" transform="rotate(30 418 868)" class="fl"/>
+
+  <ellipse cx="230" cy="900" rx="7.8" ry="9.6" transform="rotate(16 230 900)" class="fp"/>
+  <ellipse cx="246" cy="894" rx="6.6" ry="8.4" transform="rotate(-12 246 894)" class="fp2"/>
+  <circle cx="238" cy="898" r="3.6" class="fp2"/>
+
+  <ellipse cx="580" cy="900" rx="7.8" ry="9.6" transform="rotate(-18 580 900)" class="fp"/>
+  <ellipse cx="564" cy="894" rx="6.6" ry="8.4" transform="rotate(14 564 894)" class="fp2"/>
+  <circle cx="573" cy="898" r="3.6" class="fp2"/>
 
   <!-- Bottom clusters -->
-  <ellipse cx="120" cy="1040" rx="20" ry="25" transform="rotate(-25 120 1040)" class="fp"/>
-  <ellipse cx="142" cy="1032" rx="18" ry="23" transform="rotate(18 142 1032)" class="fp"/>
-  <ellipse cx="132" cy="1018" rx="16" ry="21" class="fp2"/>
-  <ellipse cx="108" cy="1025" rx="14" ry="18" transform="rotate(-30 108 1025)" class="fp2"/>
-  <circle cx="128" cy="1032" r="9" class="fp2"/>
-  <ellipse cx="100" cy="1058" rx="18" ry="7" transform="rotate(-45 100 1058)" class="fl"/>
-  <ellipse cx="155" cy="1020" rx="16" ry="6" transform="rotate(20 155 1020)" class="fl"/>
+  <ellipse cx="120" cy="1040" rx="12" ry="15" transform="rotate(-25 120 1040)" class="fp"/>
+  <ellipse cx="142" cy="1032" rx="10.8" ry="13.8" transform="rotate(18 142 1032)" class="fp"/>
+  <ellipse cx="132" cy="1018" rx="9.6" ry="12.6" class="fp2"/>
+  <ellipse cx="108" cy="1025" rx="8.4" ry="10.8" transform="rotate(-30 108 1025)" class="fp2"/>
+  <circle cx="128" cy="1032" r="5.4" class="fp2"/>
+  <ellipse cx="100" cy="1058" rx="10.8" ry="4.2" transform="rotate(-45 100 1058)" class="fl"/>
+  <ellipse cx="155" cy="1020" rx="9.6" ry="3.6" transform="rotate(20 155 1020)" class="fl"/>
 
-  <ellipse cx="650" cy="1050" rx="18" ry="23" transform="rotate(22 650 1050)" class="fp"/>
-  <ellipse cx="672" cy="1042" rx="16" ry="21" transform="rotate(-18 672 1042)" class="fp"/>
-  <ellipse cx="660" cy="1028" rx="15" ry="20" class="fp2"/>
-  <circle cx="658" cy="1042" r="8" class="fp2"/>
-  <ellipse cx="685" cy="1062" rx="16" ry="6" transform="rotate(40 685 1062)" class="fl"/>
-  <ellipse cx="635" cy="1038" rx="15" ry="6" transform="rotate(-30 635 1038)" class="fl"/>
+  <ellipse cx="400" cy="1045" rx="10.2" ry="13.2" transform="rotate(14 400 1045)" class="fp"/>
+  <ellipse cx="380" cy="1052" rx="9" ry="12" transform="rotate(-16 380 1052)" class="fp2"/>
+  <circle cx="390" cy="1048" r="4.8" class="fp2"/>
+  <ellipse cx="418" cy="1062" rx="9" ry="3.6" transform="rotate(30 418 1062)" class="fl"/>
 
-  <!-- Center scattered small elements -->
-  <circle cx="380" cy="80" r="6" class="fp"/>
-  <circle cx="380" cy="80" r="3" class="fp2"/>
+  <ellipse cx="650" cy="1050" rx="10.8" ry="13.8" transform="rotate(22 650 1050)" class="fp"/>
+  <ellipse cx="672" cy="1042" rx="9.6" ry="12.6" transform="rotate(-18 672 1042)" class="fp"/>
+  <ellipse cx="660" cy="1028" rx="9" ry="12" class="fp2"/>
+  <circle cx="658" cy="1042" r="4.8" class="fp2"/>
+  <ellipse cx="685" cy="1062" rx="9.6" ry="3.6" transform="rotate(40 685 1062)" class="fl"/>
+  <ellipse cx="635" cy="1038" rx="9" ry="3.6" transform="rotate(-30 635 1038)" class="fl"/>
+
+  <!-- Small scattered accents throughout, filling remaining gaps -->
+  <circle cx="380" cy="80" r="3.6" class="fp"/>
+  <circle cx="380" cy="80" r="1.8" class="fp2"/>
   <path d="M365 80 Q380 72 395 80" class="fs"/>
 
-  <circle cx="200" cy="350" r="7" class="fp"/>
-  <circle cx="200" cy="350" r="3.5" class="fp2"/>
+  <circle cx="200" cy="130" r="3.6" class="fp"/>
+  <circle cx="200" cy="130" r="1.8" class="fp2"/>
 
-  <circle cx="600" cy="300" r="5" class="fp"/>
-  <circle cx="600" cy="300" r="2.5" class="fp2"/>
+  <circle cx="600" cy="150" r="3" class="fp"/>
+  <circle cx="600" cy="150" r="1.5" class="fp2"/>
 
-  <circle cx="150" cy="600" r="8" class="fp"/>
-  <circle cx="150" cy="600" r="4" class="fp2"/>
+  <circle cx="200" cy="350" r="4.2" class="fp"/>
+  <circle cx="200" cy="350" r="2.1" class="fp2"/>
 
-  <circle cx="650" cy="650" r="6" class="fp"/>
-  <circle cx="650" cy="650" r="3" class="fp2"/>
+  <circle cx="600" cy="300" r="3" class="fp"/>
+  <circle cx="600" cy="300" r="1.5" class="fp2"/>
 
-  <circle cx="400" cy="900" r="7" class="fp"/>
-  <circle cx="400" cy="900" r="3.5" class="fp2"/>
+  <circle cx="150" cy="600" r="4.8" class="fp"/>
+  <circle cx="150" cy="600" r="2.4" class="fp2"/>
 
-  <!-- Plus/sparkle marks (from the reference image) -->
-  <path d="M170 130 V118 M164 124 H176" stroke="#d4b0b0" stroke-width="0.8" opacity="0.3"/>
-  <path d="M620 150 V138 M614 144 H626" stroke="#d4b0b0" stroke-width="0.8" opacity="0.3"/>
-  <path d="M80 380 V372 M76 376 H84" stroke="#d4b0b0" stroke-width="0.7" opacity="0.28"/>
-  <path d="M720 400 V392 M716 396 H724" stroke="#d4b0b0" stroke-width="0.7" opacity="0.28"/>
-  <path d="M350 500 V490 M344 495 H356" stroke="#d4b0b0" stroke-width="0.9" opacity="0.25"/>
-  <path d="M200 800 V790 M194 795 H206" stroke="#d4b0b0" stroke-width="0.7" opacity="0.28"/>
-  <path d="M590 780 V770 M584 775 H596" stroke="#d4b0b0" stroke-width="0.8" opacity="0.3"/>
+  <circle cx="650" cy="650" r="3.6" class="fp"/>
+  <circle cx="650" cy="650" r="1.8" class="fp2"/>
+
+  <circle cx="480" cy="450" r="3.6" class="fp"/>
+  <circle cx="480" cy="450" r="1.8" class="fp2"/>
+
+  <circle cx="300" cy="480" r="3" class="fp"/>
+  <circle cx="300" cy="480" r="1.5" class="fp2"/>
+
+  <circle cx="400" cy="900" r="4.2" class="fp"/>
+  <circle cx="400" cy="900" r="2.1" class="fp2"/>
+
+  <circle cx="600" cy="800" r="3.6" class="fp"/>
+  <circle cx="600" cy="800" r="1.8" class="fp2"/>
+
+  <circle cx="220" cy="780" r="3.6" class="fp"/>
+  <circle cx="220" cy="780" r="1.8" class="fp2"/>
+
+  <circle cx="500" cy="980" r="3.6" class="fp"/>
+  <circle cx="500" cy="980" r="1.8" class="fp2"/>
+
+  <circle cx="280" cy="980" r="3" class="fp"/>
+  <circle cx="280" cy="980" r="1.5" class="fp2"/>
+
+  <!-- Plus/sparkle marks scattered across the whole canvas -->
+  <path d="M170 130 V118 M164 124 H176" stroke="#d4b0b0" stroke-width="0.8" opacity="0.22"/>
+  <path d="M620 150 V138 M614 144 H626" stroke="#d4b0b0" stroke-width="0.8" opacity="0.22"/>
+  <path d="M80 380 V372 M76 376 H84" stroke="#d4b0b0" stroke-width="0.7" opacity="0.2"/>
+  <path d="M720 400 V392 M716 396 H724" stroke="#d4b0b0" stroke-width="0.7" opacity="0.2"/>
+  <path d="M350 500 V490 M344 495 H356" stroke="#d4b0b0" stroke-width="0.9" opacity="0.2"/>
+  <path d="M200 800 V790 M194 795 H206" stroke="#d4b0b0" stroke-width="0.7" opacity="0.2"/>
+  <path d="M590 780 V770 M584 775 H596" stroke="#d4b0b0" stroke-width="0.8" opacity="0.22"/>
+  <path d="M470 250 V240 M464 245 H476" stroke="#d4b0b0" stroke-width="0.7" opacity="0.2"/>
+  <path d="M260 620 V610 M254 615 H266" stroke="#d4b0b0" stroke-width="0.7" opacity="0.2"/>
+  <path d="M560 920 V910 M554 915 H566" stroke="#d4b0b0" stroke-width="0.7" opacity="0.2"/>
 </svg>

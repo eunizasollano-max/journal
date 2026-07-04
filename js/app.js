@@ -661,20 +661,21 @@ function launchJournal(user) {
   wireSyncButton();
   wireMobileMore();
 
-  Router.register('#home',      () => { document.documentElement.classList.remove('night-mode'); HomePage.init(); });
+  Router.register('#home',      () => { document.documentElement.classList.remove('night-mode', 'day-mode'); HomePage.init(); });
   Router.register('#today',     () => {
     const session = localStorage.getItem('journal_session');
     document.documentElement.classList.toggle('night-mode', session === 'evening');
+    document.documentElement.classList.toggle('day-mode', session === 'morning');
     EntryPage.init();
   });
-  Router.register('#freewrite', () => { document.documentElement.classList.remove('night-mode'); FreeWritePage.init(); });
-  Router.register('#calendar',  () => { document.documentElement.classList.remove('night-mode'); CalendarPage.init(); });
-  Router.register('#goals',     () => { document.documentElement.classList.remove('night-mode'); GoalsPage.init(); });
-  Router.register('#routines',  () => { document.documentElement.classList.remove('night-mode'); RoutinesPage.init(); });
-  Router.register('#recap',     () => { document.documentElement.classList.remove('night-mode'); RecapPage.init(); });
-  Router.register('#gallery',   () => { document.documentElement.classList.remove('night-mode'); GalleryPage.init(); });
-  Router.register('#privacy',   () => { document.documentElement.classList.remove('night-mode'); });
-  Router.register('#terms',     () => { document.documentElement.classList.remove('night-mode'); });
+  Router.register('#freewrite', () => { document.documentElement.classList.remove('night-mode', 'day-mode'); FreeWritePage.init(); });
+  Router.register('#calendar',  () => { document.documentElement.classList.remove('night-mode', 'day-mode'); CalendarPage.init(); });
+  Router.register('#goals',     () => { document.documentElement.classList.remove('night-mode', 'day-mode'); GoalsPage.init(); });
+  Router.register('#routines',  () => { document.documentElement.classList.remove('night-mode', 'day-mode'); RoutinesPage.init(); });
+  Router.register('#recap',     () => { document.documentElement.classList.remove('night-mode', 'day-mode'); RecapPage.init(); });
+  Router.register('#gallery',   () => { document.documentElement.classList.remove('night-mode', 'day-mode'); GalleryPage.init(); });
+  Router.register('#privacy',   () => { document.documentElement.classList.remove('night-mode', 'day-mode'); });
+  Router.register('#terms',     () => { document.documentElement.classList.remove('night-mode', 'day-mode'); });
 
   Router.handleRoute();
 }

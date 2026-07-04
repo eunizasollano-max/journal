@@ -36,6 +36,85 @@ body {
   overflow-x: hidden;
 }
 
+/* Night mode: a flat solid --color-bg read as one harsh block of color.
+   Layering a soft top-to-bottom gradient plus a starfield (derived from
+   each theme's own --color-bg via color-mix, so it needs no per-theme
+   tuning) turns it into a calmer "wind down" backdrop instead. Sized and
+   lit to actually read at a glance, not just in a zoomed-in crop. */
+html.night-mode body {
+  background-color: var(--color-bg);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  /* Floral layer sits between the stars (in front, so they stay crisp)
+     and the opaque gradient base (behind, since it's a solid fill that
+     would otherwise hide anything listed after it). background-size /
+     background-position need one entry per layer — "auto" for every
+     gradient (they size themselves via their own function args) and
+     "cover" / "center" for the one plain image layer. */
+  background-size: auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, cover, auto;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, center, 0 0;
+  background-image:
+    radial-gradient(2.4px 2.4px at 8% 10%,  rgba(255,255,255,0.95), transparent 70%),
+    radial-gradient(1.8px 1.8px at 21% 32%, rgba(255,255,255,0.75), transparent 70%),
+    radial-gradient(2.6px 2.6px at 37% 6%,  rgba(255,255,255,0.9),  transparent 70%),
+    radial-gradient(1.8px 1.8px at 54% 24%, rgba(255,255,255,0.7),  transparent 70%),
+    radial-gradient(2.4px 2.4px at 30% 16%, rgba(255,255,255,0.85), transparent 70%),
+    radial-gradient(1.8px 1.8px at 84% 38%, rgba(255,255,255,0.65), transparent 70%),
+    radial-gradient(2.2px 2.2px at 13% 58%, rgba(255,255,255,0.75), transparent 70%),
+    radial-gradient(1.8px 1.8px at 32% 74%, rgba(255,255,255,0.6),  transparent 70%),
+    radial-gradient(2.4px 2.4px at 61% 66%, rgba(255,255,255,0.75), transparent 70%),
+    radial-gradient(1.8px 1.8px at 91% 76%, rgba(255,255,255,0.6),  transparent 70%),
+    radial-gradient(2.2px 2.2px at 46% 88%, rgba(255,255,255,0.7),  transparent 70%),
+    radial-gradient(1.8px 1.8px at 70% 55%, rgba(255,255,255,0.6),  transparent 70%),
+    radial-gradient(2px 2px   at 5% 42%,    rgba(255,255,255,0.55), transparent 70%),
+    url('../assets/floral-bg.svg'),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--color-bg) 90%, white 8%)  0%,
+      var(--color-bg) 45%,
+      color-mix(in srgb, var(--color-bg) 76%, black 22%) 100%);
+}
+
+/* A crescent moon with a few companion stars, fixed in the upper corner.
+   The element itself is 0x0 — every visible shape (disc, bite, stars,
+   glow) is a box-shadow circle. That matters: a real `background` on
+   the element would paint in front of its own shadows and hide the
+   crescent bite entirely, which is what happened on the first pass.
+   Shadows are listed front-to-back, so the bite must come before the
+   disc to visibly cut into it, and the glow goes last (furthest back). */
+html.night-mode body::before {
+  content: '';
+  position: fixed;
+  top: 130px;
+  right: 70px;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow:
+    42px 26px 1.6px 1.6px rgba(255,255,255,0.9),
+    -32px 34px 1.2px 1.2px rgba(255,255,255,0.7),
+    16px -26px 1.8px 1.8px rgba(255,255,255,0.65),
+    -4px 44px 1.4px 1.4px rgba(255,255,255,0.55),
+    54px -8px 1.6px 1.6px rgba(255,255,255,0.6),
+    -13px -4px 2px 25px color-mix(in srgb, var(--color-bg) 88%, white 10%),
+    0 0 0 24px rgba(255,250,240,0.94),
+    0 0 30px 8px rgba(255,255,255,0.16);
+}
+
+@media (max-width: 700px) {
+  html.night-mode body::before {
+    top: 130px;
+    right: 26px;
+    box-shadow:
+      30px 18px 1.2px 1.2px rgba(255,255,255,0.9),
+      -22px 24px 1px 1px   rgba(255,255,255,0.7),
+      12px -18px 1.3px 1.3px rgba(255,255,255,0.6),
+      -9px -3px 1.5px 18px color-mix(in srgb, var(--color-bg) 88%, white 10%),
+      0 0 0 17px rgba(255,250,240,0.94),
+      0 0 20px 6px rgba(255,255,255,0.14);
+  }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
