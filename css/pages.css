@@ -885,11 +885,13 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 .routine-cat-name {
-  display: block;
+  display: inline-block;
   font-family: var(--font-heading);
   font-size: var(--fs-md);
   font-weight: 700;
   line-height: 1.25;
+  border-bottom: 1.5px dashed currentColor;
+  opacity: 0.92;
 }
 
 .routine-cat-counts {
@@ -901,17 +903,24 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 
 .routine-cat-edit {
   position: absolute;
-  top: 6px;
+  top: 8px;
   right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   font-size: 0.75rem;
-  opacity: 0.45;
-  transition: opacity var(--transition-fast);
+  background: rgba(255,255,255,0.4);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  transition: background var(--transition-fast), transform var(--transition-fast);
 }
 
-.routine-cat-card:hover .routine-cat-edit { opacity: 0.95; }
-
-@media (hover: none) {
-  .routine-cat-edit { opacity: 0.75; }
+.routine-cat-card:hover .routine-cat-edit,
+.routine-cat-edit:active {
+  background: rgba(255,255,255,0.65);
+  transform: scale(1.1);
 }
 
 .routine-cat-add {

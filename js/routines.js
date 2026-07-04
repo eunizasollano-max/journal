@@ -290,7 +290,9 @@ function tomorrowHtml() {
 function attach(body) {
   body.querySelectorAll('.routine-cat-card').forEach(card => {
     card.addEventListener('click', (e) => {
-      if (e.target.closest('.routine-cat-edit')) {
+      // Tapping the pencil OR the section name itself opens rename —
+      // the name text is the more discoverable target for most people.
+      if (e.target.closest('.routine-cat-edit') || e.target.closest('.routine-cat-name')) {
         renamingKey = card.dataset.key;
         formState = null;
         render();
