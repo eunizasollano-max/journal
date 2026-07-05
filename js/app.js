@@ -60,6 +60,7 @@ const THEMES = [
   { key: 'mint',      label: 'Mint',      dot: '#a8d8b8' },
   { key: 'peach',     label: 'Peach',     dot: '#e8c098' },
   { key: 'sky',       label: 'Sky',       dot: '#a8c4e8' },
+  { key: 'lemon',     label: 'Lemon',     dot: '#f0dc98' },
   { key: 'midnight',  label: 'Midnight',  dot: '#2a1545' },
 ];
 
@@ -356,6 +357,28 @@ function showViewOnlyBanner() {
     window._guestMode = false;
     banner.remove();
     Auth.showLoginScreen();
+  });
+}
+
+/* ── Google Drive reconnect banner ──
+   Google's OAuth access token lasts ~1hr and Supabase never refreshes it,
+   so this fires roughly hourly for active Google users. A full sign-out
+   isn't needed to fix it — re-running the Google OAuth handshake refreshes
+   just the provider_token, so this is a single click instead of a manual
+   sign-out/sign-in/re-sync sequence. */
+function showDriveReconnectBanner() {
+  if (document.getElementById('drive-reconnect-banner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'drive-reconnect-banner';
+  banner.className = 'trial-banner';
+  banner.innerHTML = `
+    <span>Entry saved 🌸 Your photo is safe on this device — sign in again and tap Sync ⟳ to back it up to Google Drive.</span>
+    <button class="trial-banner-btn" id="drive-reconnect-btn" type="button">Reconnect</button>
+  `;
+  document.body.prepend(banner);
+  document.getElementById('drive-reconnect-btn')?.addEventListener('click', async () => {
+    try { await Auth.signInWithGoogle(); }
+    catch (e) { showToast('Could not reconnect — please try again.'); }
   });
 }
 
@@ -682,4 +705,4 @@ function launchJournal(user) {
 
 document.addEventListener('DOMContentLoaded', initApp);
 
-window.App = { todayKey, dateKey, parseDateKey, formatDate, formatDateFull, isFirstDayOfMonth, isLastDayOfMonth, daysInMonth, showToast, MONTHS, MONTHS_SHORT, DAYS };
+window.App = { todayKey, dateKey, parseDateKey, formatDate, formatDateFull, isFirstDayOfMonth, isLastDayOfMonth, daysInMonth, showToast, showDriveReconnectBanner, MONTHS, MONTHS_SHORT, DAYS };

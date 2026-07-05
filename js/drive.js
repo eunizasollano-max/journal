@@ -12,11 +12,11 @@ let _lastExpiredToastAt = 0;
 function notifyExpired() {
   // Google's access token is only valid ~1hr and Supabase doesn't refresh
   // it, so this fires often during a long session — debounce so a bulk
-  // sync (many files) doesn't spam the same toast per file.
+  // sync (many files) doesn't spam the same banner per file.
   const now = Date.now();
   if (now - _lastExpiredToastAt < 10000) return;
   _lastExpiredToastAt = now;
-  window.App?.showToast?.('Google session expired — please sign in again to sync photos.');
+  window.App?.showDriveReconnectBanner?.();
 }
 
 async function getDriveTokenAsync() {

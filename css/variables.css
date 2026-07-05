@@ -168,6 +168,27 @@
   --cursor-flower: url('../assets/peony-cursor-line-peach.svg') 16 15;
 }
 
+/* ── Lemon Theme ── */
+[data-theme="lemon"] {
+  --color-bg:            #fdfaee;
+  --color-surface-alt:   #fefcf4;
+  --color-surface-warm:  #fffef8;
+  --color-border:        #e8d8a0;
+  --color-border-light:  #f5ecc8;
+  /* Tangerine accents — all-gold made the theme read flat/beige */
+  --color-accent-rose:   #e2a355;
+  --color-accent-pink:   #f0c078;
+  --color-accent-deep:   #c8802e;
+  --color-accent-script: #c06a1c;
+  --color-text-body:     #6a5c38;
+  --color-text-muted:    #b0a070;
+  --color-text-light:    #d0c090;
+  --color-star-fill:     #e8a020;
+  --color-overlay:       rgba(80, 65, 20, 0.4);
+  --cursor-glow-color:   rgba(224, 140, 40, 0.5);
+  --cursor-flower: url('../assets/peony-cursor-line-lemon.svg') 16 15;
+}
+
 /* ── Midnight Theme ── */
 [data-theme="midnight"] {
   --color-bg:            #0d0d1c;
@@ -307,4 +328,20 @@ html.night-mode[data-theme="rosewater"] {
   --color-star-fill:     #b08838;
 }
 
+html.night-mode[data-theme="lemon"] {
+  /* Warm honey-amber, not olive — darkened yellow drifts khaki, so the
+     night tone leans golden-orange instead */
+  --color-bg:            #c29040;
+  --color-surface:       #fdf6e3;
+  --color-surface-alt:   #f5ead0;
+  --color-surface-warm:  #f9f0da;
+  --color-border:        #d4b070;
+  --color-border-light:  #e8d49c;
+  --color-accent-script: #9c5410;
+  --color-text-heading:  #331f00;
+  --color-text-body:     #54400e;
+  --color-text-muted:    #967632;
+  --color-text-light:    #c0a260;
+  --color-star-fill:     #c08a10;
+}
 /* midnight is already dark — night-mode has no extra effect */
