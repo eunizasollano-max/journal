@@ -2,17 +2,46 @@
   "name": "Another Day, Another Chance",
   "short_name": "Another Day",
   "description": "A personal, faith-centered journaling app.",
-  "start_url": "/",
+  "start_url": "/#today",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#d4a0a0",
-  "background_color": "#fdf8f8",
+  "theme_color": "#b76e79",
+  "background_color": "#faf7f3",
   "icons": [
     {
-      "src": "assets/logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Entry",
+      "short_name": "Today",
+      "description": "Write today's guided entry",
+      "url": "/#today",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Free Write",
+      "short_name": "Free Write",
+      "description": "Open a blank page to write freely",
+      "url": "/#freewrite",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Calendar",
+      "short_name": "Calendar",
+      "description": "Browse past entries by date",
+      "url": "/#calendar",
+      "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }

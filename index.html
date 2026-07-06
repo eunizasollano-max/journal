@@ -3,26 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#d4a0a0">
+  <meta name="theme-color" content="#b76e79">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Another Day">
   <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/assets/logo.svg">
+  <!-- iOS Safari ignores SVG apple-touch-icons — a real PNG is required
+       for "Add to Home Screen" to show the flower instead of a blank tile -->
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=35">
   <title>Another Day, another chance — Journal</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Parisienne&family=Nunito:wght@300;400;500;600&family=Playfair+Display:wght@700&family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=Quicksand:wght@400;500&family=Josefin+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Parisienne&family=Nunito:wght@300;400;500;600&family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/variables.css?v=24">
-  <link rel="stylesheet" href="css/base.css?v=24">
-  <link rel="stylesheet" href="css/layout.css?v=24">
-  <link rel="stylesheet" href="css/components.css?v=24">
-  <link rel="stylesheet" href="css/pages.css?v=24">
-  <link rel="stylesheet" href="css/animations.css?v=24">
+  <link rel="stylesheet" href="css/variables.css?v=35">
+  <link rel="stylesheet" href="css/base.css?v=35">
+  <link rel="stylesheet" href="css/layout.css?v=35">
+  <link rel="stylesheet" href="css/components.css?v=35">
+  <link rel="stylesheet" href="css/pages.css?v=35">
+  <link rel="stylesheet" href="css/animations.css?v=35">
 
   <!-- Strip OAuth error params before Supabase initializes.
        bad_oauth_state / expired state causes Supabase to fire SIGNED_OUT
@@ -166,7 +168,7 @@
     <nav class="sidebar-nav">
       <a class="nav-item" data-route="#home" href="#home">
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(72 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(144 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(216 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(288 12 11)"/><circle cx="12" cy="11" r="1.4" fill="currentColor" stroke="none"/></svg></span>
-        <span class="nav-label">The Peony</span>
+        <span class="nav-label">Home</span>
       </a>
       <a class="nav-item" data-route="#guide" href="#guide">
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.6-4.5-1.9-7-1.5V19c2.5-.4 5-.1 7 1.5 2-1.6 4.5-1.9 7-1.5V4.5C16.5 4.1 14 4.4 12 6Z"/><path d="M12 6v14.5"/></svg></span>
@@ -211,7 +213,7 @@
         <button id="signout-btn" class="btn-ghost btn-sm" style="display:none;font-size:var(--fs-xs);padding:2px 6px" title="Sign out">↩</button>
       </div>
       <div style="margin-top:var(--sp-3);line-height:1.2">
-        <div style="font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:var(--fs-sm);color:var(--color-text-heading);">another day,</div>
+        <div style="font-family:var(--font-heading);font-weight:700;font-size:var(--fs-sm);color:var(--color-text-heading);">another day,</div>
         <div style="font-family:'Dancing Script',cursive;font-weight:600;font-size:var(--fs-md);color:var(--color-accent-script);margin-top:-2px;">another chance</div>
       </div>
     </div>
@@ -231,13 +233,9 @@
   <div id="mobile-more-drawer" class="mobile-more-drawer">
     <div class="mobile-more-handle"></div>
     <div class="mobile-more-grid">
-      <button class="mobile-more-item" data-route="#freewrite" id="more-freewrite-btn">
-        <span class="mobile-more-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4c-7 0-13 5-15 15 8-1 13-6 15-15Z"/><path d="M5 19C9 12 14 8 18 6"/></svg></span>
-        <span class="mobile-more-label">Write</span>
-      </button>
-      <button class="mobile-more-item" data-route="#calendar" id="more-calendar-btn">
-        <span class="mobile-more-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span>
-        <span class="mobile-more-label">Calendar</span>
+      <button class="mobile-more-item" data-route="#guide" id="more-guide-btn">
+        <span class="mobile-more-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.6-4.5-1.9-7-1.5V19c2.5-.4 5-.1 7 1.5 2-1.6 4.5-1.9 7-1.5V4.5C16.5 4.1 14 4.4 12 6Z"/><path d="M12 6v14.5"/></svg></span>
+        <span class="mobile-more-label">Guide</span>
       </button>
       <button class="mobile-more-item" data-route="#gallery" id="more-gallery-btn">
         <span class="mobile-more-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4.5 17l4-4 3.5 3.5 3-3 4.5 4"/></svg></span>
@@ -247,9 +245,9 @@
         <span class="mobile-more-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5v14.5h16"/><path d="M7 15l4-4.5 3 3 5-6"/><circle cx="19" cy="7.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
         <span class="mobile-more-label">Recap</span>
       </button>
-      <button class="mobile-more-item" data-route="#routines" id="more-routines-btn">
-        <span class="mobile-more-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></svg></span>
-        <span class="mobile-more-label">Routines</span>
+      <button class="mobile-more-item" data-route="#freewrite" id="more-freewrite-btn">
+        <span class="mobile-more-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4c-7 0-13 5-15 15 8-1 13-6 15-15Z"/><path d="M5 19C9 12 14 8 18 6"/></svg></span>
+        <span class="mobile-more-label">Write</span>
       </button>
       <button class="mobile-more-item" id="more-sync-btn">
         <span class="mobile-more-icon">⟳</span>
@@ -278,123 +276,57 @@
       <!-- ══════════════════════════════════════
            SECTION: HOME — PEONY MEANING
       ══════════════════════════════════════ -->
-      <section id="section-home" class="page-section" aria-label="The peony flower">
+      <section id="section-home" class="page-section" aria-label="Home">
         <div class="home-page">
           <div class="home-peony-mark" aria-hidden="true"><svg viewBox="0 0 120 112" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="var(--color-accent-sage)" stroke-width="2" stroke-linecap="round"><path d="M60 104C60 78 59 64 60 52"/><path d="M60 80C48 76 40 68 38 58"/><path d="M60 90C72 87 80 80 83 70"/></g><g stroke="var(--color-accent-deep)" stroke-width="2" stroke-linejoin="round"><ellipse cx="60" cy="22" rx="10" ry="16"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(72 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(144 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(216 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(288 60 38)"/></g><circle cx="60" cy="38" r="4" fill="var(--color-star-fill)"/></svg></div>
 
-          <h1 class="home-title animate-fade-in" style="font-family:'Playfair Display',Georgia,serif;">the peony flower</h1>
-          <div class="home-journal-title animate-fade-in">
-            <span class="home-journal-day">another day,</span>
-            <span class="home-journal-chance">another chance</span>
+          <!-- Greeting -->
+          <div class="home-greeting animate-fade-in">
+            <div class="home-greeting-script" id="home-greeting">Good morning</div>
+            <h1 class="home-greeting-name"><span class="js-user-name">friend</span></h1>
+            <div class="home-greeting-date" id="home-date"></div>
           </div>
 
-          <div class="home-meanings stagger">
-            <!-- Eternal love -->
-            <div class="home-meaning-block animate-slide-up">
-              <div class="home-meaning-word rose">eternal love</div>
-              <div class="home-divider"></div>
-              <p class="home-meaning-quote">
-                Choose yourself, every day.<br>Never give up on yourself.
-              </p>
-            </div>
+          <!-- Today's verse -->
+          <div id="home-scripture" class="home-scripture animate-fade-in"></div>
 
-            <!-- Forgiveness -->
-            <div class="home-meaning-block right animate-slide-up">
-              <div class="home-meaning-word sage">forgiveness</div>
-              <div class="home-divider"></div>
-              <p class="home-meaning-quote">
-                On your hardest days,<br>choose to forgive yourself.
-              </p>
-            </div>
+          <!-- Streak / entries / last mood -->
+          <div id="home-widgets" class="today-widgets-row home-widgets"></div>
 
-            <!-- Healing -->
-            <div class="home-meaning-block animate-slide-up">
-              <div class="home-meaning-word rose" style="color:#e8b4c0">healing</div>
-              <div class="home-divider"></div>
-              <p class="home-meaning-quote">
-                Growth is not linear.<br>Every bloom takes time.
-              </p>
-            </div>
-          </div>
-
-          <div class="home-peony" style="display:none">
-            <svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="op1" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%"   stop-color="#f9e8e8" stop-opacity=".95"/>
-                  <stop offset="60%"  stop-color="#f0d4d4" stop-opacity=".75"/>
-                  <stop offset="100%" stop-color="#e8c4c4" stop-opacity=".45"/>
-                </radialGradient>
-                <radialGradient id="op2" cx="40%" cy="40%" r="60%">
-                  <stop offset="0%"   stop-color="#ffffff" stop-opacity=".98"/>
-                  <stop offset="50%"  stop-color="#fde8e8" stop-opacity=".85"/>
-                  <stop offset="100%" stop-color="#e8c0c0" stop-opacity=".55"/>
-                </radialGradient>
-                <radialGradient id="op3" cx="60%" cy="35%" r="55%">
-                  <stop offset="0%"   stop-color="#fdf0f0" stop-opacity=".95"/>
-                  <stop offset="70%"  stop-color="#f5d8d8" stop-opacity=".65"/>
-                  <stop offset="100%" stop-color="#ddb8b8" stop-opacity=".35"/>
-                </radialGradient>
-                <radialGradient id="olg" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%"   stop-color="#c8d8c0" stop-opacity=".85"/>
-                  <stop offset="60%"  stop-color="#a8c0a0" stop-opacity=".65"/>
-                  <stop offset="100%" stop-color="#88a880" stop-opacity=".35"/>
-                </radialGradient>
-                <radialGradient id="ocg" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%"   stop-color="#c0a0a0" stop-opacity=".9"/>
-                  <stop offset="100%" stop-color="#8c6868" stop-opacity=".6"/>
-                </radialGradient>
-              </defs>
-
-              <!-- Leaves -->
-              <ellipse cx="100" cy="240" rx="42" ry="18" transform="rotate(-30 100 240)" fill="url(#olg)" opacity=".7"/>
-              <ellipse cx="220" cy="245" rx="40" ry="16" transform="rotate(25 220 245)"  fill="url(#olg)" opacity=".65"/>
-              <ellipse cx="160" cy="258" rx="38" ry="14" transform="rotate(5 160 258)"   fill="url(#olg)" opacity=".6"/>
-              <ellipse cx="75"  cy="215" rx="36" ry="14" transform="rotate(-50 75 215)"  fill="url(#olg)" opacity=".55"/>
-              <ellipse cx="248" cy="220" rx="34" ry="13" transform="rotate(45 248 220)"  fill="url(#olg)" opacity=".55"/>
-
-              <!-- Outer petals — layer 1 -->
-              <ellipse cx="160" cy="185" rx="52" ry="65" fill="url(#op1)" opacity=".65"/>
-              <ellipse cx="95"  cy="195" rx="48" ry="58" transform="rotate(-35 95 195)"  fill="url(#op1)" opacity=".60"/>
-              <ellipse cx="228" cy="192" rx="46" ry="56" transform="rotate(32 228 192)"  fill="url(#op1)" opacity=".60"/>
-              <ellipse cx="120" cy="148" rx="44" ry="60" transform="rotate(-20 120 148)" fill="url(#op2)" opacity=".55"/>
-              <ellipse cx="200" cy="150" rx="43" ry="58" transform="rotate(18 200 150)"  fill="url(#op2)" opacity=".55"/>
-              <ellipse cx="160" cy="130" rx="42" ry="55" fill="url(#op1)" opacity=".60"/>
-
-              <!-- Mid petals — layer 2 -->
-              <ellipse cx="160" cy="175" rx="38" ry="48" fill="url(#op2)" opacity=".72"/>
-              <ellipse cx="108" cy="182" rx="35" ry="44" transform="rotate(-28 108 182)" fill="url(#op2)" opacity=".68"/>
-              <ellipse cx="212" cy="180" rx="34" ry="43" transform="rotate(25 212 180)"  fill="url(#op2)" opacity=".68"/>
-              <ellipse cx="128" cy="144" rx="33" ry="46" transform="rotate(-15 128 144)" fill="url(#op3)" opacity=".62"/>
-              <ellipse cx="188" cy="146" rx="32" ry="44" transform="rotate(14 188 146)"  fill="url(#op3)" opacity=".62"/>
-              <ellipse cx="160" cy="138" rx="32" ry="42" fill="url(#op2)" opacity=".68"/>
-
-              <!-- Inner petals — layer 3 -->
-              <ellipse cx="160" cy="168" rx="26" ry="34" fill="url(#op3)" opacity=".78"/>
-              <ellipse cx="130" cy="168" rx="24" ry="32" transform="rotate(-20 130 168)" fill="url(#op2)" opacity=".72"/>
-              <ellipse cx="190" cy="168" rx="23" ry="31" transform="rotate(18 190 168)"  fill="url(#op2)" opacity=".72"/>
-              <ellipse cx="148" cy="148" rx="22" ry="32" transform="rotate(-10 148 148)" fill="url(#op3)" opacity=".70"/>
-              <ellipse cx="172" cy="148" rx="21" ry="31" transform="rotate(8 172 148)"   fill="url(#op3)" opacity=".70"/>
-
-              <!-- Innermost petals — layer 4 -->
-              <ellipse cx="160" cy="162" rx="18" ry="24" fill="url(#op1)" opacity=".82"/>
-              <ellipse cx="145" cy="158" rx="16" ry="22" transform="rotate(-15 145 158)" fill="url(#op2)" opacity=".78"/>
-              <ellipse cx="175" cy="158" rx="16" ry="22" transform="rotate(12 175 158)"  fill="url(#op2)" opacity=".78"/>
-              <ellipse cx="160" cy="148" rx="15" ry="22" fill="url(#op3)" opacity=".74"/>
-
-              <!-- Center -->
-              <ellipse cx="160" cy="155" rx="12" ry="16" fill="url(#ocg)" opacity=".62"/>
-              <ellipse cx="158" cy="152" rx="6"  ry="9"  fill="#b89090"   opacity=".52"/>
-              <circle  cx="157" cy="150" r="2.5"          fill="#9a7070"   opacity=".62"/>
-              <circle  cx="163" cy="152" r="2"            fill="#a07878"   opacity=".56"/>
-            </svg>
+          <!-- Last 7 days -->
+          <div class="card home-week animate-fade-in">
+            <div class="home-week-label">your week</div>
+            <div class="home-week-strip" id="home-week-strip"></div>
           </div>
 
           <div class="home-cta-area animate-fade-in">
-            <div class="home-cta-label" style="font-family:var(--font-heading);font-size:var(--fs-lg);color:var(--color-text-muted);font-weight:400;font-style:italic;letter-spacing:0.04em;margin-bottom:var(--sp-4);">Your journal awaits</div>
-            <a href="#today" class="btn btn-primary btn-lg" onclick="Router.navigate('#today')">
+            <a href="#today" class="btn btn-primary btn-lg" id="home-cta" onclick="Router.navigate('#today')">
               Begin Today's Entry ✦
             </a>
+            <div class="home-cta-alt">
+              <a href="#freewrite" class="btn-link text-muted" onclick="Router.navigate('#freewrite')">or open a blank page →</a>
+            </div>
+          </div>
+
+          <!-- The peony's meaning -->
+          <div class="home-meanings-row animate-fade-in">
+            <div class="home-meaning-mini">
+              <div class="home-meaning-word rose">eternal love</div>
+              <p>Choose yourself, every day.<br>Never give up on yourself.</p>
+            </div>
+            <div class="home-meaning-mini">
+              <div class="home-meaning-word sage">forgiveness</div>
+              <p>On your hardest days,<br>choose to forgive yourself.</p>
+            </div>
+            <div class="home-meaning-mini">
+              <div class="home-meaning-word rose">healing</div>
+              <p>Growth is not linear.<br>Every bloom takes time.</p>
+            </div>
+          </div>
+
+          <div class="home-brand-sig animate-fade-in">
+            <span class="home-journal-day">another day,</span>
+            <span class="home-journal-chance">another chance</span>
           </div>
         </div>
       </section>
@@ -605,6 +537,41 @@
             <div class="guide-closing-sig">with love &amp; all the cheers,</div>
             <div class="guide-closing-name">Yuni 🌷</div>
             <div class="guide-closing-quote">"every day is another day, and another chance."</div>
+          </div>
+
+          <!-- The peony, in full — the journal's original front page -->
+          <div class="guide-peony-finale">
+            <h2 class="home-title">the peony flower</h2>
+            <div class="home-journal-title">
+              <span class="home-journal-day">another day,</span>
+              <span class="home-journal-chance">another chance</span>
+            </div>
+
+            <div class="home-meanings">
+              <div class="home-meaning-block">
+                <div class="home-meaning-word rose">eternal love</div>
+                <div class="home-divider"></div>
+                <p class="home-meaning-quote">
+                  Choose yourself, every day.<br>Never give up on yourself.
+                </p>
+              </div>
+
+              <div class="home-meaning-block right">
+                <div class="home-meaning-word sage">forgiveness</div>
+                <div class="home-divider"></div>
+                <p class="home-meaning-quote">
+                  On your hardest days,<br>choose to forgive yourself.
+                </p>
+              </div>
+
+              <div class="home-meaning-block">
+                <div class="home-meaning-word rose">healing</div>
+                <div class="home-divider"></div>
+                <p class="home-meaning-quote">
+                  Growth is not linear.<br>Every bloom takes time.
+                </p>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -1016,17 +983,21 @@
         <span class="mobile-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(72 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(144 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(216 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(288 12 11)"/><circle cx="12" cy="11" r="1.4" fill="currentColor" stroke="none"/></svg></span>
         <span class="mobile-nav-label">Home</span>
       </button>
-      <button class="mobile-nav-item" data-route="#guide" onclick="Router.navigate('#guide')">
-        <span class="mobile-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.6-4.5-1.9-7-1.5V19c2.5-.4 5-.1 7 1.5 2-1.6 4.5-1.9 7-1.5V4.5C16.5 4.1 14 4.4 12 6Z"/><path d="M12 6v14.5"/></svg></span>
-        <span class="mobile-nav-label">Guide</span>
-      </button>
       <button class="mobile-nav-item active" data-route="#today" onclick="Router.navigate('#today')">
         <span class="mobile-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.5-4.5L16.5 4.5a2.1 2.1 0 0 1 3 3L8.5 18.5 4 20Z"/><path d="M14.5 6.5l3 3"/></svg></span>
         <span class="mobile-nav-label">Today</span>
       </button>
+      <button class="mobile-nav-item" data-route="#calendar" onclick="Router.navigate('#calendar')">
+        <span class="mobile-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span>
+        <span class="mobile-nav-label">Calendar</span>
+      </button>
       <button class="mobile-nav-item" data-route="#goals" onclick="Router.navigate('#goals')">
         <span class="mobile-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg></span>
         <span class="mobile-nav-label">Goals</span>
+      </button>
+      <button class="mobile-nav-item" data-route="#routines" onclick="Router.navigate('#routines')">
+        <span class="mobile-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></svg></span>
+        <span class="mobile-nav-label">Routines</span>
       </button>
       <button class="mobile-nav-item" id="mobile-more-btn">
         <span class="mobile-nav-icon">···</span>
@@ -1052,23 +1023,23 @@
 </div><!-- /app -->
 
 <!-- JS (order matters: dependencies first) -->
-<script src="js/supabase-config.js?v=24"></script>
-<script src="js/auth.js?v=24"></script>
-<script src="js/crypto.js?v=24"></script>
-<script src="js/drive.js?v=24"></script>
-<script src="js/payment.js?v=24"></script>
-<script src="js/db.js?v=24"></script>
-<script src="js/scripture.js?v=24"></script>
-<script src="js/router.js?v=24"></script>
-<script src="js/home.js?v=24"></script>
-<script src="js/entry.js?v=24"></script>
-<script src="js/freewrite.js?v=24"></script>
-<script src="js/calendar.js?v=24"></script>
-<script src="js/goals.js?v=24"></script>
-<script src="js/routines.js?v=24"></script>
-<script src="js/recap.js?v=24"></script>
-<script src="js/gallery.js?v=24"></script>
-<script src="js/app.js?v=24"></script>
+<script src="js/supabase-config.js?v=35"></script>
+<script src="js/auth.js?v=35"></script>
+<script src="js/crypto.js?v=35"></script>
+<script src="js/drive.js?v=35"></script>
+<script src="js/payment.js?v=35"></script>
+<script src="js/db.js?v=35"></script>
+<script src="js/scripture.js?v=35"></script>
+<script src="js/router.js?v=35"></script>
+<script src="js/home.js?v=35"></script>
+<script src="js/entry.js?v=35"></script>
+<script src="js/freewrite.js?v=35"></script>
+<script src="js/calendar.js?v=35"></script>
+<script src="js/goals.js?v=35"></script>
+<script src="js/routines.js?v=35"></script>
+<script src="js/recap.js?v=35"></script>
+<script src="js/gallery.js?v=35"></script>
+<script src="js/app.js?v=35"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

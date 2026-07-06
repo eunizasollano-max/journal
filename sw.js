@@ -1,4 +1,4 @@
-const CACHE = 'journal-v27';
+const CACHE = 'journal-v35';
 const SHELL = [
   '/',
   '/index.html',
@@ -26,6 +26,9 @@ const SHELL = [
   '/js/gallery.js',
   '/js/app.js',
   '/assets/logo.svg',
+  '/assets/icon-192.png',
+  '/assets/icon-512.png',
+  '/assets/apple-touch-icon.png',
   '/data/scriptures.json',
 ];
 

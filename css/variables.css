@@ -21,7 +21,7 @@
   --color-accent-sage-light: #c3cdb8;
   --color-text-heading: #3f3338;
   --color-text-body:    #6b5a60;
-  --color-text-muted:   #9c8a8f;
+  --color-text-muted:   #86747a;
   --color-text-light:   #c0b2b6;
   --color-star-fill:    #c5a05a;
   --color-star-empty:   #e7dad5;
@@ -49,8 +49,8 @@
   --fs-sm:    0.85rem;
   --fs-base:  1rem;
   --fs-md:    1.1rem;
-  --fs-lg:    1.3rem;
-  --fs-xl:    1.3rem;
+  --fs-lg:    1.25rem;
+  --fs-xl:    1.5rem;
   --fs-2xl:   2rem;
   --fs-3xl:   2.6rem;
   --fs-script-lg: 2.2rem;
@@ -108,7 +108,7 @@
   --color-accent-deep:   #9080b8;
   --color-accent-script: #7a5aaa;
   --color-text-body:     #6a5a7a;
-  --color-text-muted:    #a898c0;
+  --color-text-muted:    #8a78a8;
   --color-text-light:    #c8b8d8;
   --color-star-fill:     #b090d0;
   --color-accent-sage:   #c9a24a;
@@ -132,7 +132,7 @@
   --color-accent-deep:   #70a888;
   --color-accent-script: #4a8868;
   --color-text-body:     #4a6a58;
-  --color-text-muted:    #88a898;
+  --color-text-muted:    #6d8f7e;
   --color-text-light:    #b0c8b8;
   --color-star-fill:     #80b898;
   --color-accent-sage:   #d98a95;
@@ -156,7 +156,7 @@
   --color-accent-deep:   #b88860;
   --color-accent-script: #b86840;
   --color-text-body:     #7a5a40;
-  --color-text-muted:    #b09070;
+  --color-text-muted:    #97764f;
   --color-text-light:    #d0b090;
   --color-star-fill:     #d49060;
   --color-accent-sage:   #5f9690;
@@ -181,7 +181,7 @@
   --color-accent-deep:   #c8802e;
   --color-accent-script: #c06a1c;
   --color-text-body:     #6a5c38;
-  --color-text-muted:    #b0a070;
+  --color-text-muted:    #8f7c48;
   --color-text-light:    #d0c090;
   --color-star-fill:     #e8a020;
   --color-overlay:       rgba(80, 65, 20, 0.4);
@@ -233,7 +233,7 @@
   --color-accent-deep:   #7090b8;
   --color-accent-script: #4870a8;
   --color-text-body:     #4a5a7a;
-  --color-text-muted:    #8898b8;
+  --color-text-muted:    #6f81a3;
   --color-text-light:    #b0c0d8;
   --color-star-fill:     #7098c8;
   --color-accent-sage:   #d98a63;

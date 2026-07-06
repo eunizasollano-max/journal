@@ -151,8 +151,6 @@ const ANSWER_FONTS = [
   { key: 'nunito',    label: 'Nunito',             family: "'Nunito', sans-serif",         sample: 'Dear journal...' },
   { key: 'lora',      label: 'Lora',               family: "'Lora', serif",                sample: 'Dear journal...' },
   { key: 'cormorant', label: 'Cormorant Garamond', family: "'Cormorant Garamond', serif",  sample: 'Dear journal...' },
-  { key: 'quicksand', label: 'Quicksand',           family: "'Quicksand', sans-serif",     sample: 'Dear journal...' },
-  { key: 'josefin',   label: 'Josefin Sans',        family: "'Josefin Sans', sans-serif",  sample: 'Dear journal...' },
   { key: 'dancing',   label: 'Cursive',             family: "'Dancing Script', cursive",   sample: 'Dear journal...' },
 ];
 
@@ -415,7 +413,7 @@ function wireMobileMore() {
   document.getElementById('mobile-more-btn')?.addEventListener('click', openDrawer);
   overlay.addEventListener('click', closeDrawer);
 
-  ['freewrite', 'calendar', 'gallery', 'recap', 'routines'].forEach(route => {
+  ['freewrite', 'guide', 'gallery', 'recap'].forEach(route => {
     document.getElementById(`more-${route}-btn`)?.addEventListener('click', () => {
       closeDrawer();
       Router.navigate(`#${route}`);

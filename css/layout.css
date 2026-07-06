@@ -221,13 +221,22 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: var(--sp-2);
+  /* Tight horizontal padding so six items share the bar comfortably */
+  padding: var(--sp-2) 2px;
+  min-width: 0;
   color: var(--color-text-muted);
   font-size: var(--fs-xs);
   cursor: pointer;
   transition: color var(--transition-fast);
   border: none;
   background: none;
+}
+
+.mobile-nav-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .mobile-nav-item:hover,

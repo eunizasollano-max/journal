@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Petal symbols, tip pointing up (-y) — same drawing as assets/logo.svg,
+         recentered/rescaled onto a square canvas for use as an app icon -->
+    <path id="ipOut"  d="M0,0 C-26,-18 -20,-70 0,-86 C20,-70 26,-18 0,0 Z"/>
+    <path id="ipMid"  d="M0,0 C-20,-14 -16,-54 0,-66 C16,-54 20,-14 0,0 Z"/>
+    <path id="ipIn"   d="M0,0 C-15,-10 -12,-40 0,-48 C12,-40 15,-10 0,0 Z"/>
+    <path id="ipTiny" d="M0,0 C-9,-6 -7,-24 0,-29 C7,-24 9,-6 0,0 Z"/>
+
+    <!-- Leaf symbol, tip pointing +x -->
+    <path id="ileaf" d="M0,0 Q60,-26 130,0 Q60,26 0,0 Z"/>
+  </defs>
+
+  <!-- Background fills the full square so Android's adaptive-icon mask
+       (circle/squircle/rounded-square) always has color behind it -->
+  <rect width="512" height="512" fill="#f3e7e4"/>
+
+  <g transform="translate(256,256) scale(1.9)">
+    <!-- Leaf backing -->
+    <g transform="rotate(8)  scale(.8)"><use href="#ileaf" fill="#a8b5a0" opacity=".9"/></g>
+    <g transform="rotate(52) scale(.78)"><use href="#ileaf" fill="#bcc9ad" opacity=".9"/></g>
+    <g transform="rotate(96) scale(.8)"><use href="#ileaf" fill="#c8d5c0" opacity=".88"/></g>
+    <g transform="rotate(140) scale(.78)"><use href="#ileaf" fill="#a8b5a0" opacity=".9"/></g>
+    <g transform="rotate(184) scale(.8)"><use href="#ileaf" fill="#bcc9ad" opacity=".9"/></g>
+    <g transform="rotate(228) scale(.78)"><use href="#ileaf" fill="#c8d5c0" opacity=".88"/></g>
+    <g transform="rotate(272) scale(.8)"><use href="#ileaf" fill="#a8b5a0" opacity=".9"/></g>
+    <g transform="rotate(316) scale(.78)"><use href="#ileaf" fill="#bcc9ad" opacity=".9"/></g>
+
+    <!-- Bloom: outer layer -->
+    <use href="#ipOut" transform="rotate(0)"   fill="#e29ba8" opacity=".95"/>
+    <use href="#ipOut" transform="rotate(40)"  fill="#e29ba8" opacity=".93"/>
+    <use href="#ipOut" transform="rotate(80)"  fill="#e8909c" opacity=".93"/>
+    <use href="#ipOut" transform="rotate(120)" fill="#e8909c" opacity=".92"/>
+    <use href="#ipOut" transform="rotate(160)" fill="#e29ba8" opacity=".92"/>
+    <use href="#ipOut" transform="rotate(200)" fill="#e29ba8" opacity=".93"/>
+    <use href="#ipOut" transform="rotate(240)" fill="#e8909c" opacity=".93"/>
+    <use href="#ipOut" transform="rotate(280)" fill="#e8909c" opacity=".92"/>
+    <use href="#ipOut" transform="rotate(320)" fill="#e29ba8" opacity=".94"/>
+
+    <!-- Mid layer -->
+    <use href="#ipMid" transform="rotate(20)"  fill="#f0a8b8" opacity=".93"/>
+    <use href="#ipMid" transform="rotate(60)"  fill="#f0a8b8" opacity=".92"/>
+    <use href="#ipMid" transform="rotate(100)" fill="#f2b4c2" opacity=".92"/>
+    <use href="#ipMid" transform="rotate(140)" fill="#f2b4c2" opacity=".91"/>
+    <use href="#ipMid" transform="rotate(180)" fill="#f0a8b8" opacity=".92"/>
+    <use href="#ipMid" transform="rotate(220)" fill="#f0a8b8" opacity=".92"/>
+    <use href="#ipMid" transform="rotate(260)" fill="#f2b4c2" opacity=".91"/>
+    <use href="#ipMid" transform="rotate(300)" fill="#f2b4c2" opacity=".92"/>
+    <use href="#ipMid" transform="rotate(340)" fill="#f0a8b8" opacity=".93"/>
+
+    <!-- Inner layer -->
+    <use href="#ipIn" transform="rotate(10)"  fill="#f4c0cc" opacity=".93"/>
+    <use href="#ipIn" transform="rotate(55)"  fill="#f6cdd6" opacity=".92"/>
+    <use href="#ipIn" transform="rotate(100)" fill="#f4c0cc" opacity=".92"/>
+    <use href="#ipIn" transform="rotate(145)" fill="#f6cdd6" opacity=".91"/>
+    <use href="#ipIn" transform="rotate(190)" fill="#f4c0cc" opacity=".92"/>
+    <use href="#ipIn" transform="rotate(235)" fill="#f6cdd6" opacity=".92"/>
+    <use href="#ipIn" transform="rotate(280)" fill="#f4c0cc" opacity=".91"/>
+    <use href="#ipIn" transform="rotate(325)" fill="#f6cdd6" opacity=".92"/>
+
+    <!-- Innermost ruffle -->
+    <use href="#ipTiny" transform="rotate(0)"   fill="#fce8ee" opacity=".94"/>
+    <use href="#ipTiny" transform="rotate(36)"  fill="#fdeef2" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(72)"  fill="#fce8ee" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(108)" fill="#fdeef2" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(144)" fill="#fce8ee" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(180)" fill="#fdeef2" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(216)" fill="#fce8ee" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(252)" fill="#fdeef2" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(288)" fill="#fce8ee" opacity=".93"/>
+    <use href="#ipTiny" transform="rotate(324)" fill="#fdeef2" opacity=".93"/>
+
+    <!-- Golden stamens -->
+    <ellipse cx="0" cy="-2" rx="16" ry="13" fill="#c98a3a" opacity=".55"/>
+    <g stroke="#e0a83c" stroke-width="2" opacity=".9">
+      <line x1="0" y1="0" x2="-14" y2="-10"/>
+      <line x1="0" y1="0" x2="-6"  y2="-16"/>
+      <line x1="0" y1="0" x2="4"  y2="-17"/>
+      <line x1="0" y1="0" x2="13" y2="-11"/>
+      <line x1="0" y1="0" x2="16" y2="-1"/>
+      <line x1="0" y1="0" x2="11" y2="9"/>
+      <line x1="0" y1="0" x2="-2" y2="14"/>
+      <line x1="0" y1="0" x2="-12" y2="8"/>
+    </g>
+    <g fill="#f0c460">
+      <circle cx="-14" cy="-10" r="2.6"/><circle cx="-6" cy="-16" r="2.6"/><circle cx="4" cy="-17" r="2.6"/>
+      <circle cx="13" cy="-11" r="2.6"/><circle cx="16" cy="-1" r="2.6"/><circle cx="11" cy="9" r="2.6"/>
+      <circle cx="-2" cy="14" r="2.6"/><circle cx="-12" cy="8" r="2.6"/>
+    </g>
+    <circle cx="0" cy="-2" r="4" fill="#a8701e" opacity=".7"/>
+  </g>
+</svg>

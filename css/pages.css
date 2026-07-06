@@ -464,21 +464,34 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   min-height: 480px;
 }
 
+/* Both patterns are keyed to the textarea's own box-model: vertical
+   spacing = 2rem (matches its line-height: 2 at 1rem font-size) and
+   vertical offset = var(--sp-10) (matches its padding-top). Before, the
+   dot grid repeated every 28px against a 32px line-height — a mismatch
+   that drifted the dots out from under the text a little more with
+   every line typed. Deriving both from the same values keeps every
+   line/dot row under its matching line of text, at any screen size. */
 .freewrite-paper.paper-lined {
   background-image: repeating-linear-gradient(
     transparent,
-    transparent 31px,
-    var(--color-border-light) 31px,
-    var(--color-border-light) 32px
+    transparent calc(2rem - 1px),
+    var(--color-border-light) calc(2rem - 1px),
+    var(--color-border-light) 2rem
   );
-  background-size: 100% 32px;
-  background-position: 0 36px;
+  background-size: 100% 2rem;
+  background-position: 0 var(--sp-10);
 }
 
 .freewrite-paper.paper-dot {
   background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
-  background-size: 28px 28px;
-  background-position: 14px 14px;
+  background-size: 1.75rem 2rem;
+  /* A radial-gradient with no explicit position centers itself in its
+     own tile, so the dot actually renders at background-position + half
+     the tile size — not at background-position itself. Measured against
+     the real text baseline pixel-by-pixel (not eyeballed): this offset
+     lands each dot ~3px under where the baseline actually sits, so text
+     rests just above its dot like ink on a ruled line. */
+  background-position: 0.875rem calc(var(--sp-10) + 0.5rem);
 }
 
 .freewrite-paper.paper-blank {
@@ -1504,8 +1517,183 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   gap: 0;
 }
 
+/* ── The peony in full — closes the User Guide ── */
+.guide-peony-finale {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: var(--sp-12);
+  padding: var(--sp-8) var(--sp-4) var(--sp-6);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.guide-peony-finale .home-journal-title {
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-8);
+}
+
+.guide-peony-finale .home-meanings {
+  text-align: left;
+}
+
+/* ── Home dashboard ── */
+.home-greeting {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--sp-6);
+}
+
+.home-greeting-script {
+  font-family: var(--font-script);
+  font-size: var(--fs-script-lg);
+  color: var(--color-accent-script);
+  line-height: 1.1;
+}
+
+.home-greeting-name {
+  font-family: var(--font-heading);
+  font-size: var(--fs-2xl);
+  color: var(--color-text-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.home-greeting-date {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: var(--sp-1);
+}
+
+.home-scripture,
+.home-widgets,
+.home-week {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-scripture { margin-bottom: var(--sp-4); }
+.home-widgets   { margin-bottom: var(--sp-4); }
+
+.home-week {
+  padding: var(--sp-4) var(--sp-5);
+  margin-bottom: var(--sp-8);
+}
+
+.home-week-label {
+  font-family: var(--font-script);
+  font-size: var(--fs-md);
+  color: var(--color-accent-script);
+  text-align: center;
+  margin-bottom: var(--sp-2);
+}
+
+.home-week-strip {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-1);
+}
+
+.home-week-day {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--sp-2) 2px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.home-week-day:hover { background: var(--color-surface-alt); }
+
+.home-week-day.today {
+  border-color: var(--color-accent-rose);
+  background: var(--color-surface-alt);
+}
+
+.home-week-dayname {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.home-week-dot {
+  height: 1.2rem;
+  font-size: 0.95rem;
+  line-height: 1.2rem;
+  color: var(--color-accent-script);
+}
+
+.home-week-num {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.home-week-day.written .home-week-num { color: var(--color-text-heading); }
+
+.home-cta-alt {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+}
+
+.home-meanings-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  width: 100%;
+  max-width: 640px;
+  margin-top: var(--sp-10);
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.home-meaning-mini .home-meaning-word {
+  font-size: 1.5rem;
+  margin-bottom: var(--sp-1);
+}
+
+.home-meaning-mini p {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .home-meanings-row {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
+}
+
+.home-brand-sig {
+  margin-top: var(--sp-8);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  line-height: 1.1;
+}
+
+.home-brand-sig .home-journal-day,
+.home-brand-sig .home-journal-chance {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+}
+
+.home-brand-sig .home-journal-chance { padding-left: 1.2em; }
+
 .home-journal-day {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.8rem, 4.5vw, 3rem);
   font-weight: 700;
   color: #b09888;
