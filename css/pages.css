@@ -542,6 +542,11 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   padding: 0 var(--sp-2);
 }
 
+.freewrite-save-row {
+  text-align: center;
+  margin-top: var(--sp-5);
+}
+
 .freewrite-autosave {
   font-size: var(--fs-xs);
   color: var(--color-text-light);

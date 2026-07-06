@@ -69,34 +69,62 @@ function updateCounts() {
   countEl.textContent = `${words} words · ${chars} chars`;
 }
 
-async function autoSave() {
+/* Merge the free-write text into the day's entry without touching the
+   guided prompts, then save. Throws on failure so callers can react
+   (autoSave swallows it; the Save Entry button surfaces it). */
+async function persist() {
   const textarea = document.getElementById('freewrite-textarea');
   if (!textarea) return;
+  const existing = await JournalDB.getEntry(freeWriteDate) || { date: freeWriteDate };
+  existing.freeWrite = {
+    content: textarea.value,
+    paperStyle: currentPaperStyle,
+  };
+  await JournalDB.saveEntry(existing);
+  isUnsaved = false;
+}
 
+function flashSavedIndicator() {
   const saveIndicator = document.getElementById('freewrite-autosave');
-
-  try {
-    // Load existing entry to merge freewrite data without overwriting guided prompts
-    const existing = await JournalDB.getEntry(freeWriteDate) || { date: freeWriteDate };
-    existing.freeWrite = {
-      content: textarea.value,
-      paperStyle: currentPaperStyle,
-    };
-    await JournalDB.saveEntry(existing);
-
-    isUnsaved = false;
+  if (!saveIndicator) return;
+  saveIndicator.className = 'freewrite-autosave saved';
+  saveIndicator.innerHTML = '<span class="freewrite-autosave-dot"></span> Saved';
+  setTimeout(() => {
     if (saveIndicator) {
-      saveIndicator.className = 'freewrite-autosave saved';
-      saveIndicator.innerHTML = '<span class="freewrite-autosave-dot"></span> Saved';
-      setTimeout(() => {
-        if (saveIndicator) {
-          saveIndicator.className = 'freewrite-autosave';
-          saveIndicator.innerHTML = '<span class="freewrite-autosave-dot"></span> Auto-saves';
-        }
-      }, 2000);
+      saveIndicator.className = 'freewrite-autosave';
+      saveIndicator.innerHTML = '<span class="freewrite-autosave-dot"></span> Auto-saves';
     }
+  }, 2000);
+}
+
+async function autoSave() {
+  try {
+    await persist();
+    flashSavedIndicator();
   } catch (err) {
     console.error('Auto-save failed:', err);
+  }
+}
+
+// Explicit "Save Entry" button — same save as autosave, but with a warm
+// confirmation. Reuses the guided entry's affirmations when available
+// (no rating in Free Write, so it's always a celebration).
+async function saveNow() {
+  const btn = document.getElementById('freewrite-save-btn');
+  clearTimeout(autoSaveTimer);
+  if (btn) { btn.classList.add('saving'); btn.textContent = 'Saving…'; }
+  try {
+    await persist();
+    flashSavedIndicator();
+    const msg = (typeof saveMessage === 'function') ? saveMessage(0) : 'Entry saved 🌸';
+    App.showToast(msg, 4000);
+  } catch (err) {
+    App.showToast(err?.viewOnlyBlocked
+      ? 'Sign in to save your journal ✨'
+      : 'Could not save — please try again');
+    console.error('Free Write save failed:', err);
+  } finally {
+    if (btn) { btn.classList.remove('saving'); btn.textContent = 'Save Entry'; }
   }
 }
 
@@ -119,6 +147,12 @@ function attachAutoSave() {
     updateCounts();
     scheduleAutoSave();
   });
+
+  const saveBtn = document.getElementById('freewrite-save-btn');
+  if (saveBtn && !saveBtn._wired) {
+    saveBtn._wired = true;
+    saveBtn.addEventListener('click', saveNow);
+  }
 
   // Save on page unload
   window.addEventListener('beforeunload', () => {
