@@ -6,11 +6,20 @@
 let currentUser        = null;
 let authReadyCb        = null;
 let _pendingPassphrase = null;
+let _sessionPassword   = null; // email users: password used this session (in-memory only, never persisted)
 let _lastNotifiedUid   = false; // false = never notified; null/uid afterwards
 
 async function initAuth() {
   SupabaseClient.auth.onAuthStateChange((_event, session) => {
     currentUser = session?.user || null;
+
+    // User arrived from a "Forgot password?" email link. Flag it so app.js
+    // can show the set-new-password step — without it the link just signs
+    // them in once and their password never actually changes.
+    if (_event === 'PASSWORD_RECOVERY') {
+      window._passwordRecovery = true;
+      window.dispatchEvent(new CustomEvent('journal:password-recovery'));
+    }
 
     // Token refreshes and tab-focus re-fires must not restart the whole
     // launch sequence (duplicate passphrase modals, payment re-checks).
@@ -53,18 +62,35 @@ async function signInWithGoogle() {
 
 async function signInWithEmail(email, password) {
   _pendingPassphrase = password;
+  _sessionPassword   = password;
   const { error } = await SupabaseClient.auth.signInWithPassword({ email, password });
-  if (error) { _pendingPassphrase = null; throw error; }
+  if (error) { _pendingPassphrase = null; _sessionPassword = null; throw error; }
 }
 
 async function createAccount(email, password, name) {
   _pendingPassphrase = password;
+  _sessionPassword   = password;
   const { error } = await SupabaseClient.auth.signUp({
     email,
     password,
     options: { data: { full_name: name } },
   });
-  if (error) { _pendingPassphrase = null; throw error; }
+  if (error) { _pendingPassphrase = null; _sessionPassword = null; throw error; }
+}
+
+/* The account password used to log in this session (email users only).
+   app.js compares it to the passphrase that actually unlocked the journal
+   to detect "password changed but journal still locked to the old one"
+   and trigger re-encryption. */
+function getSessionPassword() { return _sessionPassword; }
+
+/* Finish a "Forgot password?" flow: actually set the new password on the
+   account (the recovery link alone doesn't change anything). */
+async function completePasswordRecovery(newPassword) {
+  const { error } = await SupabaseClient.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+  _sessionPassword = newPassword;
+  window._passwordRecovery = false;
 }
 
 async function sendPasswordReset(email) {
@@ -323,4 +349,5 @@ window.Auth = {
   initAuth, onAuthReady, signInWithGoogle, signInWithEmail, createAccount,
   sendPasswordReset, signOut, getCurrentUser, isLoggedIn,
   getUserDisplayName, getUserPhotoURL, showLoginScreen, hideLoginScreen,
+  getSessionPassword, completePasswordRecovery,
 };

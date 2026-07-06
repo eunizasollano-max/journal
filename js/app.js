@@ -228,11 +228,13 @@ function initFontPicker() {
 
 /* ── Onboarding (nickname, shown after first login) ── */
 function initOnboarding() {
+  // A nickname the user chose themselves always wins over the name Google
+  // gave us — that's the whole point of letting them set one.
+  const nickname = localStorage.getItem('journal_user_name');
+  if (nickname) { applyUserName(nickname); return; }
+
   const displayName = Auth.getUserDisplayName?.();
   if (displayName) { applyUserName(displayName); return; }
-
-  const name = localStorage.getItem('journal_user_name');
-  if (name) { applyUserName(name); return; }
 
   const overlay = document.getElementById('onboarding-overlay');
   if (overlay) overlay.classList.remove('hidden');
@@ -518,6 +520,69 @@ async function ensureCryptoKey(user) {
   return new Promise((resolve) => showPassphraseModal(user, resolve));
 }
 
+/* ── Password recovery (arrived from a "Forgot password?" email link) ──
+   The link signs the user in but does NOT change their password — this
+   modal completes the flow by actually setting the new one. */
+async function showPasswordRecoveryModal() {
+  if (document.getElementById('recovery-overlay')) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'recovery-overlay';
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-box" style="max-width:360px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:var(--sp-3)">🔑</div>
+      <h2 class="modal-title">Choose a new password</h2>
+      <p class="modal-desc" style="margin-bottom:var(--sp-4)">You followed a password reset link — set your new password below.</p>
+      <div class="pw-field" style="margin-bottom:var(--sp-3)">
+        <input type="password" id="rec-input" class="input" placeholder="New password (min 6 chars)" autocomplete="new-password">
+        <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
+      </div>
+      <div class="pw-field" style="margin-bottom:var(--sp-3)">
+        <input type="password" id="rec-confirm" class="input" placeholder="Confirm new password" autocomplete="new-password">
+        <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
+      </div>
+      <div id="rec-error" class="login-error hidden"></div>
+      <button id="rec-btn" class="btn btn-primary" style="width:100%" type="button">Set new password</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const input   = document.getElementById('rec-input');
+  const confirm = document.getElementById('rec-confirm');
+  const errEl   = document.getElementById('rec-error');
+  const btn     = document.getElementById('rec-btn');
+  setTimeout(() => input?.focus(), 80);
+
+  return new Promise((resolve) => {
+    let _busy = false;
+    const submit = async () => {
+      if (_busy) return;
+      const pass = input.value;
+      if (!pass || pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.classList.remove('hidden'); return; }
+      if (pass !== confirm.value)   { errEl.textContent = 'Passwords do not match.'; errEl.classList.remove('hidden'); return; }
+      _busy = true;
+      btn.textContent = 'Saving…';
+      errEl.classList.add('hidden');
+      try {
+        await Auth.completePasswordRecovery(pass);
+        overlay.remove();
+        showToast('Password updated ✓');
+        resolve();
+      } catch (e) {
+        _busy = false;
+        btn.textContent = 'Set new password';
+        errEl.textContent = 'Could not update your password. Please try again.';
+        errEl.classList.remove('hidden');
+        console.warn('Password recovery failed:', e);
+      }
+    };
+    btn.addEventListener('click', submit);
+    confirm.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  });
+}
+
 async function showPassphraseModal(user, onComplete) {
   const isEmailUser  = user.app_metadata?.provider === 'email';
   const existingKey  = await JournalCrypto.getUserKey(user.id);
@@ -526,7 +591,7 @@ async function showPassphraseModal(user, onComplete) {
   const title    = isFirstTime ? 'Protect your journal' : 'Unlock your journal';
   const subtitle = isFirstTime
     ? (isEmailUser ? 'Your entries will be encrypted with your account password — only you can read them.' : 'Create a passphrase to encrypt your journal. Only you will be able to read it.')
-    : (isEmailUser ? 'Enter your account password to unlock your journal.' : 'Enter your journal passphrase to continue.');
+    : (isEmailUser ? 'Enter your account password to unlock your journal. If you recently changed or reset your password, use the one you had <strong>before</strong> — your journal is still locked with it.' : 'Enter your journal passphrase to continue.');
   const placeholder = isEmailUser ? 'Your account password' : (isFirstTime ? 'Create a passphrase' : 'Your passphrase');
   const btnLabel = isFirstTime ? 'Set encryption & continue' : 'Unlock';
 
@@ -576,13 +641,33 @@ async function showPassphraseModal(user, onComplete) {
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       await JournalCrypto.initCrypto(pass, user.id, existingKey);
+
+      // Email user unlocked with a password that differs from the one they
+      // logged in with — they changed/reset their account password. Rotate
+      // the journal encryption to the current password so next time their
+      // normal login just works.
+      const sessionPw = isEmailUser ? Auth.getSessionPassword?.() : null;
+      if (sessionPw && sessionPw !== pass) {
+        btn.textContent = 'Securing your journal…';
+        try {
+          await JournalCrypto.rotatePassphrase(sessionPw, user.id);
+          showToast('Journal re-locked with your new password ✓');
+        } catch (rotErr) {
+          // Non-fatal: journal stays on the old password; they can unlock
+          // with it again next time and rotation will retry.
+          console.warn('Passphrase rotation failed:', rotErr);
+        }
+      }
+
       overlay.remove();
       onComplete?.();
     } catch (e) {
       _busy = false;
       btn.textContent = btnLabel;
       btn.classList.remove('loading');
-      errEl.textContent = e.message === 'wrong_passphrase' ? 'Incorrect passphrase. Try again.' : 'Something went wrong. Try again.';
+      errEl.textContent = e.message === 'wrong_passphrase'
+        ? (isEmailUser ? 'Incorrect password. If you changed or reset your password recently, try the one you used before.' : 'Incorrect passphrase. Try again.')
+        : 'Something went wrong. Try again.';
       errEl.classList.remove('hidden');
     }
   };
@@ -611,6 +696,13 @@ async function initApp() {
   initThemePicker();
   initFontPicker();
   await Scripture.loadScriptures();
+  // Supabase can emit PASSWORD_RECOVERY after the initial session event,
+  // i.e. after launch already passed the _passwordRecovery check below —
+  // catch that late arrival here.
+  window.addEventListener('journal:password-recovery', () => {
+    if (!window._viewOnly) showPasswordRecoveryModal();
+  });
+
   Auth.onAuthReady(async (user) => {
     updateAuthUI(user);
 
@@ -628,6 +720,10 @@ async function initApp() {
       showViewOnlyBanner();
       return;
     }
+
+    // Came from a "Forgot password?" email link: let them set the new
+    // password first, then the unlock modal below handles re-encryption.
+    if (window._passwordRecovery) await showPasswordRecoveryModal();
 
     await ensureCryptoKey(user);
 

@@ -57,7 +57,11 @@ function useSupabase() {
   return window.SupabaseClient &&
          typeof Auth !== 'undefined' &&
          Auth.isLoggedIn?.() &&
-         !window._guestMode;
+         !window._guestMode &&
+         // No encryption key loaded → stay local-only. Without this guard a
+         // save racing the passphrase modal could reach the cloud, and
+         // encrypt() would throw (it refuses to pass plaintext through).
+         !!JournalCrypto.getCryptoKey?.();
 }
 
 function getUserId() {

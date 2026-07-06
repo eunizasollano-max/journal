@@ -98,7 +98,10 @@ async function initCrypto(passphrase, userId, cachedKeyRecord = null) {
 
 /* ── Public encrypt/decrypt ── */
 async function encrypt(data) {
-  if (!_cryptoKey) return data;
+  // Never fall back to plaintext: if the key isn't loaded, refuse to
+  // produce anything a caller could accidentally upload unencrypted.
+  // db.js catches this and keeps the save local-only.
+  if (!_cryptoKey) throw new Error('encryption_key_missing');
   const { iv, ct } = await aeEncrypt(JSON.stringify(data), _cryptoKey);
   return { _enc: true, iv, ct };
 }
@@ -116,4 +119,65 @@ async function decrypt(data) {
 function getCryptoKey()  { return _cryptoKey; }
 function clearCryptoKey() { _cryptoKey = null; sessionStorage.removeItem(SESSION_KEY); }
 
-window.JournalCrypto = { initCrypto, restoreKeyFromSession, getUserKey, getCryptoKey, clearCryptoKey, encrypt, decrypt };
+/* ── Passphrase rotation ──
+   Re-encrypts every cloud row under a key derived from `newPassphrase`,
+   then swaps the user_keys record. Used after a password change/reset so
+   email users' journals follow their *current* password instead of being
+   locked to the old one forever.
+
+   Failure-safety: rows are rotated first, user_keys last. If it dies
+   midway, the old password still unlocks (user_keys untouched); already-
+   rotated rows fail decrypt under the old key and are simply skipped on
+   the retry, then become readable the moment user_keys flips. Local
+   IndexedDB copies are plaintext throughout, so nothing is ever lost. */
+async function rotatePassphrase(newPassphrase, userId) {
+  if (!_cryptoKey) throw new Error('encryption_key_missing');
+
+  const saltBytes = crypto.getRandomValues(new Uint8Array(16));
+  const salt   = b64Enc(saltBytes);
+  const newKey = await deriveKey(newPassphrase, salt);
+
+  const tables = [
+    { name: 'entries', keyCol: 'date' },
+    { name: 'goals',   keyCol: 'month_key' },
+    { name: 'recap',   keyCol: 'month_key' },
+  ];
+
+  for (const t of tables) {
+    const { data: rows, error } = await SupabaseClient
+      .from(t.name).select(`${t.keyCol}, data`).eq('user_id', userId);
+    if (error) throw error;
+
+    for (const row of rows || []) {
+      let plain;
+      if (row.data?._enc) {
+        try {
+          plain = JSON.parse(await aeDecrypt({ iv: row.data.iv, ct: row.data.ct }, _cryptoKey));
+        } catch {
+          continue; // under another key already (e.g. earlier partial rotation) — leave it
+        }
+      } else {
+        plain = row.data; // legacy plaintext row — encrypt it while we're here
+      }
+      const { iv, ct } = await aeEncrypt(JSON.stringify(plain), newKey);
+      const { error: upErr } = await SupabaseClient
+        .from(t.name)
+        .update({ data: { _enc: true, iv, ct } })
+        .eq('user_id', userId)
+        .eq(t.keyCol, row[t.keyCol]);
+      if (upErr) throw upErr;
+    }
+  }
+
+  const { iv, ct } = await aeEncrypt('ok', newKey);
+  const { error: keyErr } = await SupabaseClient
+    .from('user_keys')
+    .update({ salt, verify_iv: iv, verify_ct: ct })
+    .eq('user_id', userId);
+  if (keyErr) throw keyErr;
+
+  _cryptoKey = newKey;
+  await cacheKey(newKey);
+}
+
+window.JournalCrypto = { initCrypto, restoreKeyFromSession, getUserKey, getCryptoKey, clearCryptoKey, encrypt, decrypt, rotatePassphrase };
