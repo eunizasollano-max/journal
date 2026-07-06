@@ -10,7 +10,7 @@
   <link rel="manifest" href="/manifest.json">
   <!-- iOS Safari ignores SVG apple-touch-icons — a real PNG is required
        for "Add to Home Screen" to show the flower instead of a blank tile -->
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=35">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=37">
   <title>Another Day, another chance — Journal</title>
 
   <!-- Fonts -->
@@ -19,12 +19,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Parisienne&family=Nunito:wght@300;400;500;600&family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/variables.css?v=35">
-  <link rel="stylesheet" href="css/base.css?v=35">
-  <link rel="stylesheet" href="css/layout.css?v=35">
-  <link rel="stylesheet" href="css/components.css?v=35">
-  <link rel="stylesheet" href="css/pages.css?v=35">
-  <link rel="stylesheet" href="css/animations.css?v=35">
+  <link rel="stylesheet" href="css/variables.css?v=37">
+  <link rel="stylesheet" href="css/base.css?v=37">
+  <link rel="stylesheet" href="css/layout.css?v=37">
+  <link rel="stylesheet" href="css/components.css?v=37">
+  <link rel="stylesheet" href="css/pages.css?v=37">
+  <link rel="stylesheet" href="css/animations.css?v=37">
 
   <!-- Strip OAuth error params before Supabase initializes.
        bad_oauth_state / expired state causes Supabase to fire SIGNED_OUT
@@ -399,6 +399,7 @@
                 <li><strong>Photos &amp; Videos</strong> — capture a moment from today. These stay private on your device.</li>
               </ul>
               <p class="guide-tip"><em>You don't have to fill in everything. Even one line is enough. Showing up is what matters.</em></p>
+              <p class="guide-tip"><em>Not a fan of the day-streak counter? Open the <strong>Aa</strong> font button in the corner and switch it off under "Display" — it's entirely optional.</em></p>
             </div>
           </div>
 
@@ -1016,6 +1017,15 @@
   <!-- ── Font Picker ── -->
   <button id="font-toggle-btn" class="theme-toggle-btn" aria-label="Choose writing font" title="Choose font" style="bottom:4.5rem;">Aa</button>
   <div id="font-picker" class="theme-picker font-picker" role="dialog" aria-label="Writing font picker">
+    <div class="theme-picker-title">Display</div>
+    <button type="button" id="streak-toggle" class="pref-toggle" role="switch" aria-checked="true">
+      <span class="pref-toggle-text">
+        <span class="pref-toggle-label">Day streak</span>
+        <span class="pref-toggle-sub">Show the streak counter on your dashboard</span>
+      </span>
+      <span class="pref-toggle-switch"><span class="pref-toggle-knob"></span></span>
+    </button>
+    <div class="picker-divider"></div>
     <div class="theme-picker-title">Choose your writing font</div>
     <div class="font-options"></div>
   </div>
@@ -1023,23 +1033,23 @@
 </div><!-- /app -->
 
 <!-- JS (order matters: dependencies first) -->
-<script src="js/supabase-config.js?v=35"></script>
-<script src="js/auth.js?v=35"></script>
-<script src="js/crypto.js?v=35"></script>
-<script src="js/drive.js?v=35"></script>
-<script src="js/payment.js?v=35"></script>
-<script src="js/db.js?v=35"></script>
-<script src="js/scripture.js?v=35"></script>
-<script src="js/router.js?v=35"></script>
-<script src="js/home.js?v=35"></script>
-<script src="js/entry.js?v=35"></script>
-<script src="js/freewrite.js?v=35"></script>
-<script src="js/calendar.js?v=35"></script>
-<script src="js/goals.js?v=35"></script>
-<script src="js/routines.js?v=35"></script>
-<script src="js/recap.js?v=35"></script>
-<script src="js/gallery.js?v=35"></script>
-<script src="js/app.js?v=35"></script>
+<script src="js/supabase-config.js?v=37"></script>
+<script src="js/auth.js?v=37"></script>
+<script src="js/crypto.js?v=37"></script>
+<script src="js/drive.js?v=37"></script>
+<script src="js/payment.js?v=37"></script>
+<script src="js/db.js?v=37"></script>
+<script src="js/scripture.js?v=37"></script>
+<script src="js/router.js?v=37"></script>
+<script src="js/home.js?v=37"></script>
+<script src="js/entry.js?v=37"></script>
+<script src="js/freewrite.js?v=37"></script>
+<script src="js/calendar.js?v=37"></script>
+<script src="js/goals.js?v=37"></script>
+<script src="js/routines.js?v=37"></script>
+<script src="js/recap.js?v=37"></script>
+<script src="js/gallery.js?v=37"></script>
+<script src="js/app.js?v=37"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

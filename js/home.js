@@ -56,18 +56,18 @@
       .find(Boolean);
 
     container.innerHTML = `
-      <div class="widget-card">
-        <div class="widget-icon">🌸</div>
+      <div class="widget-card widget-streak">
+        <div class="widget-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(72 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(144 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(216 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(288 12 11)"/><circle cx="12" cy="11" r="1.4" fill="currentColor" stroke="none"/></svg></div>
         <div class="widget-value">${streak}</div>
         <div class="widget-label">day streak</div>
       </div>
       <div class="widget-card">
-        <div class="widget-icon">📖</div>
+        <div class="widget-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.6-4.5-1.9-7-1.5V19c2.5-.4 5-.1 7 1.5 2-1.6 4.5-1.9 7-1.5V4.5C16.5 4.1 14 4.4 12 6Z"/><path d="M12 6v14.5"/></svg></div>
         <div class="widget-value">${total}</div>
         <div class="widget-label">entries</div>
       </div>
       <div class="widget-card">
-        <div class="widget-icon" style="font-size:1.8rem">${lastMood?.emoji || '✨'}</div>
+        <div class="widget-icon" style="font-size:1.8rem">${lastMood?.emoji || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l1.7 4.8L18.5 10l-4.8 1.7L12 16l-1.7-4.3L5.5 10l4.8-1.2L12 4Z"/></svg>'}</div>
         <div class="widget-label" style="margin-top:4px">last mood</div>
       </div>
     `;

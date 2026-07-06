@@ -163,6 +163,18 @@ function applyAnswerFont(key) {
   });
 }
 
+/* ── Day-streak preference (opt-out toggle in the settings panel) ── */
+function streakEnabled() {
+  return localStorage.getItem('journal_show_streak') !== '0';
+}
+
+function applyStreakPref() {
+  const on = streakEnabled();
+  document.documentElement.classList.toggle('hide-streak', !on);
+  const btn = document.getElementById('streak-toggle');
+  if (btn) btn.setAttribute('aria-checked', on ? 'true' : 'false');
+}
+
 function initFontPicker() {
   const toggleBtn = document.getElementById('font-toggle-btn');
   const picker    = document.getElementById('font-picker');
@@ -170,6 +182,15 @@ function initFontPicker() {
 
   const saved = localStorage.getItem('journal_answer_font') || 'nunito';
   applyAnswerFont(saved);
+
+  const streakBtn = document.getElementById('streak-toggle');
+  if (streakBtn) {
+    applyStreakPref();
+    streakBtn.addEventListener('click', () => {
+      localStorage.setItem('journal_show_streak', streakEnabled() ? '0' : '1');
+      applyStreakPref();
+    });
+  }
 
   const container = picker.querySelector('.font-options');
   if (container) {

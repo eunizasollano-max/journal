@@ -18,6 +18,47 @@ let hoveredRating  = 0;
 let mediaFiles     = [];
 let currentDate    = null;
 
+// Warm message shown after a successful entry save — gentle, faith-centered,
+// in the "another day, another chance" voice. A good/neutral day gets a
+// celebration; a hard day (rating 5 or below out of 10) gets comfort that
+// affirms the act of journaling itself.
+const ENTRY_AFFIRMATIONS = [
+  'Good job showing up today 🌸',
+  'Proud of you for writing today 🌸',
+  'You chose yourself today 🌸',
+  'That took courage — well done 🌸',
+  'Another day honored 🌸',
+  'Your words matter 🌸',
+  'Beautifully done 🌸',
+  'So proud of you 🌸',
+  'One more day, one more chance — taken 🌸',
+  'You showed up for yourself 🌸',
+];
+const ENTRY_COMFORTS = [
+  'Hard days count too — thank you for showing up 🤍',
+  'Tomorrow is another chance. Rest gently tonight 🤍',
+  "You still chose to write today — that's strength 🤍",
+  'Be kind to yourself. You did enough today 🤍',
+  'Even the heavy days are worth writing down 🤍',
+  "This season will pass. You're not alone 🤍",
+  'Proud of you for facing today honestly 🤍',
+  'One breath at a time — you made it through 🤍',
+];
+const _lastPickIdx = { affirm: -1, comfort: -1 };
+function pickFrom(list, key) {
+  if (list.length < 2) return list[0];
+  let idx;
+  do { idx = Math.floor(Math.random() * list.length); }
+  while (idx === _lastPickIdx[key]);
+  _lastPickIdx[key] = idx;
+  return list[idx];
+}
+function saveMessage(rating) {
+  // rating is 0 when unset, otherwise 1–10; a rough day gets comfort
+  if (rating > 0 && rating <= 5) return pickFrom(ENTRY_COMFORTS, 'comfort');
+  return pickFrom(ENTRY_AFFIRMATIONS, 'affirm');
+}
+
 async function init() {
   currentDate = window._entryDateOverride || App.todayKey();
   window._entryDateOverride = null;
@@ -59,18 +100,18 @@ async function renderWidgets() {
       .find(m => m.length) || [];
 
     container.innerHTML = `
-      <div class="widget-card">
-        <div class="widget-icon">🌸</div>
+      <div class="widget-card widget-streak">
+        <div class="widget-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(72 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(144 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(216 12 11)"/><ellipse cx="12" cy="6.8" rx="2.6" ry="4.2" transform="rotate(288 12 11)"/><circle cx="12" cy="11" r="1.4" fill="currentColor" stroke="none"/></svg></div>
         <div class="widget-value">${streak}</div>
         <div class="widget-label">day streak</div>
       </div>
       <div class="widget-card">
-        <div class="widget-icon">📖</div>
+        <div class="widget-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.6-4.5-1.9-7-1.5V19c2.5-.4 5-.1 7 1.5 2-1.6 4.5-1.9 7-1.5V4.5C16.5 4.1 14 4.4 12 6Z"/><path d="M12 6v14.5"/></svg></div>
         <div class="widget-value">${total}</div>
         <div class="widget-label">entries</div>
       </div>
       <div class="widget-card">
-        <div class="widget-icon" style="font-size:1.8rem">${lastMoods[0]?.emoji || '✨'}</div>
+        <div class="widget-icon" style="font-size:1.8rem">${lastMoods[0]?.emoji || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l1.7 4.8L18.5 10l-4.8 1.7L12 16l-1.7-4.3L5.5 10l4.8-1.2L12 4Z"/></svg>'}</div>
         <div class="widget-label" style="margin-top:4px">last mood</div>
       </div>
     `;
@@ -512,7 +553,7 @@ async function saveEntry() {
       App.showToast("Entry saved — this session isn't recognized as Google sign-in, so the photo stayed on this device only", 5000);
       console.error('Drive upload skipped: app_metadata.provider was not "google" for this session');
     } else {
-      App.showToast('Entry saved ✨');
+      App.showToast(saveMessage(selectedRating), 4000);
     }
     const msgEl = document.getElementById('save-message');
     if (msgEl) {
