@@ -1646,15 +1646,16 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
 }
 
 .home-greeting-script {
-  font-family: var(--font-script);
-  font-size: var(--fs-script-lg);
-  color: var(--color-accent-script);
-  line-height: 1.1;
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  color: var(--color-text-muted);
+  line-height: 1.2;
+  font-style: italic;
 }
 
 .home-greeting-name {
   font-family: var(--font-heading);
-  font-size: var(--fs-2xl);
+  font-size: 1.7rem;
   color: var(--color-text-heading);
   font-weight: 700;
   line-height: 1.2;
@@ -1746,13 +1747,41 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   font-size: var(--fs-sm);
 }
 
+/* Why the peony — a warm, welcoming intro to the meaning */
+.home-peony-intro {
+  width: 100%;
+  max-width: 540px;
+  margin-top: var(--sp-10);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.home-peony-intro-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--color-text-heading);
+  margin-bottom: var(--sp-2);
+}
+.home-peony-intro-text {
+  font-size: var(--fs-base);
+  line-height: 1.85;
+  color: var(--color-text-body);
+  margin: 0 auto;
+  max-width: 460px;
+}
+.home-peony-intro-text strong {
+  color: var(--color-accent-deep);
+  font-weight: 600;
+}
+
 .home-meanings-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--sp-4);
   width: 100%;
   max-width: 640px;
-  margin-top: var(--sp-10);
+  margin-top: var(--sp-6);
   position: relative;
   z-index: 1;
   text-align: center;
@@ -1851,7 +1880,7 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   margin-bottom: var(--sp-2);
 }
 
-.home-meaning-word.rose   { color: var(--color-accent-pink); }
+.home-meaning-word.rose   { color: var(--color-accent-deep); }
 .home-meaning-word.sage   { color: var(--color-accent-sage); }
 
 .home-meaning-quote {

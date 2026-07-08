@@ -10,8 +10,8 @@
   <link rel="manifest" href="/manifest.json">
   <!-- iOS Safari ignores SVG apple-touch-icons — a real PNG is required
        for "Add to Home Screen" to show the flower instead of a blank tile -->
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=40">
-  <link rel="icon" type="image/png" href="/assets/icon-192.png?v=40">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=42">
+  <link rel="icon" type="image/png" href="/assets/icon-192.png?v=42">
   <title>Another Day, another chance — Journal</title>
 
   <!-- Fonts -->
@@ -20,12 +20,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Parisienne&family=Nunito:wght@300;400;500;600&family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/variables.css?v=40">
-  <link rel="stylesheet" href="css/base.css?v=40">
-  <link rel="stylesheet" href="css/layout.css?v=40">
-  <link rel="stylesheet" href="css/components.css?v=40">
-  <link rel="stylesheet" href="css/pages.css?v=40">
-  <link rel="stylesheet" href="css/animations.css?v=40">
+  <link rel="stylesheet" href="/css/variables.css?v=42">
+  <link rel="stylesheet" href="/css/base.css?v=42">
+  <link rel="stylesheet" href="/css/layout.css?v=42">
+  <link rel="stylesheet" href="/css/components.css?v=42">
+  <link rel="stylesheet" href="/css/pages.css?v=42">
+  <link rel="stylesheet" href="/css/animations.css?v=42">
 
   <!-- Strip OAuth error params before Supabase initializes.
        bad_oauth_state / expired state causes Supabase to fire SIGNED_OUT
@@ -56,8 +56,10 @@
       <h1 class="modal-title">Another Day,</h1>
       <div class="modal-subtitle">another chance</div>
       <p class="modal-desc">
-        Welcome to your private journal — a sacred space for faith, reflection, and daily growth.
-        What would you like to call yourself in these pages?
+        Welcome, lovely. This journal takes its name from the peony — the flower of
+        <strong>eternal love</strong> and <strong>forgiveness</strong> — a gentle reminder to
+        choose yourself, and forgive yourself, every single day.
+        What should we call you in these pages?
       </p>
       <form id="onboarding-form">
         <div class="field-group">
@@ -307,6 +309,16 @@
             <div class="home-cta-alt">
               <a href="#freewrite" class="btn-link text-muted" onclick="Router.navigate('#freewrite')">or open a blank page →</a>
             </div>
+          </div>
+
+          <!-- Why the peony -->
+          <div class="home-peony-intro animate-fade-in">
+            <div class="home-peony-intro-title">why the peony?</div>
+            <p class="home-peony-intro-text">
+              The peony blooms as a symbol of <strong>eternal love</strong> and
+              <strong>forgiveness</strong> — a gentle reminder to choose yourself,
+              and forgive yourself, one day at a time.
+            </p>
           </div>
 
           <!-- The peony's meaning -->
@@ -594,7 +606,7 @@
             <span id="entry-day-name"></span> <span id="entry-date-num"></span>
           </div>
           <div class="entry-hero-year" id="entry-month-year"></div>
-          <img src="assets/floral-corner.svg" alt="" class="entry-floral-header" aria-hidden="true">
+          <img src="/assets/floral-corner.svg" alt="" class="entry-floral-header" aria-hidden="true">
         </div>
 
         <!-- Session toggle -->
@@ -1051,23 +1063,23 @@
 </div><!-- /app -->
 
 <!-- JS (order matters: dependencies first) -->
-<script src="js/supabase-config.js?v=40"></script>
-<script src="js/auth.js?v=40"></script>
-<script src="js/crypto.js?v=40"></script>
-<script src="js/drive.js?v=40"></script>
-<script src="js/payment.js?v=40"></script>
-<script src="js/db.js?v=40"></script>
-<script src="js/scripture.js?v=40"></script>
-<script src="js/router.js?v=40"></script>
-<script src="js/home.js?v=40"></script>
-<script src="js/entry.js?v=40"></script>
-<script src="js/freewrite.js?v=40"></script>
-<script src="js/calendar.js?v=40"></script>
-<script src="js/goals.js?v=40"></script>
-<script src="js/routines.js?v=40"></script>
-<script src="js/recap.js?v=40"></script>
-<script src="js/gallery.js?v=40"></script>
-<script src="js/app.js?v=40"></script>
+<script src="/js/supabase-config.js?v=42"></script>
+<script src="/js/auth.js?v=42"></script>
+<script src="/js/crypto.js?v=42"></script>
+<script src="/js/drive.js?v=42"></script>
+<script src="/js/payment.js?v=42"></script>
+<script src="/js/db.js?v=42"></script>
+<script src="/js/scripture.js?v=42"></script>
+<script src="/js/router.js?v=42"></script>
+<script src="/js/home.js?v=42"></script>
+<script src="/js/entry.js?v=42"></script>
+<script src="/js/freewrite.js?v=42"></script>
+<script src="/js/calendar.js?v=42"></script>
+<script src="/js/goals.js?v=42"></script>
+<script src="/js/routines.js?v=42"></script>
+<script src="/js/recap.js?v=42"></script>
+<script src="/js/gallery.js?v=42"></script>
+<script src="/js/app.js?v=42"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

@@ -1,4 +1,4 @@
-const CACHE = 'journal-v40';
+const CACHE = 'journal-v42';
 const SHELL = [
   '/',
   '/index.html',

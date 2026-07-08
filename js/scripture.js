@@ -19,7 +19,7 @@ let scriptureList = [];
 
 async function loadScriptures() {
   try {
-    const res = await fetch('./data/scriptures.json');
+    const res = await fetch('/data/scriptures.json');
     if (!res.ok) throw new Error('fetch failed');
     scriptureList = await res.json();
   } catch {

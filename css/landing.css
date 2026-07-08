@@ -1,0 +1,597 @@
+/* ══════════════════════════════════════════════════
+   Landing page — cozy-modern. Reuses variables.css /
+   base.css / components.css / animations.css for tokens
+   and shared components (.btn, etc). This file holds
+   the page-specific layout.
+
+   Design language: warm ivory ground with soft rose &
+   sage washes, generous radii, serif display headings,
+   script reserved for the peony meanings + signature.
+   ══════════════════════════════════════════════════ */
+
+/* Landing-only palette override: the app's Rosewater theme reads
+   quite pink; the marketing page mutes it to warm clay + sage +
+   sand so it feels cozy and unisex. Variables are re-declared on
+   <body> so every var() inside (including shared .btn styles)
+   resolves to these instead of the app theme — without touching
+   variables.css or the app itself. */
+body.landing-body {
+  --color-bg:            #fefefd;
+  --color-surface:       #ffffff;
+  --color-surface-alt:   #f4f2f0;
+  --color-surface-warm:  #f4f2f0;
+  --color-border:        #ddd9d4;
+  --color-border-light:  #ebe8e4;
+  /* Pastel lives in exactly one place now: the primary CTA button
+     (which reads this var via the shared .btn-primary rule).
+     Everything else in this file is deliberately neutral. */
+  --color-accent-rose:   #c9aab0;
+  --color-accent-pink:   #ddc8cc;
+  --color-accent-deep:   #ab7f87;
+  --color-accent-script: #8d6a70;
+  --color-accent-sage:   #8f9d85;
+  --color-text-heading:  #2f2c2a;
+  --color-text-body:     #58524c;
+  --color-text-muted:    #928c85;
+  --color-star-fill:     #c2a05e;
+
+  background-color: var(--color-bg);
+  color: var(--color-text-body);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+/* No flower cursor on the marketing page — plain system cursors.
+   base.css paints it on every element (with !important on the
+   interactive set), so this needs !important + higher specificity. */
+body.landing-body, body.landing-body * { cursor: auto !important; }
+body.landing-body a, body.landing-body a *,
+body.landing-body button, body.landing-body button * { cursor: pointer !important; }
+
+.landing-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+}
+
+/* ── Sticky nav ── */
+.landing-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: var(--sp-3) 0;
+  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+  border-bottom: 1px solid transparent;
+}
+
+.landing-nav.is-scrolled {
+  border-bottom-color: var(--color-border-light);
+  box-shadow: 0 8px 24px rgba(63, 51, 56, 0.05);
+}
+
+.landing-nav-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.landing-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-script);
+  font-size: var(--fs-md);
+  color: var(--color-text-heading);
+}
+
+.landing-nav-brand svg { width: 24px; height: auto; display: block; }
+
+.landing-nav .btn { padding: var(--sp-2) var(--sp-5); font-size: var(--fs-xs); }
+
+/* ── Hero ── */
+.landing-hero {
+  position: relative;
+  padding: clamp(var(--sp-10), 8vw, 5.5rem) 0 var(--sp-12);
+  text-align: center;
+}
+
+.landing-hero-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* Peony + its meanings, leading the page */
+.landing-meanings { margin-bottom: var(--sp-8); }
+
+.landing-hero-mark {
+  width: 84px;
+  height: auto;
+  margin: 0 auto var(--sp-3);
+  display: block;
+}
+
+.landing-meaning-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.landing-meaning-word {
+  font-family: var(--font-script);
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+}
+
+.landing-meaning-word.rose { color: var(--color-text-heading); }
+.landing-meaning-word.sage { color: var(--color-accent-sage); }
+
+.landing-meaning-sep { color: var(--color-border); font-size: var(--fs-sm); }
+
+.landing-hero-eyebrow {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  margin-bottom: var(--sp-4);
+}
+
+.landing-hero-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.6vw, 2.9rem);
+  color: var(--color-text-heading);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--sp-5);
+}
+
+.landing-hero-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-text-heading);
+}
+
+.landing-hero-sub {
+  max-width: 460px;
+  margin: 0 auto var(--sp-8);
+  font-size: var(--fs-md);
+  color: var(--color-text-body);
+  line-height: 1.75;
+}
+
+.landing-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.landing-hero-actions .btn-primary {
+  padding: var(--sp-4) var(--sp-8);
+  font-size: var(--fs-md);
+}
+
+.landing-hero-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-6);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-heading);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  background: var(--color-surface);
+}
+
+.landing-hero-ghost:hover { border-color: var(--color-text-heading); transform: translateY(-1px); }
+
+.landing-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-2) var(--sp-6);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.landing-trust-row span { display: inline-flex; align-items: center; gap: 6px; }
+.landing-trust-row svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ── Scroll-reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-stagger.is-visible > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0.02s; }
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.08s; }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.14s; }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 0.2s; }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.26s; }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.32s; }
+
+/* ── Sections ── */
+.landing-section { padding: var(--sp-16) 0; }
+
+.landing-kicker {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: var(--sp-3);
+}
+
+.landing-kicker.center { text-align: center; }
+
+.landing-section-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  color: var(--color-text-heading);
+  margin-bottom: var(--sp-4);
+}
+
+.landing-section-title.center { text-align: center; }
+
+/* ── Why I made it — a warm letter ── */
+.landing-letter {
+  max-width: 660px;
+  margin: 0 auto;
+  background: linear-gradient(160deg, var(--color-surface), var(--color-surface-alt));
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: clamp(var(--sp-8), 5vw, var(--sp-12));
+  position: relative;
+}
+
+.landing-letter .landing-kicker { text-align: center; }
+
+.landing-letter p {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  color: var(--color-text-heading);
+  line-height: 1.8;
+  margin-bottom: var(--sp-5);
+}
+
+.landing-letter p:last-of-type { margin-bottom: 0; }
+
+.landing-signature {
+  margin-top: var(--sp-6);
+  font-family: var(--font-script);
+  font-size: var(--fs-lg);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* ── Why the peony ── */
+.landing-peony {
+  text-align: center;
+}
+
+.landing-peony-flower {
+  width: 72px;
+  height: auto;
+  margin: 0 auto var(--sp-5);
+  display: block;
+}
+
+.landing-peony-text {
+  max-width: 480px;
+  margin: 0 auto var(--sp-10);
+  font-size: var(--fs-md);
+  line-height: 1.8;
+  color: var(--color-text-body);
+}
+
+.landing-peony-text strong {
+  color: var(--color-text-heading);
+  font-weight: 700;
+}
+
+.landing-peony-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .landing-peony-grid { grid-template-columns: 1fr; }
+}
+
+.landing-peony-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--sp-8) var(--sp-6);
+  transition: border-color var(--transition-base);
+}
+
+.landing-peony-card:hover { border-color: var(--color-border); }
+
+.landing-peony-card .landing-meaning-word {
+  display: block;
+  font-size: clamp(1.4rem, 3vw, 1.7rem);
+  margin-bottom: var(--sp-3);
+}
+
+.landing-peony-card p {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── What it is — text + preview mock ── */
+.landing-what {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-12);
+  align-items: center;
+}
+
+.landing-what-body p { margin-bottom: var(--sp-4); font-size: var(--fs-base); line-height: 1.75; }
+.landing-what-body p:last-child { margin-bottom: 0; }
+
+@media (max-width: 760px) {
+  .landing-what { grid-template-columns: 1fr; gap: var(--sp-8); }
+  .landing-mock { order: -1; }
+}
+
+/* Mock entry-preview card — a small stand-in for a real product screenshot */
+.landing-mock {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-6);
+}
+
+.landing-mock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-5);
+}
+
+.landing-mock-date {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-md);
+  color: var(--color-text-heading);
+}
+
+.landing-mock-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-text-muted); opacity: 0.5; }
+
+.landing-mock-row { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-5); }
+
+.landing-mock-mood {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.landing-mock-mood svg { width: 16px; height: 16px; }
+
+.landing-mock-mood.selected {
+  background: var(--color-surface);
+  color: var(--color-text-heading);
+  box-shadow: 0 0 0 1.5px var(--color-text-heading) inset;
+}
+
+.landing-mock-lines { display: flex; flex-direction: column; gap: 9px; margin-bottom: var(--sp-5); }
+.landing-mock-line { height: 9px; border-radius: var(--radius-full); background: var(--color-surface-alt); }
+.landing-mock-line.w-full { width: 100%; }
+.landing-mock-line.w-4-5 { width: 82%; }
+.landing-mock-line.w-3-5 { width: 58%; }
+
+.landing-mock-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.landing-mock-stars { color: var(--color-star-fill); font-size: var(--fs-sm); letter-spacing: 1px; }
+.landing-mock-lock { color: var(--color-text-muted); font-size: var(--fs-xs); display: inline-flex; align-items: center; gap: 4px; }
+.landing-mock-lock svg { width: 12px; height: 12px; }
+
+/* ── Bento feature grid ── */
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--sp-5);
+  margin-top: var(--sp-8);
+}
+
+.landing-feature {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--sp-6);
+  grid-column: span 2;
+  transition: border-color var(--transition-base);
+}
+
+.landing-feature:hover { border-color: var(--color-border); }
+
+.landing-feature.span-wide {
+  grid-column: span 6;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  flex-wrap: wrap;
+}
+
+.landing-feature.span-wide .landing-feature-text { flex: 1 1 260px; }
+
+.landing-feature-stats {
+  display: flex;
+  gap: var(--sp-6);
+  flex: 1 1 240px;
+  justify-content: center;
+}
+
+.landing-stat { text-align: center; }
+.landing-stat-value {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-2xl);
+  color: var(--color-text-heading);
+  line-height: 1;
+}
+.landing-stat-label { font-size: var(--fs-xs); color: var(--color-text-muted); margin-top: var(--sp-2); }
+
+.landing-stat-icon { display: flex; align-items: center; justify-content: center; }
+.landing-stat-icon svg { width: 26px; height: 26px; }
+
+.landing-feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-alt);
+  color: var(--color-text-heading);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-4);
+}
+
+.landing-feature-icon svg { width: 17px; height: 17px; }
+
+.landing-feature-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-md);
+  color: var(--color-text-heading);
+  margin-bottom: var(--sp-2);
+}
+
+.landing-feature-body { font-size: var(--fs-sm); color: var(--color-text-body); line-height: 1.7; }
+
+@media (max-width: 760px) {
+  .landing-grid { grid-template-columns: 1fr; }
+  .landing-feature { grid-column: span 1 !important; }
+  .landing-feature.span-wide { flex-direction: column; align-items: flex-start; }
+}
+
+/* ── Reviews ── */
+.landing-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+  margin-top: var(--sp-8);
+}
+
+@media (max-width: 700px) {
+  .landing-reviews-grid { grid-template-columns: 1fr; }
+}
+
+.landing-review {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--sp-8) var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.landing-review-stars { color: var(--color-star-fill); font-size: var(--fs-sm); letter-spacing: 2px; }
+
+.landing-review-quote {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: var(--fs-md);
+  color: var(--color-text-heading);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.landing-review-name {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ── Closing CTA ── */
+.landing-cta {
+  text-align: center;
+  padding: clamp(var(--sp-12), 8vw, var(--sp-20)) var(--sp-8);
+  margin: var(--sp-8) 0 var(--sp-10);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(160deg, var(--color-surface-warm), var(--color-surface-alt));
+  border: 1px solid var(--color-border-light);
+}
+
+.landing-cta-mark { width: 44px; height: auto; margin: 0 auto var(--sp-4); display: block; opacity: 0.9; }
+
+.landing-cta-title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  color: var(--color-text-heading);
+  margin-bottom: var(--sp-6);
+}
+
+.landing-cta .btn-primary {
+  padding: var(--sp-4) var(--sp-8);
+  font-size: var(--fs-md);
+}
+
+/* ── Footer ── */
+.landing-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: var(--sp-6) 0 var(--sp-10);
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.landing-footer-brand { display: flex; align-items: center; gap: var(--sp-2); }
+.landing-footer-brand svg { width: 18px; height: auto; opacity: 0.7; }
+
+.landing-footer-links { display: flex; gap: var(--sp-4); }
