@@ -198,6 +198,17 @@ async function resolveMediaUrls(entry) {
 
 async function saveEntry(entry) {
   await openIDB();
+
+  // Free Write and the guided Today's Entry are two tabs of the SAME daily
+  // record (keyed by date). Each save only carries the fields it manages —
+  // a guided save has no freeWrite, a free-write save may omit the guided
+  // prompts — so merge onto whatever is already stored. Keys present on the
+  // incoming object win (including explicit empties, so clearing still
+  // works); keys it omits are inherited so the two tabs never wipe each
+  // other's section.
+  const prev = await idbReq(idbTx('entries').get(entry.date));
+  if (prev) entry = { ...prev, ...entry };
+
   entry.updatedAt = new Date().toISOString();
 
   const upload = await uploadMediaToDrive(entry);
@@ -339,42 +350,148 @@ async function saveRecap(year, month, reflection) {
   return { cloudError: null };
 }
 
-/* Daily Routines — local-only for now (IndexedDB only, no Supabase sync)
-   while the feature is still being tried out. */
+/* Daily Routines — synced the same way as goals/recap: encrypted per-row
+   in Supabase, plain in IndexedDB. Sections (category names/colors) have
+   no natural per-row key, so they're mirrored as a single row per user. */
+let _routinesRefreshed = false;
+async function cloudRefreshRoutines() {
+  if (!useSupabase()) return;
+  try {
+    const { data } = await SupabaseClient.from('routines').select('data').eq('user_id', getUserId());
+    for (const row of data || []) {
+      const routine = await JournalCrypto.decrypt(row.data);
+      if (!routine?.id) continue;
+      const local = await idbReq(idbTx('routines').get(routine.id));
+      if (local?.updatedAt && routine.updatedAt && local.updatedAt > routine.updatedAt) continue;
+      await idbReq(idbTx('routines', 'readwrite').put(routine));
+    }
+    _routinesRefreshed = true;
+  } catch (e) {
+    console.warn('Background routines refresh failed', e);
+  }
+}
+
 async function getRoutines() {
   await openIDB();
-  return idbReq(idbTx('routines').getAll());
+  let local = await idbReq(idbTx('routines').getAll());
+  if (local.length === 0 && useSupabase() && !_routinesRefreshed) {
+    await cloudRefreshRoutines();
+    local = await idbReq(idbTx('routines').getAll());
+  } else if (!_routinesRefreshed) {
+    cloudRefreshRoutines();
+  }
+  return local;
 }
 
 async function saveRoutine(routine) {
   await openIDB();
+  routine.updatedAt = new Date().toISOString();
   await idbReq(idbTx('routines', 'readwrite').put(routine));
+  if (useSupabase()) {
+    try {
+      const { error } = await SupabaseClient.from('routines').upsert({
+        user_id:    getUserId(),
+        routine_id: routine.id,
+        data:       await JournalCrypto.encrypt(routine),
+        updated_at: routine.updatedAt,
+      }, { onConflict: 'user_id,routine_id' });
+      if (error) throw error;
+    } catch (e) {
+      console.warn('Supabase saveRoutine failed', e);
+    }
+  }
 }
 
 async function deleteRoutine(id) {
   await openIDB();
   await idbReq(idbTx('routines', 'readwrite').delete(id));
+  if (useSupabase()) {
+    try {
+      const { error } = await SupabaseClient.from('routines').delete()
+        .eq('user_id', getUserId()).eq('routine_id', id);
+      if (error) throw error;
+    } catch (e) {
+      console.warn('Supabase deleteRoutine failed', e);
+    }
+  }
 }
 
 async function getRoutineLog(date) {
   await openIDB();
-  const log = await idbReq(idbTx('routineLog').get(date));
-  return log?.completed || {};
+  let local = await idbReq(idbTx('routineLog').get(date));
+  if (!local && useSupabase() && !_cloudMiss.has('routineLog:' + date)) {
+    try {
+      const { data } = await SupabaseClient
+        .from('routine_log').select('data')
+        .eq('user_id', getUserId()).eq('date', date).maybeSingle();
+      if (data) {
+        local = await JournalCrypto.decrypt(data.data);
+        if (local) await idbReq(idbTx('routineLog', 'readwrite').put({ ...local, date }));
+      } else {
+        _cloudMiss.add('routineLog:' + date);
+      }
+    } catch (e) {
+      console.warn('Supabase getRoutineLog failed', e);
+    }
+  }
+  return local?.completed || {};
 }
 
 async function setRoutineDone(date, routineId, done) {
   await openIDB();
   const existing  = await idbReq(idbTx('routineLog').get(date)) || { date, completed: {} };
   const completed = { ...existing.completed, [routineId]: done };
-  await idbReq(idbTx('routineLog', 'readwrite').put({ date, completed }));
+  const record    = { date, completed, updatedAt: new Date().toISOString() };
+  await idbReq(idbTx('routineLog', 'readwrite').put(record));
+  if (useSupabase()) {
+    try {
+      const { error } = await SupabaseClient.from('routine_log').upsert({
+        user_id:    getUserId(),
+        date,
+        data:       await JournalCrypto.encrypt(record),
+        updated_at: record.updatedAt,
+      }, { onConflict: 'user_id,date' });
+      if (error) throw error;
+    } catch (e) {
+      console.warn('Supabase setRoutineDone failed', e);
+    }
+  }
+}
+
+/* Section list (names/colors) — one row per user, no date/id key */
+async function getRoutineSections() {
+  if (!useSupabase()) return null;
+  try {
+    const { data } = await SupabaseClient
+      .from('routine_sections').select('data')
+      .eq('user_id', getUserId()).maybeSingle();
+    return data ? await JournalCrypto.decrypt(data.data) : null;
+  } catch (e) {
+    console.warn('Supabase getRoutineSections failed', e);
+    return null;
+  }
+}
+
+async function saveRoutineSections(sections) {
+  if (!useSupabase()) return;
+  try {
+    const { error } = await SupabaseClient.from('routine_sections').upsert({
+      user_id:    getUserId(),
+      data:       await JournalCrypto.encrypt(sections),
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' });
+    if (error) throw error;
+  } catch (e) {
+    console.warn('Supabase saveRoutineSections failed', e);
+  }
 }
 
 async function syncFromCloud() {
-  if (!useSupabase()) return { entries: 0, goals: 0, recap: 0, debug: 'useSupabase() was false' };
+  if (!useSupabase()) return { entries: 0, goals: 0, recap: 0, routines: 0, debug: 'useSupabase() was false' };
   await openIDB();
   _cloudMiss.clear();
   const uid = getUserId();
-  let counts = { entries: 0, goals: 0, recap: 0 };
+  let counts = { entries: 0, goals: 0, recap: 0, routines: 0 };
   const errors = [];
 
   if (!uid) errors.push('no user id available (not signed in?)');
@@ -419,6 +536,32 @@ async function syncFromCloud() {
       counts.recap = rRows.length;
     }
   } catch (e) { console.warn('Sync recap failed', e); errors.push(`recap: ${e?.message || e}`); }
+
+  try {
+    const { data: rtRows, error } = await SupabaseClient.from('routines').select('*').eq('user_id', uid);
+    if (error) throw error;
+    if (rtRows?.length) {
+      for (const row of rtRows) {
+        const routine = await JournalCrypto.decrypt(row.data);
+        if (routine?.id) await idbReq(idbTx('routines', 'readwrite').put(routine));
+      }
+      counts.routines = rtRows.length;
+    }
+  } catch (e) { console.warn('Sync routines failed', e); errors.push(`routines: ${e?.message || e}`); }
+
+  try {
+    const { data: rlRows, error } = await SupabaseClient.from('routine_log').select('*').eq('user_id', uid);
+    if (error) throw error;
+    for (const row of rlRows || []) {
+      const record = await JournalCrypto.decrypt(row.data);
+      if (record?.date) await idbReq(idbTx('routineLog', 'readwrite').put(record));
+    }
+  } catch (e) { console.warn('Sync routine log failed', e); errors.push(`routine log: ${e?.message || e}`); }
+
+  try {
+    const sections = await getRoutineSections();
+    if (sections) localStorage.setItem('journal_routine_sections', JSON.stringify(sections));
+  } catch (e) { console.warn('Sync routine sections failed', e); errors.push(`routine sections: ${e?.message || e}`); }
 
   counts.photos   = await syncMediaFromCloud();
   counts.uploaded = await uploadPendingMedia();
@@ -508,4 +651,4 @@ async function syncMediaFromCloud() {
   return downloaded;
 }
 
-window.JournalDB = { openDB, getEntry, saveEntry, getAllEntries, getEntriesForMonth, getGoals, saveGoals, getRecap, saveRecap, syncFromCloud, getRoutines, saveRoutine, deleteRoutine, getRoutineLog, setRoutineDone };
+window.JournalDB = { openDB, getEntry, saveEntry, getAllEntries, getEntriesForMonth, getGoals, saveGoals, getRecap, saveRecap, syncFromCloud, getRoutines, saveRoutine, deleteRoutine, getRoutineLog, setRoutineDone, getRoutineSections, saveRoutineSections };

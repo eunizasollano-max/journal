@@ -4,11 +4,15 @@ let isUnsaved = false;
 let freeWriteDate = null;
 
 async function init() {
-  freeWriteDate = App.todayKey();
+  // Honor a date handed in from the Calendar / history list, else today
+  freeWriteDate = window._entryDateOverride || App.todayKey();
+  window._entryDateOverride = null;
   renderPaperToggle();
+  renderDateNav();
   await loadFreeWrite();
   attachAutoSave();
   updateCounts();
+  await renderHistory();
 }
 
 function renderPaperToggle() {
@@ -41,20 +45,71 @@ function setPaperStyle(style) {
   });
 }
 
+/* ── Date navigation ── */
+function renderDateNav() {
+  const label = document.getElementById('freewrite-date-label');
+  if (label) {
+    const d = App.parseDateKey(freeWriteDate);
+    label.textContent = freeWriteDate === App.todayKey()
+      ? `Today · ${App.formatDate(d)}`
+      : App.formatDateFull(d);
+  }
+
+  const isToday = freeWriteDate === App.todayKey();
+  const prevBtn  = document.getElementById('freewrite-prev-btn');
+  const nextBtn  = document.getElementById('freewrite-next-btn');
+  const todayBtn = document.getElementById('freewrite-today-btn');
+
+  if (prevBtn)  prevBtn.onclick  = () => goToDay(-1);
+  if (nextBtn) {
+    // Free writing is for looking back, not ahead — cap at today
+    nextBtn.disabled = isToday;
+    nextBtn.style.visibility = isToday ? 'hidden' : '';
+    nextBtn.onclick = () => goToDay(1);
+  }
+  if (todayBtn) {
+    todayBtn.style.display = isToday ? 'none' : '';
+    todayBtn.onclick = () => goToToday();
+  }
+}
+
+async function goToDay(offset) {
+  // Persist any unsaved text for the day we're leaving
+  clearTimeout(autoSaveTimer);
+  if (isUnsaved) { try { await persist(); } catch { /* keep navigating */ } }
+
+  const d = App.parseDateKey(freeWriteDate);
+  d.setDate(d.getDate() + offset);
+  const next = App.dateKey(d.getFullYear(), d.getMonth() + 1, d.getDate());
+  if (next > App.todayKey()) return; // never past today
+  freeWriteDate = next;
+
+  renderDateNav();
+  await loadFreeWrite();
+  await renderHistory();
+}
+
+async function goToToday() {
+  clearTimeout(autoSaveTimer);
+  if (isUnsaved) { try { await persist(); } catch { /* keep navigating */ } }
+  freeWriteDate = App.todayKey();
+  renderDateNav();
+  await loadFreeWrite();
+  await renderHistory();
+}
+
 async function loadFreeWrite() {
   const entry = await JournalDB.getEntry(freeWriteDate);
   const textarea = document.getElementById('freewrite-textarea');
   if (!textarea) return;
 
-  if (entry?.freeWrite?.content) {
-    textarea.value = entry.freeWrite.content;
-    if (entry.freeWrite.paperStyle) {
-      currentPaperStyle = entry.freeWrite.paperStyle;
-      setPaperStyle(currentPaperStyle);
-      renderPaperToggle();
-    }
-  }
+  // Always reset first, so switching to an empty day clears the last one's text
+  textarea.value = entry?.freeWrite?.content || '';
+  currentPaperStyle = entry?.freeWrite?.paperStyle || 'lined';
+  setPaperStyle(currentPaperStyle);
+  renderPaperToggle();
 
+  isUnsaved = false;
   updateCounts();
 }
 
@@ -67,6 +122,55 @@ function updateCounts() {
   const chars  = text.length;
   const words  = text.trim() ? text.trim().split(/\s+/).length : 0;
   countEl.textContent = `${words} words · ${chars} chars`;
+}
+
+/* ── Past free writes ── */
+async function renderHistory() {
+  const container = document.getElementById('freewrite-history');
+  if (!container) return;
+
+  let entries = [];
+  try { entries = await JournalDB.getAllEntries(); } catch { entries = []; }
+
+  const past = entries
+    .filter(e => e.freeWrite?.content?.trim())
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 12);
+
+  if (!past.length) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="freewrite-history-title">Past free writes</div>
+    <div class="freewrite-history-list">
+      ${past.map(e => {
+        const d = App.parseDateKey(e.date);
+        const snippet = e.freeWrite.content.trim().replace(/\s+/g, ' ').slice(0, 90);
+        const isCurrent = e.date === freeWriteDate;
+        return `
+          <button type="button" class="freewrite-history-item ${isCurrent ? 'current' : ''}" data-date="${e.date}">
+            <span class="freewrite-history-date">${App.formatDate(d)}</span>
+            <span class="freewrite-history-snippet">${App.escapeHtml(snippet)}${e.freeWrite.content.trim().length > 90 ? '…' : ''}</span>
+          </button>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  container.querySelectorAll('.freewrite-history-item').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (btn.dataset.date === freeWriteDate) return;
+      clearTimeout(autoSaveTimer);
+      if (isUnsaved) { try { await persist(); } catch { /* keep navigating */ } }
+      freeWriteDate = btn.dataset.date;
+      renderDateNav();
+      await loadFreeWrite();
+      await renderHistory();
+      document.getElementById('freewrite-textarea')?.focus();
+    });
+  });
 }
 
 /* Merge the free-write text into the day's entry without touching the
@@ -116,6 +220,7 @@ async function saveNow() {
   try {
     await persist();
     flashSavedIndicator();
+    await renderHistory();
     const msg = (typeof saveMessage === 'function') ? saveMessage(0) : 'Entry saved 🌸';
     App.showToast(msg, 4000);
   } catch (err) {
@@ -141,7 +246,8 @@ function scheduleAutoSave() {
 
 function attachAutoSave() {
   const textarea = document.getElementById('freewrite-textarea');
-  if (!textarea) return;
+  if (!textarea || textarea._wired) return;
+  textarea._wired = true;
 
   textarea.addEventListener('input', () => {
     updateCounts();

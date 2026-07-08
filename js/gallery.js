@@ -91,7 +91,7 @@ function renderGallery() {
           ? `<video src="${m.dataUrl}" muted playsinline></video>`
           : `<img src="${m.dataUrl}" alt="Photo from ${dateLabel}" loading="lazy">`}
         <div class="gallery-item-overlay">
-          <span class="gallery-item-date">${dateLabel}${m.mood ? ' · ' + m.mood.emoji : ''}</span>
+          <span class="gallery-item-date">${dateLabel}${m.mood ? ' · ' + App.escapeHtml(m.mood.emoji) : ''}</span>
         </div>
       </div>
     `;
@@ -116,7 +116,7 @@ function openLightbox(media) {
       ${media.type.startsWith('video/')
         ? `<video src="${media.dataUrl}" controls autoplay muted style="max-width:90vw;max-height:80vh;border-radius:var(--radius-md)"></video>`
         : `<img src="${media.dataUrl}" alt="Journal photo" style="max-width:90vw;max-height:80vh;border-radius:var(--radius-md)">`}
-      <div class="lightbox-caption">${App.formatDateFull(d)}${media.mood ? ' — ' + media.mood.emoji + ' ' + media.mood.label : ''}</div>
+      <div class="lightbox-caption">${App.formatDateFull(d)}${media.mood ? ' — ' + App.escapeHtml(media.mood.emoji) + ' ' + App.escapeHtml(media.mood.label) : ''}</div>
     </div>
   `;
 

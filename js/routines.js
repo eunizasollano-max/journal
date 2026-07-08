@@ -38,7 +38,7 @@ async function reinit() {
 async function loadData() {
   allRoutines = await JournalDB.getRoutines();
   dayLog      = await JournalDB.getRoutineLog(currentDateKey());
-  sections    = loadSections();
+  sections    = await loadSections();
   if (isToday()) {
     const t = new Date(viewDate);
     t.setDate(t.getDate() + 1);
@@ -60,20 +60,31 @@ function isToday() {
   return currentDateKey() === App.todayKey();
 }
 
-/* Sections live in localStorage. Older builds stored a plain
+/* Sections live in localStorage (instant, no network wait) and are
+   mirrored to Supabase as a single row per user so a second device picks
+   up renamed/recolored sections too. Older builds stored a plain
    { key: name } object — migrate that shape onto the defaults. */
-function loadSections() {
+function normalizeSections(list) {
+  return list.map((s, i) => ({
+    key:   s.key,
+    name:  s.name || 'Untitled',
+    color: s.color || PALETTE[i % PALETTE.length],
+  }));
+}
+
+async function loadSections() {
   try {
     const raw = localStorage.getItem('journal_routine_sections');
-    if (!raw) return DEFAULT_SECTIONS.map(s => ({ ...s }));
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      return parsed.map((s, i) => ({
-        key:   s.key,
-        name:  s.name || 'Untitled',
-        color: s.color || PALETTE[i % PALETTE.length],
-      }));
+    if (!raw) {
+      const cloud = await JournalDB.getRoutineSections?.();
+      if (Array.isArray(cloud) && cloud.length) {
+        localStorage.setItem('journal_routine_sections', JSON.stringify(cloud));
+        return normalizeSections(cloud);
+      }
+      return DEFAULT_SECTIONS.map(s => ({ ...s }));
     }
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return normalizeSections(parsed);
     return DEFAULT_SECTIONS.map(s => ({ ...s, name: parsed[s.key] || s.name }));
   } catch {
     return DEFAULT_SECTIONS.map(s => ({ ...s }));
@@ -82,6 +93,7 @@ function loadSections() {
 
 function saveSections() {
   localStorage.setItem('journal_routine_sections', JSON.stringify(sections));
+  JournalDB.saveRoutineSections?.(sections);
 }
 
 function nextFreeColor() {

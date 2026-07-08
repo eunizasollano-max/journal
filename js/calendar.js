@@ -68,7 +68,7 @@ function renderGrid() {
       <div class="cal-day ${isToday ? 'today' : ''} ${entry ? 'has-entry' : ''}"
            data-date="${key}" role="button" tabindex="0" aria-label="${key}">
         <span class="cal-day-num">${cell.day}</span>
-        ${dayMoods.length ? `<span class="cal-day-mood">${dayMoods.map(m => m.emoji).join('')}</span>` : ''}
+        ${dayMoods.length ? `<span class="cal-day-mood">${dayMoods.map(m => App.escapeHtml(m.emoji)).join('')}</span>` : ''}
         ${entry?.rating ? `<div class="cal-day-dots">${ratingDots(entry.rating)}</div>` : ''}
         ${hasMedia ? `<span style="font-size:0.55rem;opacity:0.6;">🖼</span>` : ''}
       </div>
@@ -122,18 +122,18 @@ function showEntryPreview(dateKey) {
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3)">
       <div class="entry-preview-date">${App.formatDateFull(d)}</div>
       <div style="display:flex;gap:var(--sp-2);align-items:center">
-        ${previewMoods.length ? `<span style="font-size:1.4rem">${previewMoods.map(m => m.emoji).join(' ')}</span><span class="text-muted">${previewMoods.map(m => m.label).join(', ')}</span>` : ''}
+        ${previewMoods.length ? `<span style="font-size:1.4rem">${previewMoods.map(m => App.escapeHtml(m.emoji)).join(' ')}</span><span class="text-muted">${previewMoods.map(m => App.escapeHtml(m.label)).join(', ')}</span>` : ''}
         ${entry.rating ? `<span class="badge badge-rose">${entry.rating}/10</span>` : ''}
       </div>
     </div>
-    ${entry.prompts?.lookForward ? `<p class="text-muted" style="font-size:var(--fs-sm);margin-bottom:var(--sp-2)"><strong>${entry.session === 'morning' ? 'Looking forward to' : 'How it went'}:</strong> ${entry.prompts.lookForward}</p>` : ''}
+    ${entry.prompts?.lookForward ? `<p class="text-muted" style="font-size:var(--fs-sm);margin-bottom:var(--sp-2)"><strong>${entry.session === 'morning' ? 'Looking forward to' : 'How it went'}:</strong> ${App.escapeHtml(entry.prompts.lookForward)}</p>` : ''}
     ${gratitude.length ? `
       <div style="margin-bottom:var(--sp-3)">
         <strong style="font-size:var(--fs-sm);color:var(--color-text-heading)">Grateful for:</strong>
-        ${gratitude.map(g => `<div style="font-size:var(--fs-sm);color:var(--color-text-muted);margin-top:4px">✿ ${g}</div>`).join('')}
+        ${gratitude.map(g => `<div style="font-size:var(--fs-sm);color:var(--color-text-muted);margin-top:4px">✿ ${App.escapeHtml(g)}</div>`).join('')}
       </div>
     ` : ''}
-    ${entry.freeWrite?.content ? `<p class="text-muted" style="font-size:var(--fs-sm);font-style:italic;border-left:2px solid var(--color-border);padding-left:var(--sp-3);">${entry.freeWrite.content.slice(0, 200)}${entry.freeWrite.content.length > 200 ? '…' : ''}</p>` : ''}
+    ${entry.freeWrite?.content ? `<p class="text-muted" style="font-size:var(--fs-sm);font-style:italic;border-left:2px solid var(--color-border);padding-left:var(--sp-3);">${App.escapeHtml(entry.freeWrite.content.slice(0, 200))}${entry.freeWrite.content.length > 200 ? '…' : ''}</p>` : ''}
     ${entry.media?.length ? `<div class="media-previews" style="margin-top:var(--sp-3)">${entry.media.map(m => `<div class="media-preview-item">${m.type.startsWith('video/') ? `<video src="${m.dataUrl}" muted></video>` : `<img src="${m.dataUrl}" alt="">`}</div>`).join('')}</div>` : ''}
     <button class="btn btn-primary" id="preview-open-btn" style="width:100%;margin-top:var(--sp-4)">${btnLabel}</button>
   `;

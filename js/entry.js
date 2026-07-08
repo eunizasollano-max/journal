@@ -111,7 +111,7 @@ async function renderWidgets() {
         <div class="widget-label">entries</div>
       </div>
       <div class="widget-card">
-        <div class="widget-icon" style="font-size:1.8rem">${lastMoods[0]?.emoji || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l1.7 4.8L18.5 10l-4.8 1.7L12 16l-1.7-4.3L5.5 10l4.8-1.2L12 4Z"/></svg>'}</div>
+        <div class="widget-icon" style="font-size:1.8rem">${lastMoods[0]?.emoji ? App.escapeHtml(lastMoods[0].emoji) : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l1.7 4.8L18.5 10l-4.8 1.7L12 16l-1.7-4.3L5.5 10l4.8-1.2L12 4Z"/></svg>'}</div>
         <div class="widget-label" style="margin-top:4px">last mood</div>
       </div>
     `;
@@ -250,8 +250,8 @@ function renderMoodGrid() {
   const customBtns = customMoods.map((m, i) => `
     <button class="mood-btn mood-btn-custom ${isMoodSelected(m) ? 'selected' : ''}" data-custom-index="${i}" type="button">
       <span class="mood-remove" data-remove-custom="${i}">✕</span>
-      <span class="mood-emoji${graphemes(m.emoji).length > 2 ? ' mood-emoji-text' : ''}">${m.emoji}</span>
-      <span class="mood-label">${m.label}</span>
+      <span class="mood-emoji${graphemes(m.emoji).length > 2 ? ' mood-emoji-text' : ''}">${App.escapeHtml(m.emoji)}</span>
+      <span class="mood-label">${App.escapeHtml(m.label)}</span>
     </button>
   `).join('');
 
@@ -441,7 +441,7 @@ function renderMediaPreviews() {
     <div class="media-preview-item animate-scale-in">
       ${f.type.startsWith('video/')
         ? `<video src="${f.dataUrl}" muted playsinline></video>`
-        : `<img src="${f.dataUrl}" alt="${f.name}">`}
+        : `<img src="${f.dataUrl}" alt="${App.escapeAttr(f.name)}">`}
       <button class="media-remove-btn" data-index="${i}" type="button" aria-label="Remove">✕</button>
     </div>
   `).join('');

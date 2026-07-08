@@ -547,6 +547,88 @@ html.night-mode .entry-save-message { color: rgba(255, 255, 255, 0.75); }
   margin-top: var(--sp-5);
 }
 
+/* ── Free Write date navigation ── */
+.freewrite-datenav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+.freewrite-datenav-center {
+  flex: 1;
+  text-align: center;
+  padding: 0 var(--sp-3);
+}
+.freewrite-date-label {
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--color-text-heading);
+}
+.freewrite-datenav .btn-sm { flex-shrink: 0; }
+.freewrite-datenav .btn-secondary {
+  min-width: 40px;
+  font-size: var(--fs-lg);
+  line-height: 1;
+}
+.freewrite-datenav .freewrite-datenav-center .btn-ghost {
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+}
+
+/* ── Past free writes ── */
+.freewrite-history {
+  margin-top: var(--sp-8);
+}
+.freewrite-history-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--color-text-heading);
+  margin-bottom: var(--sp-3);
+  padding-left: var(--sp-1);
+}
+.freewrite-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.freewrite-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+.freewrite-history-item:hover {
+  border-color: var(--color-accent-rose);
+  background: var(--color-surface-alt);
+}
+.freewrite-history-item.current {
+  border-color: var(--color-accent-deep);
+  background: var(--color-surface-warm);
+}
+.freewrite-history-date {
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-accent-script);
+}
+.freewrite-history-snippet {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .freewrite-autosave {
   font-size: var(--fs-xs);
   color: var(--color-text-light);

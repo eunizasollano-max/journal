@@ -39,6 +39,18 @@ function daysInMonth(year, month) {
   return new Date(year, month, 0).getDate();
 }
 
+/* ── HTML escaping ──
+   For interpolating user-typed text into innerHTML template strings.
+   Without this, journal text containing "<" or ">" would be parsed as
+   markup instead of shown as text. */
+function escapeHtml(str) {
+  return (str ?? '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function escapeAttr(str) {
+  return escapeHtml(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 function showToast(message, duration = 2500) {
   let toast = document.getElementById('toast');
   if (!toast) {
@@ -334,9 +346,10 @@ function wireSyncButton() {
     btn.style.opacity = '0.5';
     try {
       const counts = await JournalDB.syncFromCloud();
-      const photoPart  = counts.photos ? `, ${counts.photos} photo${counts.photos === 1 ? '' : 's'}` : '';
-      const backupPart = counts.uploaded ? ` — backed up ${counts.uploaded} photo${counts.uploaded === 1 ? '' : 's'} to Drive` : '';
-      showToast(`Synced ${counts.entries} entries, ${counts.goals} goals, ${counts.recap} recaps${photoPart}${backupPart} ✓`);
+      const photoPart    = counts.photos ? `, ${counts.photos} photo${counts.photos === 1 ? '' : 's'}` : '';
+      const backupPart   = counts.uploaded ? ` — backed up ${counts.uploaded} photo${counts.uploaded === 1 ? '' : 's'} to Drive` : '';
+      const routinesPart = counts.routines ? `, ${counts.routines} routine${counts.routines === 1 ? '' : 's'}` : '';
+      showToast(`Synced ${counts.entries} entries, ${counts.goals} goals, ${counts.recap} recaps${routinesPart}${photoPart}${backupPart} ✓`);
       // Temporary diagnostic: surface details when a sync looks off, since
       // phone testing has no easy console access.
       if (counts.debug && (counts.debug.includes('errors:') || counts.debug.includes('MISSING'))) {
@@ -820,4 +833,4 @@ function launchJournal(user) {
 
 document.addEventListener('DOMContentLoaded', initApp);
 
-window.App = { todayKey, dateKey, parseDateKey, formatDate, formatDateFull, isFirstDayOfMonth, isLastDayOfMonth, daysInMonth, showToast, showDriveReconnectBanner, MONTHS, MONTHS_SHORT, DAYS };
+window.App = { todayKey, dateKey, parseDateKey, formatDate, formatDateFull, isFirstDayOfMonth, isLastDayOfMonth, daysInMonth, showToast, showDriveReconnectBanner, escapeHtml, escapeAttr, MONTHS, MONTHS_SHORT, DAYS };

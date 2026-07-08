@@ -67,7 +67,7 @@
         <div class="widget-label">entries</div>
       </div>
       <div class="widget-card">
-        <div class="widget-icon" style="font-size:1.8rem">${lastMood?.emoji || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l1.7 4.8L18.5 10l-4.8 1.7L12 16l-1.7-4.3L5.5 10l4.8-1.2L12 4Z"/></svg>'}</div>
+        <div class="widget-icon" style="font-size:1.8rem">${lastMood?.emoji ? App.escapeHtml(lastMood.emoji) : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l1.7 4.8L18.5 10l-4.8 1.7L12 16l-1.7-4.3L5.5 10l4.8-1.2L12 4Z"/></svg>'}</div>
         <div class="widget-label" style="margin-top:4px">last mood</div>
       </div>
     `;
