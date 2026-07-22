@@ -575,6 +575,11 @@ async function saveEntry() {
 function attachEventListeners() {
   const saveBtn = document.getElementById('save-entry-btn');
   if (saveBtn) saveBtn.addEventListener('click', saveEntry);
+
+  // Saving is a plain button click (see above), not a real form submission —
+  // this only guards against Enter-key-in-a-text-field triggering a native
+  // submit/page-reload. Was previously inline onsubmit="return false".
+  document.getElementById('guided-form')?.addEventListener('submit', (e) => e.preventDefault());
 }
 
 window.EntryPage = { init, MOODS };

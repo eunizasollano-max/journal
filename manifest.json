@@ -1,7 +1,7 @@
 {
   "name": "Another Day, Another Chance",
   "short_name": "Another Day",
-  "description": "A personal, faith-centered journaling app.",
+  "description": "A private, gentle journal — free write or guided, at your own pace.",
   "start_url": "/#today",
   "display": "standalone",
   "orientation": "portrait",

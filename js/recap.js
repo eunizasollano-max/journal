@@ -129,8 +129,8 @@ async function renderStats() {
           <div class="recap-stat-label">Average Day Rating</div>
         </div>
         <div class="recap-stat-card animate-slide-up">
-          <span class="recap-mood-display">${topMoodEmoji}</span>
-          <div class="recap-stat-value" style="font-size:var(--fs-lg)">${topMoodLabel || '–'}</div>
+          <span class="recap-mood-display">${App.escapeHtml(topMoodEmoji)}</span>
+          <div class="recap-stat-value" style="font-size:var(--fs-lg)">${App.escapeHtml(topMoodLabel) || '–'}</div>
           <div class="recap-stat-label">Most Common Mood</div>
         </div>
         <div class="recap-stat-card animate-slide-up">
@@ -159,7 +159,7 @@ async function renderStats() {
         <div class="card mt-4">
           <div class="card-label">Things You Were Grateful For</div>
           <div class="recap-gratitude-list">
-            ${uniqueGratitude.map(g => `<div class="recap-gratitude-item">${g}</div>`).join('')}
+            ${uniqueGratitude.map(g => `<div class="recap-gratitude-item">${App.escapeHtml(g)}</div>`).join('')}
           </div>
         </div>
       ` : ''}

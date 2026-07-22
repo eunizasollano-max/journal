@@ -55,5 +55,16 @@ function handleRoute() {
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
+// Delegated nav clicks: any [data-route] element navigates on click.
+// <a data-route href="#x"> already navigates natively via href; this is
+// what actually drives <button data-route> elements (entry tabs, mobile
+// nav bar) which have no href of their own. Was previously inline
+// onclick="Router.navigate(...)" on every one of these — moved here so
+// a strict script-src CSP (no 'unsafe-inline') doesn't block them.
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-route]');
+  if (el) navigate(el.dataset.route);
+});
+
 window.addEventListener('hashchange', handleRoute);
 window.Router = { register, navigate, handleRoute, getCurrentRoute: () => currentRoute };

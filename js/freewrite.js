@@ -206,7 +206,7 @@ async function autoSave() {
     await persist();
     flashSavedIndicator();
   } catch (err) {
-    console.error('Auto-save failed:', err);
+    if (!err?.viewOnlyBlocked) console.error('Auto-save failed:', err);
   }
 }
 
@@ -224,10 +224,12 @@ async function saveNow() {
     const msg = (typeof saveMessage === 'function') ? saveMessage(0) : 'Entry saved 🌸';
     App.showToast(msg, 4000);
   } catch (err) {
-    App.showToast(err?.viewOnlyBlocked
-      ? 'Sign in to save your journal ✨'
-      : 'Could not save — please try again');
-    console.error('Free Write save failed:', err);
+    if (err?.viewOnlyBlocked) {
+      App.showToast('Sign in to save your journal ✨');
+    } else {
+      App.showToast('Could not save — please try again');
+      console.error('Free Write save failed:', err);
+    }
   } finally {
     if (btn) { btn.classList.remove('saving'); btn.textContent = 'Save Entry'; }
   }

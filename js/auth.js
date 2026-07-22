@@ -180,9 +180,9 @@ function renderLoginUI(mode = 'signin') {
         <div class="login-theme-dots" id="login-theme-dots"></div>
       </div>
       <div style="text-align:center;margin-top:var(--sp-3);display:flex;gap:var(--sp-3);justify-content:center">
-        <a href="#privacy" class="btn-link text-muted" style="font-size:var(--fs-xs)" onclick="Router.navigate('#privacy')">Privacy Policy</a>
+        <a href="#privacy" class="btn-link text-muted" style="font-size:var(--fs-xs)">Privacy Policy</a>
         <span style="font-size:var(--fs-xs);color:var(--color-text-light)">·</span>
-        <a href="#terms" class="btn-link text-muted" style="font-size:var(--fs-xs)" onclick="Router.navigate('#terms')">Terms of Service</a>
+        <a href="#terms" class="btn-link text-muted" style="font-size:var(--fs-xs)">Terms of Service</a>
       </div>
     `;
     wireSignInButtons();

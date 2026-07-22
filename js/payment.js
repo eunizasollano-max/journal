@@ -1,5 +1,5 @@
 /*
-  Payment module — 7-day free trial + Stripe paywall.
+  Payment module — 14-day free trial + Stripe paywall.
   Reads/writes user_subscriptions table in Supabase.
   Secret keys never touch this file — checkout session is
   created server-side in the Edge Function.

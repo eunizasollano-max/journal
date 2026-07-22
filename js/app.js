@@ -133,31 +133,6 @@ function initThemePicker() {
   });
 }
 
-/* ── Cursor glow ── */
-function initCursorGlow() {
-  if (document.getElementById('cursor-glow')) return;
-  const glow = document.createElement('div');
-  glow.id = 'cursor-glow';
-  document.body.appendChild(glow);
-
-  let _rafId = null;
-  let _x = 0, _y = 0;
-  document.addEventListener('mousemove', (e) => {
-    _x = e.clientX;
-    _y = e.clientY;
-    if (_rafId) return;
-    _rafId = requestAnimationFrame(() => {
-      glow.style.transform = `translate(calc(${_x}px - 50%), calc(${_y}px - 50%))`;
-      glow.style.opacity = '1';
-      _rafId = null;
-    });
-  });
-
-  document.addEventListener('mouseleave', () => {
-    glow.style.opacity = '0';
-  });
-}
-
 /* ── Font picker ── */
 const ANSWER_FONTS = [
   { key: 'nunito',    label: 'Nunito',             family: "'Nunito', sans-serif",         sample: 'Dear journal...' },
@@ -762,40 +737,6 @@ function hideLoginAndLaunch(user) {
   launchJournal(user);
 }
 
-function showBetaWelcome() {
-  if (localStorage.getItem('journal_beta_dismissed')) return;
-  if (document.getElementById('beta-welcome-overlay')) return;
-
-  const overlay = document.createElement('div');
-  overlay.id = 'beta-welcome-overlay';
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `
-    <div class="modal-box" style="max-width:420px;text-align:center">
-      <div style="width:64px;margin:0 auto var(--sp-3)"><svg viewBox="0 0 120 112" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="var(--color-accent-sage)" stroke-width="2" stroke-linecap="round"><path d="M60 104C60 78 59 64 60 52"/><path d="M60 80C48 76 40 68 38 58"/><path d="M60 90C72 87 80 80 83 70"/></g><g stroke="var(--color-accent-deep)" stroke-width="2" stroke-linejoin="round"><ellipse cx="60" cy="22" rx="10" ry="16"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(72 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(144 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(216 60 38)"/><ellipse cx="60" cy="22" rx="10" ry="16" transform="rotate(288 60 38)"/></g><circle cx="60" cy="38" r="4" fill="var(--color-star-fill)"/></svg></div>
-      <h2 class="modal-title">Hey friend!</h2>
-      <p class="modal-desc" style="line-height:1.85;margin-bottom:var(--sp-4)">
-        Thank you so much for being an early tester — it truly means the world.
-      </p>
-      <p class="modal-desc" style="line-height:1.85;margin-bottom:var(--sp-4)">
-        Just a heads up: <em>Another Day, another chance</em> is still in
-        <strong>testing mode</strong>, so you may run into small bugs or unfinished features.
-        Please don't rely on it yet as your only journal — data could be reset
-        as we make improvements.
-      </p>
-      <p class="modal-desc" style="line-height:1.85;margin-bottom:var(--sp-5)">
-        Your feedback is a gift. If something feels off or broken, just let me know! 🤍
-      </p>
-      <p style="font-family:var(--font-script);font-size:var(--fs-xl);color:var(--color-accent-script);margin-bottom:var(--sp-6)">— Yuni</p>
-      <button class="btn btn-primary btn-lg" id="beta-got-it-btn" style="width:100%">Got it, let's go! ✨</button>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  document.getElementById('beta-got-it-btn').addEventListener('click', () => {
-    overlay.remove();
-    localStorage.setItem('journal_beta_dismissed', '1');
-  });
-}
-
 let _journalLaunched = false;
 
 function launchJournal(user) {
@@ -803,7 +744,6 @@ function launchJournal(user) {
   _journalLaunched = true;
 
   updateSidebarDate();
-  showBetaWelcome();
   initOnboarding();
   initNicknameEdit();
   // initCursorGlow() retired in the feminine-minimal refresh — the glow
